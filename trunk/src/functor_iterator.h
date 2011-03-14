@@ -1,15 +1,12 @@
 #ifndef _FUNCTOR_ITERATOR_H_
 #define _FUNCTOR_ITERATOR_H_
 
-#include <vector>
-
-template<typename Funct>
+template<typename F, typename V>
 class functor_iterator {
-    Funct _funct;
+    F _funct;
 public:
-    typedef typename Funct::value_type value_type;
-    functor_iterator(const Funct& funct): _funct(funct) {}
-    functor_iterator& operator=(const value_type& elem) { _funct(elem); return *this; }
+    functor_iterator(const F& funct): _funct(funct) {}
+    functor_iterator& operator=(const V& elem) { _funct(elem); return *this; }
     functor_iterator& operator*() { return *this; }
     functor_iterator& operator++() { return *this; }
     functor_iterator operator++(int) { return *this; }
