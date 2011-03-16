@@ -1,11 +1,10 @@
 #include "logger.h"
 #include "program_options.h"
 #include "filesystem.h"
-#include "pairing.h"
-#include "comparator.h"
 #include "kleisli.h"
-#include "file_type.h"
-#include "clusterization.h"
+#include "file_types.h"
+#include "file_typer.h"
+#include "file_types/base.h"
 
 using namespace category::kleisli;
 
@@ -20,6 +19,19 @@ public:
     }
 };
 
+template<typename T>
+class comparator: public category::kleisli::arr<T, file_type::compare_result> {
+    //TODO: smart ptrs
+    std::vector<T*> values;
+public:
+    void next(const T& t) {
+        for (typename std::vector<T*>::iterator it = values.begin(); it != values.end(); ++it) {
+            (*it)->compare(t, *this);
+        }
+        values.push_back(t.clone());
+    }
+};
+
 int main(int argc, char* argv[]) {
     stderr_logger std_logger(argv[0]);
     logger::set_std(&std_logger);
@@ -29,11 +41,11 @@ int main(int argc, char* argv[]) {
     make_pair(po.input_files().begin(), po.input_files().end())
     >>= The<fs::recursive>()
     >>= po.extensions().empty() ? The< arr<fs::path, fs::path> >() : The<elem_filter>(po.extensions())
-    >>= The<file_type_ext>()
-//    >>= The<clusterization>()
-    >>= The<pairing<typed_file> >()
-    >>= The<comparator>()
-    >>= The<iterator_end, compare_result>(std::ostream_iterator<compare_result>(std::cout, "\n"));
+    >>= The<file_typer<match_first> >()
+//    >>= The<clusterization<file_type::base> >()
+    >>= The<comparator<file_type::base> >()
+    >>= The<iterator_end, file_type::compare_result>
+        (std::ostream_iterator<file_type::compare_result>(std::cout, "\n"));
     
     return 0;
 }

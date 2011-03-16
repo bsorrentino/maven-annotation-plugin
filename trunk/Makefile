@@ -2,7 +2,7 @@ LIBS = boost_program_options boost_filesystem boost_system
 CFLAGS = -O2 -Wall -pedantic
 PROJECT_NAME = pn
 SRC_DIR = src
-SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+SRCS = $(wildcard $(SRC_DIR)/*.cpp $(SRC_DIR)/*/*.cpp)
 OBJS = $(patsubst $(SRC_DIR)/%.cpp,%.o,$(SRCS))
 
 builds = debug release
@@ -19,6 +19,9 @@ clean:
 -include $(patsubst $(SRC_DIR)/%.cpp,.depend/%.dep,$(SRCS))
 
 $(addsuffix /%.o,$(builds)): $(SRC_DIR)/%.cpp
-	g++ $< -c -o $@ $(CFLAGS) $($(D@)_flags) -MMD -MT $@ -MF .depend/$*.dep
+	g++ $< -c -o $@ $(CFLAGS) $($(@D)_flags) -MMD -MT $@ -MF .depend/$*.dep
 $(addsuffix /$(PROJECT_NAME),$(builds)): %$(PROJECT_NAME): $(addprefix %,$(OBJS))
 	g++ $^ -o $@ $(addprefix -l,$(LIBS))
+
+%:
+	$(info target $@ not found)

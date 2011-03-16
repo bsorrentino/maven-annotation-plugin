@@ -13,25 +13,21 @@ template<template<typename S, typename T, typename U> class R, typename S, typen
 template<typename S>
 struct end {
     virtual void next(const S&) {}
-    virtual void stop() {}
 };
 
 template<typename F, typename S>
 struct end< std::pair<F, S> > {
     virtual void next(const F&, const S&) {}
-    virtual void stop() {}
 };
 
 template<typename V>
 void operator>>=(const V& from, end<V>& to) {
     to.next(from);
-    to.stop();
 }
 
 template<typename Iter, typename V>
 void operator>>=(const std::pair<Iter, Iter>& from, end<V>& to) {
     for (Iter it = from.first; it != from.second; to.next(*it++)) ;
-    to.stop();
 }
 
 template<typename Funct, typename V>
@@ -39,7 +35,6 @@ void operator>>=(const std::pair<Funct, int>& from, end<V>& to) {
     for (int i = 0; i < from.second; ++i) {
         to.next(from.first());
     }
-    to.stop();
 }
 
 template<typename S, typename T>
@@ -47,9 +42,6 @@ class arr: public end<S> {
     end<T>* e;
 public:
     arr(): e(&The< end<T> >()) {}
-    void stop() {
-        e->stop();
-    }
     void operator()(const T& t) {
         e->next(t);
     }
@@ -67,9 +59,6 @@ public:
     void next(const T& t) {
         e->next(t);
     }
-    void stop() {
-        e->stop();
-    }
     void operator()(const T& t) {
         e->next(t);
     }
@@ -84,9 +73,6 @@ class arr<S, std::pair<F, T> >: public end<S> {
     end< std::pair<F, T> >* e;
 public:
     arr(): e(&The< end< std::pair<F, T> > >()) {}
-    void stop() {
-        e->stop();
-    }
     void operator()(const F& f, const T& t) {
         e->next(f, t);
     }
@@ -103,9 +89,6 @@ public:
     arr(): e(&The< end< std::pair<F, T> > >()) {}
     void next(const F& f, const T& t) {
         e->next(f, t);
-    }
-    void stop() {
-        e->stop();
     }
     void operator()(const F& f, const T& t) {
         e->next(f, t);

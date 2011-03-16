@@ -1,6 +1,7 @@
 #ifndef _COMPARATOR_H_
 #define _COMPARATOR_H_
 
+/*
 #include "filesystem.h"
 #include "kleisli.h"
 #include "file_type.h"
@@ -19,5 +20,6 @@ std::ostream& operator<<(std::ostream& o, const compare_result& r);
 struct comparator: category::kleisli::arr< std::pair<typed_file, typed_file>, compare_result> {
     void next(const typed_file& file1, const typed_file& file2);
 };
+*/
 
 #endif
