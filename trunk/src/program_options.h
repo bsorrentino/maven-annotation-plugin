@@ -2,7 +2,6 @@
 #define _PROGRAM_OPTIONS_H_
 
 #include <vector>
-#include <iostream>
 
 #include "logger.h"
 

@@ -5,8 +5,11 @@ template<typename H, typename T>
 struct cons {
     typedef H head;
     typedef T tail;
+    enum { size = T::size + 1 };
 };
-struct nil;
+struct nil {
+    enum { size = 0 };
+};
 
 template<typename T>
 struct type_traits {

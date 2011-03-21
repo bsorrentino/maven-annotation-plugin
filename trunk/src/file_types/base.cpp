@@ -2,7 +2,6 @@
 #include <boost/make_shared.hpp>
 #include <cstring>
 #include <cassert>
-#include <iostream>
 
 #include "base.h"
 #include "../kleisli.h"

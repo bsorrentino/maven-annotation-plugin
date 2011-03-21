@@ -1,5 +1,6 @@
 #include <boost/shared_ptr.hpp>
 
+#include "clusterization.h"
 #include "program_options.h"
 #include "filesystem.h"
 #include "kleisli.h"
@@ -22,14 +23,17 @@ public:
 
 template<typename T>
 class comparator: public category::kleisli::arr<boost::shared_ptr<T>, file_type::compare_result> {
-    std::vector< boost::shared_ptr<T> > values;
+    std::vector< boost::shared_ptr<T> > _values;
 public:
     void next(const boost::shared_ptr<T>& t) {
         typedef typename std::vector<boost::shared_ptr<T> >::iterator iterator;
-        for (iterator it = values.begin(); it != values.end(); ++it) {
+        for (iterator it = _values.begin(); it != _values.end(); ++it) {
             (*it)->compare(*t, sink<file_type::compare_result>::continuation());
         }
-        values.push_back(t);
+        _values.push_back(t);
+    }
+    boost::shared_ptr< end< boost::shared_ptr<T> > > clone() const {
+        return boost::make_shared< comparator<T> >(*this);
     }
 };
 
@@ -38,7 +42,7 @@ void default_main(const program_options& po) {
     >>= The<fs::recursive>()
     >>= (po.extensions().empty() ? The< arr<fs::path, fs::path> >() : The<elem_filter>(po.extensions()))
     >>= The<file_typer_match_first>()
-//    >>= The<clusterization<file_type::base> >()
+    >>= clusterization<file_type::base>()
     >>= The<comparator<file_type::base> >()
     >>= The<iterator_end, file_type::compare_result>
         (std::ostream_iterator<file_type::compare_result>(std::cout, "\n"));

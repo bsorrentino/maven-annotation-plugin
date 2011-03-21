@@ -1,5 +1,3 @@
-#include <iterator>
-
 #include "filesystem.h"
 #include "logger.h"
 

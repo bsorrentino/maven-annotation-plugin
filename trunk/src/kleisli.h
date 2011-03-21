@@ -1,6 +1,9 @@
 #ifndef _KLEISLI_H_
 #define _KLEISLI_H_
 
+#include <boost/make_shared.hpp>
+#include <boost/shared_ptr.hpp>
+
 namespace category {
 namespace kleisli {
 
@@ -13,11 +16,13 @@ template<template<typename S, typename T, typename U> class R, typename S, typen
 template<typename S>
 struct end {
     virtual void next(const S&) = 0;
+    virtual boost::shared_ptr< end<S> > clone() const { return boost::shared_ptr< end<S> >(); }
 };
 
 template<typename S>
 struct empty: end<S> {
     void next(const S&) {}
+    boost::shared_ptr< end<S> > clone() const { return boost::make_shared< empty<S> >(); }
 };
 
 template<typename V>
@@ -67,6 +72,7 @@ class iterator_end: public end<V> {
 public:
     iterator_end(const Iter& i): it(i) {}
     void next(const V& value) { *it++ = value; }
+    boost::shared_ptr< end<V> > clone() const { return boost::make_shared< iterator_end<V, Iter> >(it); }
 };
 
 }}
