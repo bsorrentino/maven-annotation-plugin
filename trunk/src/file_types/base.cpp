@@ -1,4 +1,5 @@
 #include <boost/filesystem/fstream.hpp>
+#include <boost/make_shared.hpp>
 #include <cstring>
 #include <cassert>
 
@@ -8,12 +9,11 @@
 
 namespace file_type {
 
-bool base::try_file(const fs::path& file, base* res) {
-    res->_path = file;
-    return true;
+boost::shared_ptr<base> base::try_file(const fs::path& file) {
+    return boost::make_shared<base>(file);
 }
 
-void base::compare(const base& a, category::kleisli::arr<base, compare_result>& cont) const {
+void base::compare(const base& a, category::kleisli::end<compare_result>& cont) const {
     if (fs::file_size(_path) != fs::file_size(a._path)) {
         return;
     }
@@ -30,7 +30,7 @@ void base::compare(const base& a, category::kleisli::arr<base, compare_result>& 
             }
             assert(file1.eof() == file2.eof());
             if (file1.eof() && file2.eof()) {
-                cont(compare_result(_path, a._path));
+                cont.next(compare_result(_path, a._path));
                 return;
             } else
             if (!file1.eof() && !file2.eof()) {

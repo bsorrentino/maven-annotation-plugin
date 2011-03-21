@@ -1,6 +1,8 @@
 #ifndef _FILE_TYPE_BASE_H_
 #define _FILE_TYPE_BASE_H_
 
+#include <boost/shared_ptr.hpp>
+
 #include "../filesystem.h"
 #include "../type_list.h"
 #include "../kleisli.h"
@@ -20,17 +22,11 @@ std::ostream& operator<<(std::ostream& o, const compare_result& r);
 
 class base {
     fs::path _path;
-protected:
-    void set_path(const fs::path& p) { _path = p; }
 public:
-    base() {}
     base(const fs::path& p): _path(p) {}
     const fs::path& path() const { return _path; }
-    //TODO: smart ptrs
-    static bool try_file(const fs::path& file, base* res);
-    virtual void compare(const base& a, category::kleisli::arr<base, compare_result>& cont) const;
-    //TODO: smart ptrs
-    virtual base* clone() const { return new base(_path); }
+    static boost::shared_ptr<base> try_file(const fs::path& file);
+    virtual void compare(const base& a, category::kleisli::end<compare_result>& cont) const;
 };
 
 }

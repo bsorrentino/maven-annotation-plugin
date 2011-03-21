@@ -3,8 +3,8 @@
 
 namespace file_type {
 
-bool img::try_file(const base& file, img* res) {
-    return false;
+boost::shared_ptr<img> img::try_file(const boost::shared_ptr<base>& file) {
+    return boost::shared_ptr<img>();
 }
 
 }

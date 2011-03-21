@@ -64,7 +64,7 @@ class type_sort< cons<H, T> > {
     template<typename F, typename L, typename R>
     struct insert<F, cons<L, R> > {
         typedef typename choose
-            <SUPER_SUB_CLASS(L, F)
+            <SUPER_SUB_CLASS(F, L)
                 , cons<F, cons<L, R> >
                 , cons<L, typename insert<F, R>::result>
             >::result result;

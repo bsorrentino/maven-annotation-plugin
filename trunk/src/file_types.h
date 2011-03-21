@@ -13,7 +13,6 @@ typedef
     cons< file_type::img,
     nil > > > unsorted_file_types_list;
 
-// typedef type_sort<unsorted_file_types_list>::result file_types_list;
-typedef unsorted_file_types_list file_types_list;
+typedef type_sort<unsorted_file_types_list>::result file_types_list;
 
 #endif
