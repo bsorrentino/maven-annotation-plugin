@@ -2,6 +2,7 @@
 #include <boost/make_shared.hpp>
 #include <cstring>
 #include <cassert>
+#include <iostream>
 
 #include "base.h"
 #include "../kleisli.h"
@@ -23,21 +24,13 @@ void base::compare(const base& a, category::kleisli::end<compare_result>& cont) 
     while (true) {
         file1.read(buf1, buf_size);
         file2.read(buf2, buf_size);
-        assert(file1.gcount() == file2.gcount());
-        if (file1.gcount() == file2.gcount()) {
-            if (memcmp(buf1, buf2, file1.gcount()) != 0) {
-                return;
-            }
-            assert(file1.eof() == file2.eof());
-            if (file1.eof() && file2.eof()) {
-                cont.next(compare_result(_path, a._path));
-                return;
-            } else
-            if (!file1.eof() && !file2.eof()) {
-                continue;
-            }
+        if (file1.gcount() != file2.gcount() || file1.eof() != file2.eof() || memcmp(buf1, buf2, file1.gcount()) != 0) {
+            return;
         }
-        return;
+        if (file1.eof() && file2.eof()) {
+            cont.next(compare_result(_path, a._path));
+            return;
+        }
     }
 }
 
