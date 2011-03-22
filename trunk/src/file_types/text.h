@@ -9,7 +9,7 @@ namespace file_type {
 struct text: base {
     text(const fs::path& p): base(p) {}
     static boost::shared_ptr<text> try_file(const boost::shared_ptr<base>& file);
-    void compare(const base& a, category::kleisli::end<compare_result>& cont) const;
+    boost::shared_ptr<base> compare(const boost::shared_ptr<base>& a) const;
 };
 
 }

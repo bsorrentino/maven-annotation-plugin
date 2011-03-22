@@ -16,7 +16,8 @@ class clusterization: public category::kleisli::arr<boost::shared_ptr<T>, boost:
         }
     };
     typedef boost::shared_ptr<category::kleisli::end<T_ptr> > Cont;
-    std::map<T_ptr, Cont, less> _continuations;
+    typedef std::map<T_ptr, Cont, less> map;
+    map _continuations;
 public:
     void next(const T_ptr& t) {
         typename std::map<T_ptr, Cont, less>::iterator it = _continuations.find(t);
@@ -27,6 +28,12 @@ public:
         } else {
             it->second->next(t);
         }
+    }
+    void stop() {
+        for (typename map::iterator it = _continuations.begin(); it != _continuations.end(); ++it) {
+            it->second->stop();
+        }
+        _continuations.clear();
     }
 };
 

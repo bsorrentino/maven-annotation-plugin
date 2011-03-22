@@ -1,5 +1,4 @@
-#include <boost/shared_ptr.hpp>
-
+#include "comparator.h"
 #include "clusterization.h"
 #include "program_options.h"
 #include "filesystem.h"
@@ -22,28 +21,36 @@ public:
 };
 
 template<typename T>
-class comparator: public category::kleisli::arr<boost::shared_ptr<T>, file_type::compare_result> {
+class accumulator: public arr<boost::shared_ptr<T>, boost::shared_ptr<T> > {
     std::vector< boost::shared_ptr<T> > _values;
 public:
     void next(const boost::shared_ptr<T>& t) {
-        typedef typename std::vector<boost::shared_ptr<T> >::iterator iterator;
-        for (iterator it = _values.begin(); it != _values.end(); ++it) {
-            (*it)->compare(*t, sink<file_type::compare_result>::continuation());
-        }
         _values.push_back(t);
     }
+    void stop() {
+        if (_values.size() > 1) {
+            make_pair(_values.begin(), _values.end())
+            >>= sink< boost::shared_ptr<T> >::continuation();
+        }
+        _values.clear();
+    }
     boost::shared_ptr< end< boost::shared_ptr<T> > > clone() const {
-        return boost::make_shared< comparator<T> >(*this);
+        return boost::make_shared< accumulator<T> >(*this);
     }
 };
 
 void default_main(const program_options& po) {
+    struct : end< boost::shared_ptr<file_type::base> > {
+        void next(const boost::shared_ptr<file_type::base>& t) { std::cout << t->path() << "\n"; }
+        void stop() { std::cout << "\n"; }
+    } output;
+
     make_pair(po.input_files().begin(), po.input_files().end())
-    >>= The<fs::recursive>()
+    >>= fs::recursive()
     >>= (po.extensions().empty() ? The< arr<fs::path, fs::path> >() : The<elem_filter>(po.extensions()))
-    >>= The<file_typer_match_first>()
+    >>= file_typer_match_first()
     >>= clusterization<file_type::base>()
-    >>= The<comparator<file_type::base> >()
-    >>= The<iterator_end, file_type::compare_result>
-        (std::ostream_iterator<file_type::compare_result>(std::cout, "\n"));
+    >>= comparator<file_type::base, file_type::base>()
+    >>= accumulator<file_type::base>()
+    >>= output;
 }

@@ -15,11 +15,11 @@ boost::shared_ptr<text> text::try_file(const boost::shared_ptr<base>& file) {
     return boost::shared_ptr<text>();
 }
 
-void text::compare(const base& a, category::kleisli::end<compare_result>& cont) const {
-    if (fs::file_size(path()) != fs::file_size(a.path())) {
-        return;
+boost::shared_ptr<base> text::compare(const boost::shared_ptr<base>& a) const {
+    if (fs::file_size(path()) != fs::file_size(a->path())) {
+        return boost::shared_ptr<base>();
     }
-    cont.next(compare_result(path(), a.path()));
+    return a;
 }
 
 }
