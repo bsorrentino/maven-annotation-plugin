@@ -12,8 +12,9 @@ namespace file_type {
 
 class base {
     fs::path _path;
+    unsigned int size;
 public:
-    base(const fs::path& p): _path(p) {}
+    base(const fs::path& p);
     const fs::path& path() const { return _path; }
     static boost::shared_ptr<base> try_file(const fs::path& file);
     virtual boost::shared_ptr<base> compare(const boost::shared_ptr<base>& a) const;

@@ -1,5 +1,6 @@
 LIBS = boost_program_options boost_filesystem boost_system
-CFLAGS = -O2 -Wall -pedantic
+CFLAGS = -O2 -Wall -pedantic `Magick++-config --cppflags`
+LINKER_FLAGS = `Magick++-config --libs`
 PROJECT_NAME = pn
 SRC_DIR = src
 SRCS = $(wildcard $(SRC_DIR)/*.cpp $(SRC_DIR)/*/*.cpp)
@@ -21,7 +22,7 @@ clean:
 $(addsuffix /%.o,$(builds)): $(SRC_DIR)/%.cpp
 	g++ $< -c -o $@ $(CFLAGS) $($(@D)_flags) -MMD -MT $@ -MF .depend/$*.dep
 $(addsuffix /$(PROJECT_NAME),$(builds)): %$(PROJECT_NAME): $(addprefix %,$(OBJS))
-	g++ $^ -o $@ $(addprefix -l,$(LIBS))
+	g++ $^ -o $@ $(LINKER_FLAGS) $(addprefix -l,$(LIBS))
 
 %:
 	$(info target $@ not found)

@@ -16,9 +16,9 @@ boost::shared_ptr<text> text::try_file(const boost::shared_ptr<base>& file) {
 }
 
 boost::shared_ptr<base> text::compare(const boost::shared_ptr<base>& a) const {
-    if (fs::file_size(path()) != fs::file_size(a->path())) {
-        return boost::shared_ptr<base>();
-    }
+    // const int buf_size = 4096;
+    // char buf1[buf_size], buf2[buf_size];
+    // fs::ifstream file1(_path), file2(a->_path);
     return a;
 }
 

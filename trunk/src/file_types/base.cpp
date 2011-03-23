@@ -9,6 +9,8 @@
 
 namespace file_type {
 
+base::base(const fs::path& p): _path(p), size(fs::file_size(p)) { }
+
 boost::shared_ptr<base> base::try_file(const fs::path& file) {
     return boost::make_shared<base>(file);
 }

@@ -44,7 +44,7 @@ void default_main(const program_options& po) {
         void next(const boost::shared_ptr<file_type::base>& t) { std::cout << t->path() << "\n"; }
         void stop() { std::cout << "\n"; }
     } output;
-
+    
     make_pair(po.input_files().begin(), po.input_files().end())
     >>= fs::recursive()
     >>= (po.extensions().empty() ? The< arr<fs::path, fs::path> >() : The<elem_filter>(po.extensions()))
