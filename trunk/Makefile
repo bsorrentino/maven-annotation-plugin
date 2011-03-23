@@ -6,7 +6,7 @@ SRC_DIR = src
 SRCS = $(wildcard $(SRC_DIR)/*.cpp $(SRC_DIR)/*/*.cpp)
 OBJS = $(patsubst $(SRC_DIR)/%.cpp,%.o,$(SRCS))
 
-builds = debug release
+builds = release debug
 debug_flags = -ggdb
 release_flags = -DNDEBUG
 
