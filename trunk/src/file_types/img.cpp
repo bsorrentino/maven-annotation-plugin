@@ -20,6 +20,8 @@ boost::shared_ptr<base> img::compare(const boost::shared_ptr<base>& a) const {
     try { 
         image.read(path().string()); 
         image2.read(a->path().string()); 
+        image.scale("16x16");
+        image2.scale("16x16");
         if (image.compare(image2)) {
             return a;
         }
