@@ -26,12 +26,16 @@ class accumulator: public arr<boost::shared_ptr<T>, boost::shared_ptr<T> > {
 public:
     void next(const boost::shared_ptr<T>& t) {
         _values.push_back(t);
-    }
-    void stop() {
         if (_values.size() > 1) {
             make_pair(_values.begin(), _values.end())
             >>= sink< boost::shared_ptr<T> >::continuation();
         }
+    }
+    void stop() {
+        /* if (_values.size() > 1) {
+            make_pair(_values.begin(), _values.end())
+            >>= sink< boost::shared_ptr<T> >::continuation();
+        } */
         _values.clear();
     }
     boost::shared_ptr< end< boost::shared_ptr<T> > > clone() const {
