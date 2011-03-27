@@ -12,6 +12,7 @@ struct img: base {
     img(const fs::path& p): base(p) {}
     static boost::shared_ptr<img> try_file(const boost::shared_ptr<base>& file);
     boost::shared_ptr<base> compare(const boost::shared_ptr<base>& a) const;
+    comparison_result precompare(const boost::shared_ptr<base>& a) const;
 };
 
 }

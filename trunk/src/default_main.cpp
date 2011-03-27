@@ -49,7 +49,7 @@ void default_main(const program_options& po) {
     >>= fs::recursive()
     >>= (po.extensions().empty() ? The< arr<fs::path, fs::path> >() : The<elem_filter>(po.extensions()))
     >>= file_typer_match_first()
-    >>= clusterization<file_type::base>()
+    >>= clusterization()
     >>= comparator<file_type::base, file_type::base>()
     >>= accumulator<file_type::base>()
     >>= output;

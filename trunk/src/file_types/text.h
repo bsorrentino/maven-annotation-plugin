@@ -10,6 +10,7 @@ struct text: base {
     text(const fs::path& p): base(p) {}
     static boost::shared_ptr<text> try_file(const boost::shared_ptr<base>& file);
     boost::shared_ptr<base> compare(const boost::shared_ptr<base>& a) const;
+    comparison_result precompare(const boost::shared_ptr<base>& a) const;
 };
 
 }

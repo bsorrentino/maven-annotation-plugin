@@ -10,14 +10,21 @@
 
 namespace file_type {
 
+enum comparison_result
+  { less
+  , greater
+  , equal
+  };
+
 class base {
     fs::path _path;
-    unsigned int size;
+    unsigned int _size;
 public:
     base(const fs::path& p);
     const fs::path& path() const { return _path; }
     static boost::shared_ptr<base> try_file(const fs::path& file);
     virtual boost::shared_ptr<base> compare(const boost::shared_ptr<base>& a) const;
+    virtual comparison_result precompare(const boost::shared_ptr<base>& a) const;
 };
 
 }

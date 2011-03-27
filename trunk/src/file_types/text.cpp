@@ -77,4 +77,8 @@ boost::shared_ptr<base> text::compare(const boost::shared_ptr<base>& a) const {
     }
 }
 
+inline comparison_result text::precompare(const boost::shared_ptr<base>& a) const {
+    return equal;
+}
+
 }

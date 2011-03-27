@@ -9,16 +9,13 @@
 
 namespace file_type {
 
-base::base(const fs::path& p): _path(p), size(fs::file_size(p)) { }
+base::base(const fs::path& p): _path(p), _size(fs::file_size(p)) { }
 
 boost::shared_ptr<base> base::try_file(const fs::path& file) {
     return boost::make_shared<base>(file);
 }
 
 boost::shared_ptr<base> base::compare(const boost::shared_ptr<base>& a) const {
-    if (fs::file_size(_path) != fs::file_size(a->_path)) {
-        return boost::shared_ptr<base>();
-    }
     const int buf_size = 4096;
     char buf1[buf_size], buf2[buf_size];
     fs::ifstream file1(_path), file2(a->_path);
@@ -32,6 +29,10 @@ boost::shared_ptr<base> base::compare(const boost::shared_ptr<base>& a) const {
             return a;
         }
     }
+}
+
+inline comparison_result base::precompare(const boost::shared_ptr<base>& a) const {
+    return _size < a->_size ? less : _size == a->_size ? equal : greater;
 }
 
 }

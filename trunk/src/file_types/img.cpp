@@ -31,4 +31,8 @@ boost::shared_ptr<base> img::compare(const boost::shared_ptr<base>& a) const {
     return boost::shared_ptr<img>();
 }
 
+inline comparison_result img::precompare(const boost::shared_ptr<base>& a) const {
+    return equal;
+}
+
 }
