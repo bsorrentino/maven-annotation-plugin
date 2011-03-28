@@ -16,7 +16,8 @@ struct img: base {
     comparison_result precompare(const boost::shared_ptr<base>& a) const;
 private:
     static const unsigned int BUCKET_COUNT = 4;
-    double bucket[3][BUCKET_COUNT];
+    static const unsigned int HISTOGRAM_COUNT = 3;
+    double bucket[HISTOGRAM_COUNT][BUCKET_COUNT];
     Magick::Image _image;
 };
 

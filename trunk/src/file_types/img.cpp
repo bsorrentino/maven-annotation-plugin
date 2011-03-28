@@ -27,16 +27,17 @@ img::img(const fs::path& p, const Magick::Image& image): base(p), _image(image) 
         }
     }
     for (unsigned int j = 0; j < BUCKET_COUNT; ++j) {
-        bucket[0][j] /= size;
-        bucket[1][j] /= size;
-        bucket[2][j] /= size;
+        for (unsigned int k = 0; k < HISTOGRAM_COUNT; ++k) {
+            bucket[k][j] /= size;
+        }
     }
 }
 
 boost::shared_ptr<img> img::try_file(const boost::shared_ptr<base>& file) {
-    static const fs::path exts[] = { ".JPG", ".png" };
-    static const fs::path* exts_end = exts + sizeof(exts)/sizeof(fs::path);
-    if (find(exts, exts_end, file->path().extension()) != exts_end) {
+    static const std::string mimes[] = { "image/jpeg", "image/png" };
+    static const std::string exts[] = { ".jpg", ".png" };
+    if (file->check_type(mimes, mimes + sizeof(mimes)/sizeof(std::string),
+      exts, exts + sizeof(exts)/sizeof(std::string))) {
         try { 
             Magick::Image image;
             image.read(file->path().string()); 
@@ -54,7 +55,9 @@ boost::shared_ptr<base> img::compare(const boost::shared_ptr<base>& _a) const {
     const img* a = static_cast<const img*>(_a.get());
     double res = 0;
     for (unsigned int i = 0; i < BUCKET_COUNT; ++i) {
-        res += abs(bucket[0][i] - a->bucket[0][i]) + abs(bucket[1][i] - a->bucket[1][i]) + abs(bucket[2][i] - a->bucket[2][i]);
+        for (unsigned int k = 0; k < HISTOGRAM_COUNT; ++k) {
+            res += abs(bucket[k][i] - a->bucket[k][i]);
+        }
     }
     return res > THRESHOLD ? boost::shared_ptr<img>() : _a;
 }

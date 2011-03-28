@@ -9,12 +9,11 @@
 namespace file_type {
 
 boost::shared_ptr<text> text::try_file(const boost::shared_ptr<base>& file) {
-    static const fs::path exts[] = { ".txt" };
-    static const fs::path* exts_end = exts + sizeof(exts)/sizeof(fs::path);
-    if (find(exts, exts_end, file->path().extension()) != exts_end) {
-        return boost::make_shared<text>(file->path());
-    }
-    return boost::shared_ptr<text>();
+    static const std::string mimes[] = { "text/plain" };
+    static const std::string exts[] = { ".txt" };
+    return file->check_type(mimes, mimes + sizeof(mimes)/sizeof(std::string),
+        exts, exts + sizeof(exts)/sizeof(std::string)) ?
+        boost::make_shared<text>(file->path()) : boost::shared_ptr<text>();
 }
 
 static int clean_str(char* s, int size) {

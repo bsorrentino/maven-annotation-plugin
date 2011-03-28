@@ -1,5 +1,5 @@
-LIBS = boost_program_options boost_filesystem boost_system
-CFLAGS = -O2 -Wall -pedantic `Magick++-config --cppflags`
+LIBS = boost_program_options boost_filesystem boost_system magic
+CFLAGS = -O2 -Wall `Magick++-config --cppflags`
 LINKER_FLAGS = `Magick++-config --libs`
 PROJECT_NAME = pn
 SRC_DIR = src

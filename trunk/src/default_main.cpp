@@ -45,7 +45,7 @@ public:
 
 void default_main(const program_options& po) {
     struct : end< boost::shared_ptr<file_type::base> > {
-        void next(const boost::shared_ptr<file_type::base>& t) { std::cout << t->path() << "\n"; }
+        void next(const boost::shared_ptr<file_type::base>& t) { std::cout << t->path().string() << "\n"; }
         void stop() { std::cout << "\n"; }
     } output;
     

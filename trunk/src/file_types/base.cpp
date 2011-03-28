@@ -6,10 +6,14 @@
 #include "base.h"
 #include "../kleisli.h"
 #include "../filesystem.h"
+#include "../magic_file.h"
 
 namespace file_type {
 
-base::base(const fs::path& p): _path(p), _size(fs::file_size(p)) { }
+base::base(const fs::path& p): _path(p), _size(fs::file_size(p)) {
+    const char* s = magic::mime_type(p.c_str());
+    _mime = s ? s : "";
+}
 
 boost::shared_ptr<base> base::try_file(const fs::path& file) {
     return boost::make_shared<base>(file);

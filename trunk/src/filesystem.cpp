@@ -12,7 +12,7 @@ void recursive::next(const std::string& value) {
             void next(const fs::path& value) { if (is_regular_file(value)) pass(value); }
         } filter;
         boost::system::error_code e;
-        make_pair(recursive_directory_iterator(value, e), recursive_directory_iterator())
+        std::make_pair(recursive_directory_iterator(value, e), recursive_directory_iterator())
         >>= filter >>= continuation();
         if (e) {
             logger::std_stream() << value << ": " << e.message() << "\n";
