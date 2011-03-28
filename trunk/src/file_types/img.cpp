@@ -4,7 +4,7 @@
 
 namespace file_type {
 
-const double THRESHOLD = 0.03;
+const double THRESHOLD = 0.005;
 
 img::img(const fs::path& p, const Magick::Image& image): base(p), _image(image) {
     const Magick::PixelPacket* pix = image.getConstPixels(0, 0, image.size().width(), image.size().height());
@@ -34,7 +34,7 @@ img::img(const fs::path& p, const Magick::Image& image): base(p), _image(image) 
 }
 
 boost::shared_ptr<img> img::try_file(const boost::shared_ptr<base>& file) {
-    static const fs::path exts[] = { ".JPG" };
+    static const fs::path exts[] = { ".JPG", ".png" };
     static const fs::path* exts_end = exts + sizeof(exts)/sizeof(fs::path);
     if (find(exts, exts_end, file->path().extension()) != exts_end) {
         try { 
@@ -61,6 +61,7 @@ boost::shared_ptr<base> img::compare(const boost::shared_ptr<base>& _a) const {
 
 inline comparison_result img::precompare(const boost::shared_ptr<base>& a) const {
     return equal;
+    // return static_cast<const img*>(a.get())->bucket[0][0] - bucket[0][0] > THRESHOLD ? less : equal;
 }
 
 }
