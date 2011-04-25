@@ -1,14 +1,15 @@
 LIBS = boost_program_options boost_filesystem boost_system magic
-CFLAGS = -O2 -Wall `Magick++-config --cppflags`
+CFLAGS = -Wall `Magick++-config --cppflags`
 LINKER_FLAGS = `Magick++-config --libs`
 PROJECT_NAME = pn
 SRC_DIR = src
 SRCS = $(wildcard $(SRC_DIR)/*.cpp $(SRC_DIR)/*/*.cpp)
 OBJS = $(patsubst $(SRC_DIR)/%.cpp,%.o,$(SRCS))
 
-builds = release debug
-debug_flags = -ggdb
-release_flags = -DNDEBUG
+builds = release debug valgrind
+debug_flags = -ggdb -O2
+release_flags = -DNDEBUG -O2
+valgrind_flags = -g -O0
 
 .PHONY: $(builds) clean
 $(builds): %: %-makedirs %/$(PROJECT_NAME)
