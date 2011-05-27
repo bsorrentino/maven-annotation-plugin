@@ -2,11 +2,11 @@
 #include <boost/make_shared.hpp>
 #include <string.h>
 #include <ctype.h>
-#include <algorithm>
 #include <map>
 
 #include "text.h"
 #include "../kleisli.h"
+#include "../program_options.h"
 
 namespace file_type {
 
@@ -88,74 +88,63 @@ text::text(const fs::path& p): base(p) {
     char buf[buf_size];
     fs::ifstream file(p);
     uint32_t hash = hash_init();
-    std::string last;
-    std::map<std::string, unsigned int> counts;
+    unsigned int cur_size = 0;
+    std::map<uint32_t, unsigned int> counts;
     while (!file.eof()) {
         file.read(buf, buf_size);
         for (int i = 0; i < file.gcount(); ++i) {
-            if (buf[i] == '.' || buf[i] == '!' || buf[i] == '?') {
-                _hashes.push_back(hash_final(hash));
-                hash = hash_init();
-            } else
             if (isalnum(buf[i])) {
                 hash_update(hash, tolower(buf[i]));
-            }
-            if (isalnum(buf[i])) {
-                last += /*tolower*/(buf[i]);
+                ++cur_size;
             } else {
-                if (last.length() > 3) {
-                    ++counts[last];
-                    last = "";
+                if (cur_size > 3) {
+                    ++counts[hash_final(hash)];
                 }
+                hash = hash_init();
+                cur_size = 0;
             }
         }
     }
-    std::map<unsigned int, std::vector<std::string> > rev;
-    for (std::map<std::string, unsigned int>::iterator it = counts.begin(); it != counts.end(); ++it) {
+    std::map<unsigned int, std::vector<uint32_t> > rev;
+    for (std::map<uint32_t, unsigned int>::iterator it = counts.begin(); it != counts.end(); ++it) {
         rev[it->second].push_back(it->first);
     }
-    std::map<unsigned int, std::vector<std::string> >::iterator it = --rev.end();
-    for (unsigned int i = 0; i < WORDS_COUNT;) {
-        for (unsigned int j = 0; j < it->second.size(); ++j, ++i) {
-            if (i >= WORDS_COUNT) {
+    std::map<unsigned int, std::vector<uint32_t> >::iterator it = --rev.end();
+    for (unsigned int i = 0; i < program_options::text_words_count();) {
+        for (unsigned int j = 0; j < it->second.size(); ++j) {
+            if (i++ >= program_options::text_words_count()) {
                 break;
             }
-            _words[i] = it->second[j];
+            _words.push_back(it->second[j]);
         }
         --it;
     }
-    std::sort(_words, _words + WORDS_COUNT);
-    std::sort(_hashes.begin(), _hashes.end());
+    std::sort(_words.begin(), _words.end());
 }
 
 boost::shared_ptr<text> text::try_file(const boost::shared_ptr<base>& file) {
-    static const std::string mimes[] = { "text/plain" };
-    static const std::string exts[] = { ".txt" };
-    return file->check_type(mimes, mimes + sizeof(mimes)/sizeof(std::string),
-        exts, exts + sizeof(exts)/sizeof(std::string)) ?
+    return file->check_type(program_options::text_formats()) ?
         boost::make_shared<text>(file->path()) : boost::shared_ptr<text>();
 }
 
 boost::shared_ptr<base> text::compare(const boost::shared_ptr<base>& _a) const {
     const text* a = static_cast<const text*>(_a.get());
     unsigned int r = 0;
-    const std::string *first1 = _words, *last1 = _words + WORDS_COUNT,
-        *first2 = a->_words, *last2 = a->_words + WORDS_COUNT;
-    // std::vector<uint32_t>::const_iterator first1 = _hashes.begin(),
-    //     last1 = _hashes.end(), first2 = a->_hashes.begin(), last2 = a->_hashes.end();
+    std::vector<uint32_t>::const_iterator
+        first1 = _words.begin(), last1 = _words.end(),
+        first2 = a->_words.begin(), last2 = a->_words.end();
     while (true) {
         if (first1 == last1)
             { r += distance(first2, last2); break; }
         if (first2 == last2)
             { r += distance(first1, last1); break; }
         if (*first1 < *first2)
-            { ++r; *first1++; }
+            { ++r; first1++; }
         else if (*first2 < *first1)
-            { ++r; *first2++; }
+            { ++r; first2++; }
         else { first1++; first2++; }
     }
-    return r <= 2 ? _a : boost::shared_ptr<text>();
-    // return float(r) / (_hashes.size() + a->_hashes.size()) < THRESHOLD ? _a : boost::shared_ptr<text>();
+    return r <= program_options::text_threshold() ? _a : boost::shared_ptr<text>();
 }
 
 }

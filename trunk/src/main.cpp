@@ -2,17 +2,17 @@
 #include "program_options.h"
 #include "magic_file.h"
 
-void default_main(const program_options& po);
+void default_main();
 
 int main(int argc, char* argv[]) {
     stderr_logger std_logger(argv[0]);
     logger::set_std(&std_logger);
     
-    program_options po(argc, argv);
+    program_options::initialize(argc, argv);
     
     magic::initialize();
     
-    default_main(po);
+    default_main();
     
     magic::destroy();
     

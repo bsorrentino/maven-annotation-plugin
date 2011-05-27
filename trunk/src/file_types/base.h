@@ -30,17 +30,7 @@ public:
     virtual boost::shared_ptr<base> compare(const boost::shared_ptr<base>& a) const;
     virtual comparison_result precompare(const boost::shared_ptr<base>& a) const;
     
-    template<typename It1, typename It2>
-    bool check_type(It1 mimes, It1 mimes_end, It2 exts, It2 exts_end) const {
-        bool res;
-        if (!_mime.empty()) {
-            res = std::find(mimes, mimes_end, _mime) != mimes_end;
-        } else {
-            std::string ext = boost::to_lower_copy(_path.extension().string());
-            res = std::find(exts, exts_end, ext) != exts_end;
-        }
-        return res;
-    }
+    bool check_type(const std::vector<std::string>& types) const;
 };
 
 }

@@ -15,9 +15,7 @@ struct text: base {
     boost::shared_ptr<base> compare(const boost::shared_ptr<base>& a) const;
     comparison_result precompare(const boost::shared_ptr<base>& a) const { return equal; }
 private:
-    static const unsigned int WORDS_COUNT = 10;
-    std::vector<uint32_t> _hashes;
-    std::string _words[WORDS_COUNT];
+    std::vector<uint32_t> _words;
 };
 
 }

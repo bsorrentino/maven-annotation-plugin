@@ -39,4 +39,15 @@ inline comparison_result base::precompare(const boost::shared_ptr<base>& a) cons
     return _size < a->_size ? less : _size == a->_size ? equal : greater;
 }
 
+bool base::check_type(const std::vector<std::string>& types) const {
+    bool res;
+    if (!_mime.empty()) {
+        res = std::find(types.begin(), types.end(), _mime) != types.end();
+    } else {
+        std::string ext = boost::to_lower_copy(_path.extension().string());
+        res = std::find(types.begin(), types.end(), ext) != types.end();
+    }
+    return res;
+}
+
 }

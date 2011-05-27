@@ -1,6 +1,7 @@
 #ifndef _FILE_TYPE_IMG_H_
 #define _FILE_TYPE_IMG_H_
 
+#include <vector>
 #include <boost/shared_ptr.hpp>
 #include <Magick++.h>
 
@@ -16,9 +17,8 @@ struct img: base {
     boost::shared_ptr<base> compare(const boost::shared_ptr<base>& a) const;
     comparison_result precompare(const boost::shared_ptr<base>& a) const;
 private:
-    static const unsigned int BUCKET_COUNT = 4;
     static const unsigned int HISTOGRAM_COUNT = 3;
-    double bucket[HISTOGRAM_COUNT][BUCKET_COUNT];
+    std::vector<double> bucket[HISTOGRAM_COUNT];
     mutable Magick::PixelPacket* _pixels;
     float _aspect_ratio;
     void init_pixels() const;

@@ -43,15 +43,15 @@ public:
     }
 };
 
-void default_main(const program_options& po) {
+void default_main() {
     struct : end< boost::shared_ptr<file_type::base> > {
         void next(const boost::shared_ptr<file_type::base>& t) { std::cout << t->path().string() << "\n"; }
         void stop() { std::cout << "\n"; }
     } output;
     
-    make_pair(po.input_files().begin(), po.input_files().end())
+    make_pair(program_options::input_files().begin(), program_options::input_files().end())
     >>= fs::recursive()
-    >>= (po.extensions().empty() ? The< arr<fs::path, fs::path> >() : The<elem_filter>(po.extensions()))
+    >>= (program_options::extensions().empty() ? The< arr<fs::path, fs::path> >() : The<elem_filter>(program_options::extensions()))
     >>= file_typer_match_first()
     >>= clusterization()
     >>= comparator<file_type::base, file_type::base>()
