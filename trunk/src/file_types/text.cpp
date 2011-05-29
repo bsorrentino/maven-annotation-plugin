@@ -117,6 +117,9 @@ text::text(const fs::path& p): base(p) {
             }
             _words.push_back(it->second[j]);
         }
+        if (it == rev.begin()) {
+            break;
+        }
         --it;
     }
     std::sort(_words.begin(), _words.end());

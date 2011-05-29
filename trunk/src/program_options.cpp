@@ -15,7 +15,8 @@ unsigned int program_options::_text_words_count = 10
     , program_options::_image_bucket_count = 4
     , program_options::_image_max_diff = 200000
     , program_options::_image_img_size = 128
-    , program_options::_text_threshold = 2;
+    , program_options::_text_threshold = 2
+;
 bool program_options::_image_precise = false;
 
 static void parse_list(const std::string& list, std::vector<std::string>* res) {
@@ -57,6 +58,12 @@ void program_options::initialize(int argc, char* argv[]) {
     const std::string usage = std::string("Usage: ") + argv[0] + " [OPTIONS] FILES\n";
     try {
         std::string extensions, text_formats, image_formats;
+        int image_img_size = _image_img_size
+            , image_max_diff = _image_max_diff
+            , image_bucket_count = _image_bucket_count
+            , text_words_count = _text_words_count
+            , text_threshold = _text_threshold
+        ;
         
         po::options_description visible_options("Available options");
         visible_options.add_options()
@@ -66,14 +73,14 @@ void program_options::initialize(int argc, char* argv[]) {
         po::options_description config_file_options;
         config_file_options.add_options()
             ("text.formats", po::value(&text_formats))
-            ("text.threshold", po::value(&_text_threshold))
-            ("text.words_count", po::value(&_text_words_count))
+            ("text.threshold", po::value(&text_threshold))
+            ("text.words_count", po::value(&text_words_count))
             ("image.formats", po::value(&image_formats))
-            ("image.bucket_count", po::value(&_image_bucket_count))
+            ("image.bucket_count", po::value(&image_bucket_count))
             ("image.threshold", po::value(&_image_threshold))
             ("image.precise", po::value(&_image_precise))
-            ("image.max_diff", po::value(&_image_max_diff))
-            ("image.img_size", po::value(&_image_img_size))
+            ("image.max_diff", po::value(&image_max_diff))
+            ("image.img_size", po::value(&image_img_size))
         ;
         
         po::options_description command_line_options;
@@ -103,6 +110,36 @@ void program_options::initialize(int argc, char* argv[]) {
         parse_list(extensions, &_extensions);
         parse_list(text_formats, &_text_formats);
         parse_list(image_formats, &_image_formats);
+        
+        if (image_img_size <= 0) {
+            logger::std("image.img_size should be positive");
+        } else {
+            _image_img_size = image_img_size;
+        }
+        if (image_max_diff < 0) {
+            logger::std("image.max_diff should be nonnegative");
+        } else {
+            _image_max_diff = image_max_diff;
+        }
+        if (_image_threshold < 0) {
+            logger::std("image.threshold should be nonnegative");
+            _image_threshold = 0.005;
+        }
+        if (image_bucket_count <= 0 || image_bucket_count > 65536) {
+            logger::std("image.bucket_count should be positive and less than or equal to 65536");
+        } else {
+            _image_bucket_count = image_bucket_count;
+        }
+        if (text_words_count <= 0) {
+            logger::std("text.words_count should be positive");
+        } else {
+            _text_words_count = text_words_count;
+        }
+        if (text_threshold < 0 || text_threshold > text_words_count * 2) {
+            logger::std_stream() << "text.threshold should be nonnegative and less than or equal to " << 2 * _text_words_count << std::endl;
+        } else {
+            _text_threshold = text_threshold;
+        }
     } catch(std::exception const& e) {
         logger::std(e.what());
         exit(1);

@@ -13,9 +13,7 @@ img::img(const fs::path& p, const Magick::Image& image): base(p), _pixels(0) {
     const Magick::PixelPacket* pix = image.getConstPixels(0, 0, image.size().width(), image.size().height());
     static const unsigned int BUCKET_SIZE = 65536 / program_options::image_bucket_count();
     for (unsigned int j = 0; j < program_options::image_bucket_count(); ++j) {
-        bucket[0].push_back(0);
-        bucket[1].push_back(0);
-        bucket[2].push_back(0);
+        for (unsigned int k = 0; k < HISTOGRAM_COUNT; ++k) bucket[k].push_back(0);
     }
     unsigned int size = image.size().width() * image.size().height();
     for (unsigned int i = 0; i < size; ++i, ++pix) {
@@ -88,7 +86,7 @@ boost::shared_ptr<base> img::compare(const boost::shared_ptr<base>& _a) const {
                 res += abs(_pixels[p].red - a->_pixels[p1].red)
                     + abs(_pixels[p].green - a->_pixels[p1].green)
                     + abs(_pixels[p].blue - a->_pixels[p1].blue);
-                if (res > program_options::image_max_diff()) {
+                if (res >= program_options::image_max_diff()) {
                     return boost::shared_ptr<img>();
                 }
             }
