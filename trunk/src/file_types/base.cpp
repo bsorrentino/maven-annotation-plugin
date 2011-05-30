@@ -1,7 +1,5 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/make_shared.hpp>
-#include <cstring>
-#include <cassert>
 
 #include "base.h"
 #include "../kleisli.h"

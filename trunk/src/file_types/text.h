@@ -1,7 +1,6 @@
 #ifndef _FILE_TYPE_TEXT_H_
 #define _FILE_TYPE_TEXT_H_
 
-#include <stdint.h>
 #include <vector>
 
 #include "base.h"

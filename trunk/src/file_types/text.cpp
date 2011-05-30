@@ -1,7 +1,5 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/make_shared.hpp>
-#include <string.h>
-#include <ctype.h>
 #include <map>
 
 #include "text.h"
