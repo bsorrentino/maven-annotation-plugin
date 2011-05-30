@@ -1,8 +1,11 @@
 #include <boost/program_options/variables_map.hpp>
 #include <boost/program_options/parsers.hpp>
 #include <exception>
+#include <stdlib.h>
 
 #include "program_options.h"
+#include "filesystem.h"
+#include "../config.h"
 
 namespace po = boost::program_options;
 
@@ -47,6 +50,30 @@ static void parse_list(const std::string& list, std::vector<std::string>* res) {
     }
 }
 
+static void parse_config_file(po::options_description config_file_options, po::variables_map vm, std::string config_file) {
+    fs::path file_name;
+    if (vm.count("config")) {
+        file_name = config_file;
+    } else {
+#ifndef FILE_CONF
+        return;
+#endif
+        char* home = getenv("HOME");
+        file_name = home ? fs::path(home) / "." PACKAGE_NAME / FILE_CONF : "";
+        if (!exists(file_name)) {
+#ifndef DATA_DIR
+            return;
+#endif
+            file_name = fs::path(DATA_DIR) / FILE_CONF;
+            if (!exists(file_name)) {
+                return;
+            }
+        }
+    }
+    po::store(po::parse_config_file<char>(file_name.c_str(), config_file_options), vm);
+    po::notify(vm);
+}
+
 void program_options::initialize(int argc, char* argv[]) {
     _text_formats.push_back("text/plain");
     _text_formats.push_back(".txt");
@@ -57,7 +84,7 @@ void program_options::initialize(int argc, char* argv[]) {
     
     const std::string usage = std::string("Usage: ") + argv[0] + " [OPTIONS] FILES\n";
     try {
-        std::string extensions, text_formats, image_formats;
+        std::string extensions, text_formats, image_formats, config_file;
         int image_img_size = _image_img_size
             , image_max_diff = _image_max_diff
             , image_bucket_count = _image_bucket_count
@@ -68,6 +95,7 @@ void program_options::initialize(int argc, char* argv[]) {
         po::options_description visible_options("Available options");
         visible_options.add_options()
             ("extensions", po::value(&extensions), "Search through files with <extensions>")
+            ("config,c", po::value(&config_file), "Path to config file")
             ("help", "Print this message and exit")
         ;
         po::options_description config_file_options;
@@ -104,8 +132,7 @@ void program_options::initialize(int argc, char* argv[]) {
             std::cout << visible_options << "\n";
             exit(0);
         }
-        po::store(po::parse_config_file<char>("file.conf", config_file_options), vm);
-        po::notify(vm);
+        parse_config_file(config_file_options, vm, config_file);
         
         parse_list(extensions, &_extensions);
         parse_list(text_formats, &_text_formats);

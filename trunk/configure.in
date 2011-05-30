@@ -2,7 +2,7 @@ AC_PREREQ([2.68])
 AC_INIT([pn], [0.1], [valery.isaev@gmail.com])
 
 AC_CONFIG_SRCDIR([src/main.cpp])
-AC_CONFIG_HEADER(src/config.h)
+AC_CONFIG_HEADER(config.h)
 
 AM_INIT_AUTOMAKE([1.9 foreign])
 

@@ -26,5 +26,12 @@ pn_SOURCES = \
     src/file_typer.h \
     src/filesystem.h
 
-pn_CXXFLAGS = -I/usr/include/ImageMagick 
+file_conf = file.conf
+pkgdata_DATA = $(file_conf)
+
+uninstall: uninstall-am
+	@echo " ( rmdir '$(pkgdatadir)' )"
+	-@rmdir '$(pkgdatadir)'
+
+pn_CXXFLAGS = -I/usr/include/ImageMagick -DDATA_DIR='"$(pkgdatadir)"' -DFILE_CONF='"$(file_conf)"'
 pn_LDADD = -lMagick++ -lboost_program_options -lboost_filesystem -lboost_system
