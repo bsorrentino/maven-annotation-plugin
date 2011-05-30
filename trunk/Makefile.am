@@ -1,8 +1,17 @@
 bin_PROGRAMS = pn
 
+FILE_CONF = file.conf
+pkgdata_DATA = $(FILE_CONF)
+
+if DISABLE_IMAGES
+else
+images_pn_sources = src/file_types/img.cpp src/file_types/img.h
+images_pn_cxxflags = -I/usr/include/ImageMagick
+images_pn_ldadd = -lMagick++
+endif
+
 pn_SOURCES = \
     src/logger.cpp \
-    src/file_types/img.cpp \
     src/file_types/base.cpp \
     src/file_types/text.cpp \
     src/program_options.cpp \
@@ -13,7 +22,6 @@ pn_SOURCES = \
     src/file_typer.cpp \
     src/clusterization.cpp \
     src/logger.h \
-    src/file_types/img.h \
     src/file_types/text.h \
     src/file_types/base.h \
     src/kleisli.h \
@@ -24,14 +32,13 @@ pn_SOURCES = \
     src/file_types.h \
     src/clusterization.h \
     src/file_typer.h \
-    src/filesystem.h
+    src/filesystem.h \
+	$(images_pn_sources) \
+    $(FILE_CONF)
 
-file_conf = file.conf
-pkgdata_DATA = $(file_conf)
+pn_CXXFLAGS = $(images_pn_cxxflags) -DDATA_DIR='"$(pkgdatadir)"'
+pn_LDADD = $(images_pn_ldadd) -lboost_program_options -lboost_filesystem -lboost_system
 
 uninstall: uninstall-am
 	@echo " ( rmdir '$(pkgdatadir)' )"
 	-@rmdir '$(pkgdatadir)'
-
-pn_CXXFLAGS = -I/usr/include/ImageMagick -DDATA_DIR='"$(pkgdatadir)"' -DFILE_CONF='"$(file_conf)"'
-pn_LDADD = -lMagick++ -lboost_program_options -lboost_filesystem -lboost_system

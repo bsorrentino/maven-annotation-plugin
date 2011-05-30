@@ -6,6 +6,7 @@
 #include "program_options.h"
 #include "filesystem.h"
 #include "../config.h"
+#include <stdio.h>
 
 namespace po = boost::program_options;
 
@@ -64,7 +65,7 @@ static void parse_config_file(po::options_description config_file_options, po::v
 #ifndef DATA_DIR
             return;
 #endif
-            file_name = fs::path(DATA_DIR) / FILE_CONF;
+            file_name = fs::path(DATA_DIR) / PACKAGE / FILE_CONF;
             if (!exists(file_name)) {
                 return;
             }
@@ -167,6 +168,7 @@ void program_options::initialize(int argc, char* argv[]) {
         } else {
             _text_threshold = text_threshold;
         }
+        printf("%d\n", _text_threshold);
     } catch(std::exception const& e) {
         logger::std(e.what());
         exit(1);
