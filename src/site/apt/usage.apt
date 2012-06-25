@@ -1,0 +1,225 @@
+
+
+Repository
+
+  To use this plugin you have to include the following repository declaration in your POM
+
++-------------------------------------------+
+
+<pluginRepositories>
+
+	<!-- THIS REPOSITORY IS NOT LONGER VALID 
+	<pluginRepository>
+		<id>maven2-repository.dev.java.net</id>
+		<name>Java.net Repository for Maven</name>
+		<url>http://download.java.net/maven/2/</url>
+		<layout>default</layout>
+    </pluginRepository>
+    -->
+
+	<!-- IF YOU WANT STAY TUNED ON UPDATE REMOVE COMMENT -->
+	  
+    <pluginRepository>
+		<id>sonatype-repo</id>
+		<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		<releases>
+			<enabled>false</enabled>
+		</releases>
+		<snapshots>
+			<enabled>true</enabled>
+		</snapshots>
+    </pluginRepository>
+    
+</pluginRepositories>
+
+
++-------------------------------------------+
+
+Usage
+
+  <<Example1>>
+  
+  Sources will be generated into target/generated-sources/apt/main/java 
+  Test sources into target/generated-sources/apt/test/java
+  Both directories will be added to the compilation path
+  
++-------------------------------------------+
+
+<build>
+  <plugins>
+    <!-- Run annotation processors on src/main/java sources -->
+    <plugin>
+      <groupId>org.bsc.maven</groupId>
+      <artifactId>maven-processor-plugin</artifactId>
+      <executions>
+        <execution>
+          <id>process</id>
+          <goals>
+            <goal>process</goal>
+          </goals>
+          <phase>generate-sources</phase>
+        </execution>
+      </executions>
+    </plugin>
+    <!-- Run annotation processors on src/test/java sources -->
+    <plugin>
+      <groupId>org.bsc.maven</groupId>
+      <artifactId>maven-processor-plugin</artifactId>
+      <executions>
+        <execution>
+          <id>process-test</id>
+          <goals>
+            <goal>process-test</goal>
+          </goals>
+          <phase>generate-test-sources</phase>
+        </execution>
+      </executions>
+    </plugin>
+    <!-- Disable annotation processors during normal compilation -->
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-compiler-plugin</artifactId>
+      <configuration>
+        <compilerArgument>-proc:none</compilerArgument>
+      </configuration>
+    </plugin>
+
+  </plugins>
+</build>
+
++-------------------------------------------+
+
+  <<Example2>>
+
+  Generating sources into src/main/generated directory. This strategy is good if you wish to check in your generated sources into your SCM.
+  Run mvn generate-sources to generate the sources.
+  
++-------------------------------------------+
+
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.bsc.maven</groupId>
+      <artifactId>maven-processor-plugin</artifactId>
+      <executions>
+        <execution>
+          <id>process</id>
+          <goals>
+            <goal>process</goal>
+          </goals>
+          <phase>generate-sources</phase>
+          <configuration>
+            <!-- source output directory -->
+            <outputDirectory>src/main/generated</outputDirectory>
+          </configuration> 
+        </execution>
+      </executions>
+    </plugin>
+  </plugin>
+</build>
+
++-------------------------------------------+
+
+  <<Example3>>
+
+  Running specific annotation processors only.
+  
++-------------------------------------------+
+
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.bsc.maven</groupId>
+      <artifactId>maven-processor-plugin</artifactId>
+      <executions>
+        <execution>
+          <id>process</id>
+          <goals>
+            <goal>process</goal>
+          </goals>
+          <phase>generate-sources</phase>
+          <configuration>
+
+            <processors>
+               <!-- list of processors to use -->
+               <processor>org.bsc.apt.BeanInfoAnnotationProcessor</processor>
+            </processors>
+            
+          </configuration> 
+        </execution>
+      </executions>
+    </plugin>
+  </plugin>
+</build>
+
++-------------------------------------------+
+
+  <<Example4>>
+
+  Passing options to processors 
+  
++-------------------------------------------+
+
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.bsc.maven</groupId>
+      <artifactId>maven-processor-plugin</artifactId>
+      <executions>
+        <execution>
+          <id>process</id>
+          <goals>
+            <goal>process</goal>
+          </goals>
+          <phase>generate-sources</phase>
+          <configuration>
+           <!-- STANDARD WAY -->
+            <compilerArguments>-Amyoption=TRUE</outputDirectory> 
+            
+           <!-- NEW FEATURE FROM VERSION 2.0.4-->
+           <options>
+           	<myoption>TRUE</myoption>
+           </options>
+          
+          </configuration> 
+        </execution>
+      </executions>
+    </plugin>
+  </plugin>
+</build>
+
++-------------------------------------------+
+
+  <<Example5>>
+
+  Set System Properties 
+  
++-------------------------------------------+
+
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.bsc.maven</groupId>
+      <artifactId>maven-processor-plugin</artifactId>
+      <executions>
+        <execution>
+          <id>process</id>
+          <goals>
+            <goal>process</goal>
+          </goals>
+          <phase>generate-sources</phase>
+          <configuration>
+          
+           <systemProperties>
+            <log4j.ignoreTCL>true</log4j.ignoreTCL>
+           </systemProperties>
+          
+          </configuration> 
+        </execution>
+      </executions>
+    </plugin>
+  </plugin>
+</build>
+
++-------------------------------------------+
+

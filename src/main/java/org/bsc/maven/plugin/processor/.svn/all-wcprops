@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/402/trunk/processor/src/main/java/org/bsc/maven/plugin/processor
+END
+TestAnnotationProcessorMojo.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/402/trunk/processor/src/main/java/org/bsc/maven/plugin/processor/TestAnnotationProcessorMojo.java
+END
+AbstractAnnotationProcessorMojo.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/400/trunk/processor/src/main/java/org/bsc/maven/plugin/processor/AbstractAnnotationProcessorMojo.java
+END
+MainAnnotationProcessorMojo.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/400/trunk/processor/src/main/java/org/bsc/maven/plugin/processor/MainAnnotationProcessorMojo.java
+END
+Debug.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/400/trunk/processor/src/main/java/org/bsc/maven/plugin/processor/Debug.java
+END
