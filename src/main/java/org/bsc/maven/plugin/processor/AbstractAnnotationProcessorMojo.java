@@ -24,16 +24,10 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import javax.tools.Diagnostic;
-import javax.tools.DiagnosticListener;
-import javax.tools.JavaCompiler;
 import javax.tools.JavaCompiler.CompilationTask;
-import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.ToolProvider;
-
+import javax.tools.*;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -143,7 +137,9 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     private String[] excludes;
     
     
-    private ReentrantLock compileLock = new ReentrantLock();
+    private static final Lock syncExecutionLock = new ReentrantLock();
+    
+
     
     protected abstract File getSourceDirectory();
     protected abstract File getOutputClassDirectory();
@@ -211,6 +207,8 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
             return;
         }
 
+        syncExecutionLock.lock();
+        
         try
         {
             executeWithExceptionsHandled();
@@ -222,6 +220,9 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
             {
                 throw new MojoExecutionException("Error executing", e1);
             }
+        }
+        finally {
+          syncExecutionLock.unlock();  
         }
 
     }
@@ -333,7 +334,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
         }
         
-        compileLock.lock();
+        //compileLock.lock();
         try {
             JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
             
@@ -379,7 +380,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
             }
         }
         finally {
-           compileLock.unlock(); 
+           //compileLock.unlock(); 
         }
             
     }
