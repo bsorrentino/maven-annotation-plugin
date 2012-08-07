@@ -59,9 +59,9 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
 
 
 <scm>
-<connection>scm:svn:https://maven-annotation-plugin.googlecode.com/svn/trunk/processor</connection>
-<developerConnection>scm:svn:https://maven-annotation-plugin.googlecode.com/svn/trunk/processor</developerConnection>
-<url>https://maven-annotation-plugin.googlecode.com/svn/trunk/processor</url>
+<connection>scm:git:https://bartolomeo.sorrentino@code.google.com/p/maven-annotation-plugin/</connection>
+<developerConnection>scm:git:https://bartolomeo.sorrentino@code.google.com/p/maven-annotation-plugin/</developerConnection>
+<url>https://bartolomeo.sorrentino@code.google.com/p/maven-annotation-plugin/</url>
 </scm>
 
 <inceptionYear>2009</inceptionYear>
