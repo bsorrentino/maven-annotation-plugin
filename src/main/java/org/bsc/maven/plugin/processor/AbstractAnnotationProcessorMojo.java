@@ -141,7 +141,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     
 
     
-    protected abstract File getSourceDirectory();
+    protected abstract java.util.List<File> getSourceDirectories();
     protected abstract File getOutputClassDirectory();
 
     private String buildProcessor()
@@ -240,28 +240,37 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
         // new Debug(project).printDebugInfo();
 
-        java.io.File sourceDir = getSourceDirectory();
-        if( sourceDir==null ) {
-            getLog().warn( "source directory cannot be read (null returned)! Processor task will be skipped");
-            return;            
-        }
-        if( !sourceDir.exists() ) {
-            getLog().warn( "source directory doesn't exist! Processor task will be skipped");
-            return;                        
-        }
-        if( !sourceDir.isDirectory() ) {
-            getLog().warn( "source directory is invalid! Processor task will be skipped");
-            return;                        
-        }
-        
         final String includesString = ( includes==null || includes.length==0) ? "**/*.java" : StringUtils.join(includes, ",");
         final String excludesString = ( excludes==null || excludes.length==0) ? null : StringUtils.join(excludes, ",");
 
-        List<File> files = FileUtils.getFiles(getSourceDirectory(), includesString, excludesString);
-
-        Iterable< ? extends JavaFileObject> compilationUnits1 = null;
-
+        java.util.List<File> sourceDirs = getSourceDirectories();
+        if( sourceDirs == null ) throw new IllegalStateException("getSourceDirectories is null!");
         
+        
+        List<File> files = new java.util.ArrayList<File>();
+        
+        for( File sourceDir : sourceDirs ) {
+            
+            getLog().debug( String.format( "sourceDir [%s]", sourceDir.getPath()) );
+            
+            if( sourceDir==null ) {
+                getLog().warn( "source directory cannot be read (null returned)! Processor task will be skipped");
+                continue;            
+            }
+            if( !sourceDir.exists() ) {
+                getLog().warn( "source directory doesn't exist! Processor task will be skipped");
+                continue;                        
+            }
+            if( !sourceDir.isDirectory() ) {
+                getLog().warn( "source directory is invalid! Processor task will be skipped");
+                continue;                        
+            }
+        
+
+            files.addAll( FileUtils.getFiles(sourceDir, includesString, excludesString) );
+        }
+        
+        Iterable< ? extends JavaFileObject> compilationUnits1 = null;
 
         String compileClassPath = buildCompileClasspath();
 

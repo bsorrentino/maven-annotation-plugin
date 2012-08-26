@@ -74,9 +74,18 @@ public class TestAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
     private File outputClassDirectory;
 
     @Override
-    public File getSourceDirectory()
+    public java.util.List<File> getSourceDirectories()
     {
-        return sourceDirectory;
+        java.util.List<String> sourceRoots = project.getTestCompileSourceRoots();
+        java.util.List<File> result = new java.util.ArrayList<File>( sourceRoots.size() + 1);
+        
+        for( String s : sourceRoots ) {
+            if( s.equals(sourceDirectory.getPath())) continue;
+            result.add( new File(s) );
+        }
+        result.add( sourceDirectory );
+        
+        return result;
     }
 
     protected void addCompileSourceRoot(MavenProject project, String dir)
