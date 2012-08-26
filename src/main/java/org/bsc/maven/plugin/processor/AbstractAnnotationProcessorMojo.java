@@ -20,6 +20,7 @@
 package org.bsc.maven.plugin.processor;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -139,7 +140,15 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     
     private static final Lock syncExecutionLock = new ReentrantLock();
     
+    /**
+     * additional source directories for the annotation processors.
+     * @parameter
+     */
+    private File[] additionalSourceDirectories;
 
+    public File[] getAdditionalSourceDirectories() {
+        return additionalSourceDirectories;
+    }
     
     protected abstract File getSourceDirectory();
     protected abstract File getOutputClassDirectory();
@@ -241,24 +250,10 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         // new Debug(project).printDebugInfo();
 
         java.io.File sourceDir = getSourceDirectory();
-        if( sourceDir==null ) {
-            getLog().warn( "source directory cannot be read (null returned)! Processor task will be skipped");
-            return;            
+        List<File> files = scanSourceDirectorySources(sourceDir);
+        for (File additionalSourceDir : getAdditionalSourceDirectories()) {
+            files.addAll(scanSourceDirectorySources(additionalSourceDir));
         }
-        if( !sourceDir.exists() ) {
-            getLog().warn( "source directory doesn't exist! Processor task will be skipped");
-            return;                        
-        }
-        if( !sourceDir.isDirectory() ) {
-            getLog().warn( "source directory is invalid! Processor task will be skipped");
-            return;                        
-        }
-        
-        final String includesString = ( includes==null || includes.length==0) ? "**/*.java" : StringUtils.join(includes, ",");
-        final String excludesString = ( excludes==null || excludes.length==0) ? null : StringUtils.join(excludes, ",");
-
-        List<File> files = FileUtils.getFiles(getSourceDirectory(), includesString, excludesString);
-
         Iterable< ? extends JavaFileObject> compilationUnits1 = null;
 
         
@@ -383,6 +378,27 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
            //compileLock.unlock(); 
         }
             
+    }
+
+    private List<File> scanSourceDirectorySources(File sourceDir) throws IOException {
+        if( sourceDir==null ) {
+            getLog().warn( "source directory cannot be read (null returned)! Processor task will be skipped");
+            return null;
+        }
+        if( !sourceDir.exists() ) {
+            getLog().warn( "source directory doesn't exist! Processor task will be skipped");
+            return null;
+        }
+        if( !sourceDir.isDirectory() ) {
+            getLog().warn( "source directory is invalid! Processor task will be skipped");
+            return null;
+        }
+
+        final String includesString = ( includes==null || includes.length==0) ? "**/*.java" : StringUtils.join(includes, ",");
+        final String excludesString = ( excludes==null || excludes.length==0) ? null : StringUtils.join(excludes, ",");
+
+        List<File> files = FileUtils.getFiles(sourceDir, includesString, excludesString);
+        return files;
     }
 
     private void addCompilerArguments(List<String> options)
