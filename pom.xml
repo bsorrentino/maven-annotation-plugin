@@ -4,7 +4,7 @@
   <artifactId>maven-processor-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   <version>2.0.7-SNAPSHOT</version>
-  <name>maven-processor-plugin Maven Mojo</name>
+  <name>maven-processor-plugin - ${project.version}</name>
   <description>A maven plugin to process annotation for jdk6 at compile time
 
 This plugin helps to use from maven the new annotation processing provided by JDK6 integrated in java compiler

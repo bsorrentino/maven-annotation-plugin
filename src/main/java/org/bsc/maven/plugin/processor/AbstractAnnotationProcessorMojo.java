@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
@@ -147,11 +148,37 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     private File[] additionalSourceDirectories;
 
     public File[] getAdditionalSourceDirectories() {
+        if( additionalSourceDirectories == null ) {
+            additionalSourceDirectories = new File[0];
+        }
         return additionalSourceDirectories;
     }
     
-    protected abstract File getSourceDirectory();
+    /**
+     * 
+     * @return supported source directories
+     */
+    protected abstract java.util.Set<File> getSourceDirectories();
+    
+    /**
+     * 
+     * @return output folder
+     */
     protected abstract File getOutputClassDirectory();
+
+    /**
+     * 
+     * @param project
+     * @param dir 
+     */
+    protected abstract void addCompileSourceRoot(MavenProject project, String dir);
+    
+    /**
+     * 
+     * @return 
+     */
+    public abstract File getDefaultOutputDirectory();
+
 
     private String buildProcessor()
     {
@@ -249,14 +276,40 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
         // new Debug(project).printDebugInfo();
 
-        java.io.File sourceDir = getSourceDirectory();
-        List<File> files = scanSourceDirectorySources(sourceDir);
-        for (File additionalSourceDir : getAdditionalSourceDirectories()) {
-            files.addAll(scanSourceDirectorySources(additionalSourceDir));
-        }
-        Iterable< ? extends JavaFileObject> compilationUnits1 = null;
+        final String includesString = ( includes==null || includes.length==0) ? "**/*.java" : StringUtils.join(includes, ",");
+        final String excludesString = ( excludes==null || excludes.length==0) ? null : StringUtils.join(excludes, ",");
 
+        java.util.Set<File> sourceDirs = getSourceDirectories();
+        if( sourceDirs == null ) throw new IllegalStateException("getSourceDirectories is null!");
         
+        if( additionalSourceDirectories != null && additionalSourceDirectories.length>0) {
+            sourceDirs.addAll( Arrays.asList((File[])additionalSourceDirectories) );
+        }
+        
+        List<File> files = new java.util.ArrayList<File>();
+        
+        for( File sourceDir : sourceDirs ) {
+            
+            getLog().debug( String.format( "processing source directory [%s]", sourceDir.getPath()) );
+            
+            if( sourceDir==null ) {
+                getLog().warn( "source directory is null! Processor task will be skipped!" );
+                continue;            
+            }
+            if( !sourceDir.exists() ) {
+                getLog().warn( String.format("source directory [%s] doesn't exist! Processor task will be skipped!", sourceDir.getPath()));
+                continue;                        
+            }
+            if( !sourceDir.isDirectory() ) {
+                getLog().warn( String.format("source directory [%s] is invalid! Processor task will be skipped!", sourceDir.getPath()));
+                continue;                        
+            }
+        
+
+            files.addAll( FileUtils.getFiles(sourceDir, includesString, excludesString) );
+        }
+        
+        Iterable< ? extends JavaFileObject> compilationUnits1 = null;
 
         String compileClassPath = buildCompileClasspath();
 
@@ -437,9 +490,6 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
             addCompileSourceRoot(project, outputDirectory.getAbsolutePath());
         }
     }
-
-    protected abstract void addCompileSourceRoot(MavenProject project, String dir);
-    public abstract File getDefaultOutputDirectory();
 
     private void ensureOutputDirectoryExists()
     {
