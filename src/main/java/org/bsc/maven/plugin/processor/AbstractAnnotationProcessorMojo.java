@@ -95,6 +95,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
     /**
      * Controls whether or not the output directory is added to compilation
+     * @parameter 
      */
     //@MojoParameter(required = false, description = "Controls whether or not the output directory is added to compilation")
     private Boolean addOutputDirectoryToCompilationSources;
