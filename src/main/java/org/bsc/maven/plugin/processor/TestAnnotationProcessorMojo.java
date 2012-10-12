@@ -22,55 +22,51 @@ import java.io.File;
 import java.util.List;
 
 import org.apache.maven.model.Resource;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 
 /**
  * 
  * @author bsorrentino
  *
- * @goal process-test
- * @requiresDependencyResolution test
- * @phase generate-test-sources
  */
-//@MojoGoal("process-test")
-//@MojoRequiresDependencyResolution(value = "test")
-//@MojoPhase("generate-test-sources")
+@Mojo(name="process-test",threadSafe=true,requiresDependencyResolution= ResolutionScope.TEST,defaultPhase= LifecyclePhase.GENERATE_TEST_SOURCES)
 public class TestAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
 {
 
     /** 
      * project classpath 
      * 
-     * @parameter expression = "${project.testClasspathElements}"
-     * @required
-     * @readonly
      */
     @SuppressWarnings("rawtypes")
     //@MojoParameter(expression = "${project.testClasspathElements}", required = true, readonly = true)
+    @Parameter( defaultValue="${project.testClasspathElements}", required=true, readonly=true)
     private List classpathElements;
 
 
     /**
      * 
-     * @parameter expression = "${project.build.testSourceDirectory}"
-     * @required
      */
     //@MojoParameter(expression = "${project.build.testSourceDirectory}", required = true)
+    @Parameter( defaultValue="${project.build.testSourceDirectory}", required = true)
     private File sourceDirectory;
 
     /**
-     * @parameter expression = "${project.build.directory}/generated-sources/apt-test"
-     * @required
+     * 
      */
     //@MojoParameter(expression = "${project.build.directory}/generated-sources/apt-test", required = true)
+    @Parameter( defaultValue="${project.build.directory}/generated-sources/apt-test", required = true)
     private File defaultOutputDirectory;
 
     /**
      * Set the destination directory for class files (same behaviour of -d option)
      * 
-     * @parameter expression="${project.build.testOutputDirectory}" 
      */
     //@MojoParameter(required = false, expression="${project.build.testOutputDirectory}", description = "Set the destination directory for class files (same behaviour of -d option)")
+    @Parameter( defaultValue="${project.build.testOutputDirectory}")
     private File outputClassDirectory;
 
     @Override

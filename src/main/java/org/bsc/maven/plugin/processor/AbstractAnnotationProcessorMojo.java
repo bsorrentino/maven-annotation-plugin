@@ -33,6 +33,8 @@ import javax.tools.*;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
@@ -42,111 +44,108 @@ import org.codehaus.plexus.util.StringUtils;
  * 
  * @author bsorrentino
  *
- * @threadSafe
  */
 public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 {
 
     /**
-     * @parameter expression = "${project}"
-     * @readonly
-     * @required
+     * 
      */
     //@MojoParameter(expression = "${project}", readonly = true, required = true)
+    @Component
     protected MavenProject project;
 
     /**
-     * @parameter expression="${plugin.artifacts}"
-     * @readonly
+     * 
      */
     //@MojoParameter(expression="${plugin.artifacts}", readonly = true )
+    @Component
     private java.util.List<Artifact> pluginArtifacts;
 
     /**
      * Specify the directory where to place generated source files (same behaviour of -s option)
-     * @parameter
      * 
      */
     //@MojoParameter(required = false, description = "Specify the directory where to place generated source files (same behaviour of -s option)")
+    @Parameter
     private File outputDirectory;
 
     /**
      * Annotation Processor FQN (Full Qualified Name) - when processors are not specified, the default discovery mechanism will be used
-     * @parameter
      * 
      */
     //@MojoParameter(required = false, description = "Annotation Processor FQN (Full Qualified Name) - when processors are not specified, the default discovery mechanism will be used")
+    @Parameter
     private String[] processors;
 
     /**
      * Additional compiler arguments
-     * @parameter
      * 
      */
     //@MojoParameter(required = false, description = "Additional compiler arguments")
+    @Parameter
     private String compilerArguments;
 
     /**
      * Additional processor options (see javax.annotation.processing.ProcessingEnvironment#getOptions()
-     * @parameter alias="options"
      * 
      */
+    @Parameter( alias = "options" )
     private java.util.Map<String,Object> optionMap;
 
     /**
      * Controls whether or not the output directory is added to compilation
-     * @parameter 
      */
     //@MojoParameter(required = false, description = "Controls whether or not the output directory is added to compilation")
+    @Parameter
     private Boolean addOutputDirectoryToCompilationSources;
 
     /**
      * Indicates whether the build will continue even if there are compilation errors; defaults to true.
-     * @parameter default-value="true"  expression = "${annotation.failOnError}"
-     * @required
      */
     //@MojoParameter(required = true, defaultValue = "true", expression = "${annotation.failOnError}", description = "Indicates whether the build will continue even if there are compilation errors; defaults to true.")
+    @Parameter( defaultValue="true", required=true, property="annotation.failOnError" )
     private Boolean failOnError = true;
 
     /**
      * Indicates whether the compiler output should be visible, defaults to true.
      * 
-     * @parameter expression = "${annotation.outputDiagnostics}" default-value="true"
-     * @required
      */
     //@MojoParameter(required = true, defaultValue = "true", expression = "${annotation.outputDiagnostics}", description = "Indicates whether the compiler output should be visible, defaults to true.")
+    @Parameter( defaultValue="true", required=true, property="annotation.outputDiagnostics" )
     private boolean outputDiagnostics = true;
 
     /**
      * System properties set before processor invocation.
-     * @parameter
      * 
      */
     //@MojoParameter(required = false, description = "System properties set before processor invocation.")
+    @Parameter
     private java.util.Map<String,String> systemProperties;
     
     /**
      * includes pattern
-     * @parameter
      */
     //@MojoParameter( description="includes pattern")
+    @Parameter
     private String[] includes;
     
     /**
      * excludes pattern
-     * @parameter
      */
     //@MojoParameter( description="excludes pattern")
+    @Parameter
     private String[] excludes;
-    
-    
-    private static final Lock syncExecutionLock = new ReentrantLock();
     
     /**
      * additional source directories for the annotation processors.
-     * @parameter
      */
+    @Parameter
     private File[] additionalSourceDirectories;
+    
+
+    private static final Lock syncExecutionLock = new ReentrantLock();
+    
 
     public File[] getAdditionalSourceDirectories() {
         if( additionalSourceDirectories == null ) {
