@@ -12,15 +12,19 @@ This plugin helps to use from maven the new annotation processing provided by JD
 This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.codehaus.org/apt-maven-plugin/ </description>
   <url>http://code.google.com/p/maven-annotation-plugin/</url>
   
+  <!--
+    LEGACY MAVEN2 REPORTING
+
   <reporting>
-  	<plugins>
-  		<plugin>
-  			<groupId>org.apache.maven.plugins</groupId>
-  			<artifactId>maven-plugin-plugin</artifactId>
-  			<version>2.5.1</version>
-  		</plugin>
-  	</plugins>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-plugin-plugin</artifactId>
+            <version>2.5.1</version>
+        </plugin>
+    </plugins>
   </reporting>
+  -->
   
   
   <distributionManagement>
@@ -167,6 +171,41 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
     </executions>
 </plugin>
 
+<!--
+=====================================================
+MAVEN3 SITE GENERATION
+=====================================================
+-->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-site-plugin</artifactId>
+    <version>3.0</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>3.1</version>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+    <configuration>
+        <reportPlugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <version>3.1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+        </reportPlugins>
+    </configuration>
+</plugin>     
 
 </plugins>
 
@@ -177,14 +216,6 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
         <artifactId>wagon-svn</artifactId>
         <version>1.8</version>	
       </extension>
-<!-- 
-
-      <extension>
-        <groupId>org.jfrog.maven.annomojo</groupId>
-        <artifactId>maven-plugin-tools-anno</artifactId>
-        <version>${maven.anno.version}</version>
-      </extension>
- -->
 </extensions>  	
 
 
@@ -234,10 +265,10 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
                         <version>0.1</version>
 	
                         <executions>	
-						<!-- phase: deploy -->
+			<!-- phase: deploy -->
                             <execution>
                                 <configuration>
-								<!-- Tell your users that the project is deployed -->
+				<!-- Tell your users that the project is deployed -->
                                     <twitterStatus>New release ${project.version} of maven-annotation-plugin is available -	http://code.google.com/p/maven-annotation-plugin</twitterStatus>
                                 </configuration>
                                 <id>deploy</id>
