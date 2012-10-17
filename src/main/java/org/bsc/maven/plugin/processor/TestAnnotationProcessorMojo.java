@@ -20,7 +20,6 @@ package org.bsc.maven.plugin.processor;
 
 import java.io.File;
 import java.util.List;
-
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
