@@ -43,7 +43,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
 <!-- SONATYPE REPO -->
     <snapshot.repo.id>sonatype-repo</snapshot.repo.id>
     <snapshot.repo.url>https://oss.sonatype.org/content/repositories/snapshots</snapshot.repo.url>
-  	<release.repo.id>sonatype-repo</release.repo.id>
+    <release.repo.id>sonatype-repo</release.repo.id>
     <release.repo.url>https://oss.sonatype.org/service/local/staging/deploy/maven2</release.repo.url>
 
 <!-- GOOGLE REPO
@@ -54,9 +54,8 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
     <release.repo.id>java.net-m2-repository</release.repo.id>
     <release.repo.url>java-net:/maven2-repository/trunk/repository/</release.repo.url>
  -->
-    <release.site.url>svn:https://maven-annotation-plugin.googlecode.com/svn/docs</release.site.url>
+    <release.site.url>svn:https://bsc-documentation-repo.googlecode.com/svn/trunk/maven-annotation-plugin/site</release.site.url>
     <release.site.id>google-project</release.site.id>
-    <maven.anno.version>1.3.1</maven.anno.version>
 </properties>
 
 
