@@ -59,7 +59,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
      * 
      */
     //@MojoParameter(expression="${plugin.artifacts}", readonly = true )
-    @Component
+    @Parameter(property="plugin.artifacts", readonly=true)
     private java.util.List<Artifact> pluginArtifacts;
 
     /**
