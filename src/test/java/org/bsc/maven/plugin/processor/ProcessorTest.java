@@ -13,6 +13,18 @@ import org.hamcrest.core.*;
  */
 public class ProcessorTest {
  
+    @Test
+    public void compareFile() {
+    
+        final java.io.File f = new java.io.File( "target/test-classes");
+        final java.io.File f2 = new java.io.File( "target/classes");
+        
+        Assert.assertThat( f.equals(f2), Is.is(false));
+
+        final java.io.File f3 = new java.io.File( "target/classes");
+
+        Assert.assertThat( f3.equals(f2), Is.is(true));
+    }
     
     @Test
     public void testDuplicatePath() {
