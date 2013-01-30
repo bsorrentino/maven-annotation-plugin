@@ -4,6 +4,7 @@
  */
 package org.bsc.maven.plugin.processor;
 
+import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;
 import org.hamcrest.core.*;
@@ -24,6 +25,7 @@ public class ProcessorTest {
         final java.io.File f3 = new java.io.File( "target/classes");
 
         Assert.assertThat( f3.equals(f2), Is.is(true));
+        
     }
     
     @Test

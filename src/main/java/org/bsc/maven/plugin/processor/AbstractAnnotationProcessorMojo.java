@@ -141,24 +141,31 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
      * additional source directories for the annotation processors.
      */
     @Parameter
-    private File[] additionalSourceDirectories;
+    private java.util.List<File> additionalSourceDirectories;
     
-
+    
+    /**
+     * if true add to the source directory of the annotation processor all compile source roots detected int the project
+     * This is useful when we plan to use build-helper-maven-plugin
+     * 
+     * @since 2.1.1
+     */
+    @Parameter(defaultValue = "false")
+    private boolean addCompileSourceRoots = false;
+    
+    
+    
+    /**
+     * for execution synchronization
+     */
     private static final Lock syncExecutionLock = new ReentrantLock();
     
 
-    public File[] getAdditionalSourceDirectories() {
-        if( additionalSourceDirectories == null ) {
-            additionalSourceDirectories = new File[0];
-        }
-        return additionalSourceDirectories;
-    }
-    
     /**
      * 
      * @return supported source directories
      */
-    protected abstract java.util.Set<File> getSourceDirectories();
+    protected abstract java.util.Set<File> getSourceDirectories( java.util.Set<File> result );
     
     /**
      * 
@@ -279,12 +286,28 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         final String includesString = ( includes==null || includes.length==0) ? "**/*.java" : StringUtils.join(includes, ",");
         final String excludesString = ( excludes==null || excludes.length==0) ? null : StringUtils.join(excludes, ",");
 
-        java.util.Set<File> sourceDirs = getSourceDirectories();
-        if( sourceDirs == null ) throw new IllegalStateException("getSourceDirectories is null!");
+        java.util.Set<File> sourceDirs = getSourceDirectories(new java.util.HashSet<File>( 5 ));
         
-        if( additionalSourceDirectories != null && additionalSourceDirectories.length>0) {
-            sourceDirs.addAll( Arrays.asList((File[])additionalSourceDirectories) );
+        if( addCompileSourceRoots ) {
+            final java.util.List<String> sourceRoots = project.getCompileSourceRoots();
+            if( sourceRoots != null ) {
+                
+                for( String s : sourceRoots ) {         
+                    sourceDirs.add( new File(s) );
+                }
+            }
+
         }
+
+        if( additionalSourceDirectories != null && !additionalSourceDirectories.isEmpty() ) {
+            sourceDirs.addAll( additionalSourceDirectories );
+        }
+        
+        
+        if( sourceDirs == null ) {
+            throw new IllegalStateException("getSourceDirectories is null!");
+        }
+        
         
         List<File> files = new java.util.ArrayList<File>();
         
