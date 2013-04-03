@@ -23,11 +23,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.*;
 import org.apache.maven.artifact.Artifact;
@@ -47,6 +49,13 @@ import org.codehaus.plexus.util.StringUtils;
  */
 public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 {
+
+    interface ArtifactClosure {
+       
+        void execute( Artifact artifact );
+    }
+    
+    private static final String SOURCE_CLASSIFIER = "sources";
 
     /**
      * 
@@ -154,7 +163,14 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     private boolean addCompileSourceRoots = false;
     
     
-    
+    /**
+     * append source artifacts to sources list
+     * 
+     * @since 2.2.0
+     */
+    @Parameter( defaultValue = "false")
+    private boolean appendSourceArtifacts = false;
+	
     /**
      * for execution synchronization
      */
@@ -313,12 +329,13 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         
         for( File sourceDir : sourceDirs ) {
             
-            getLog().debug( String.format( "processing source directory [%s]", sourceDir.getPath()) );
-            
             if( sourceDir==null ) {
                 getLog().warn( "source directory is null! Processor task will be skipped!" );
                 continue;            
             }
+            
+            getLog().debug( String.format( "processing source directory [%s]", sourceDir.getPath()) );
+            
             if( !sourceDir.exists() ) {
                 getLog().warn( String.format("source directory [%s] doesn't exist! Processor task will be skipped!", sourceDir.getPath()));
                 continue;                        
@@ -331,8 +348,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
             files.addAll( FileUtils.getFiles(sourceDir, includesString, excludesString) );
         }
-        
-        Iterable< ? extends JavaFileObject> compilationUnits1 = null;
+       
 
         String compileClassPath = buildCompileClasspath();
 
@@ -404,35 +420,80 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
             }
 
         }
+
+        //
+        // add to allSource the files coming out from source archives
+        // 
+        final List<JavaFileObject> allSources = new java.util.ArrayList<JavaFileObject>();
+        
+        processSourceArtifacts( new ArtifactClosure() {
+
+            public void execute(Artifact artifact) {
+                try {
+                    
+                    java.io.File f = artifact.getFile();
+
+                    ZipFile zipFile = new ZipFile(f);
+                    Enumeration<? extends ZipEntry> entries = zipFile.entries();
+                    int sourceCount = 0;
+
+                    while (entries.hasMoreElements()) {
+                        ZipEntry entry = (ZipEntry) entries.nextElement();
+
+                        if (entry.getName().endsWith(".java")) {
+                            ++sourceCount;
+                            allSources.add(ZipFileObject.create(zipFile, entry));
+
+                        }
+                    }
+
+                    getLog().debug(String.format("** Discovered %d java sources in %s", sourceCount, f.getAbsolutePath()));
+                    
+                } catch (Exception ex) {
+                    getLog().warn(String.format("Problem reading source archive [%s]", artifact.getFile().getPath()));
+                }
+            }
+        });
         
         //compileLock.lock();
         try {
-            JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+            final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
             
             if( compiler==null ) {
                 getLog().error("JVM is not suitable for processing annotation! ToolProvider.getSystemJavaCompiler() is null.");
                 return;
             }
             
-            StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
+            final StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
     
             if( files!=null && !files.isEmpty() ) {
-                compilationUnits1 = fileManager.getJavaFileObjectsFromFiles(files);
+                
+        
+                for( JavaFileObject f : fileManager.getJavaFileObjectsFromFiles(files) ) {
+                    
+                    allSources.add(f);
+                };
+                
+                
                 
             }
-            else {
+            
+            
+            
+            if( allSources.isEmpty() ) {
                 getLog().warn( "no source file(s) detected! Processor task will be skipped");
                 return;
             }
     
-    
+            final Iterable<String> classes = null;
+            
             CompilationTask task = compiler.getTask(
                     new PrintWriter(System.out),
                     fileManager,
                     dl,
                     options, 
-                    null,
-                    compilationUnits1);
+                    classes,
+                    allSources);
     
             /*
              * //Create a list to hold annotation processors LinkedList<Processor> processors = new
@@ -526,5 +587,19 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         }
     }
 
+
+    private void processSourceArtifacts( ArtifactClosure closure ) {
+        if( ! appendSourceArtifacts ) {
+            return;
+        }
+        for (Artifact dep : this.project.getDependencyArtifacts()) {
+            if ((dep.hasClassifier()) && (dep.getClassifier().equals(SOURCE_CLASSIFIER))) {
+                
+                closure.execute(dep);
+                //getLog().debug("Append source artifact to classpath: " + dep.getGroupId() + ":" + dep.getArtifactId());
+                //this.sourceArtifacts.add(dep.getFile());
+            }
+        }
+    }
 
 }
