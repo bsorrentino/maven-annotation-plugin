@@ -22,6 +22,7 @@ package org.bsc.maven.plugin.processor;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -170,6 +171,14 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
      */
     @Parameter( defaultValue = "false")
     private boolean appendSourceArtifacts = false;
+    
+    /**
+     * The character set used for decoding sources
+     *
+     * @since 2.2.1
+     */
+    @Parameter(property = "project.build.sourceEncoding", readonly = true, required = true)
+    private String encoding;
 	
     /**
      * for execution synchronization
@@ -464,7 +473,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                 return;
             }
             
-            final StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
+            final StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, Charset.forName(encoding));
     
             if( files!=null && !files.isEmpty() ) {
                 

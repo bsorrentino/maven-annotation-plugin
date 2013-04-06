@@ -88,6 +88,13 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
 		</roles>
 	</developer>
 </developers>
+<contributors>
+    <contributor>
+        <email>velo.br@gmail.com</email>
+        <name>Marvin Froeder</name>
+        <timezone>GMT-3</timezone>
+    </contributor>
+</contributors>
  <licenses>
     <license>
       <name>GNU LESSER GENERAL PUBLIC LICENSE</name>
