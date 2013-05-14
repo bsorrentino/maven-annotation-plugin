@@ -378,7 +378,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         }
         else
         {
-            getLog().info("No processors specified. Using default discovery mechanism.");
+            getLog().warn("No processors specified. Using default discovery mechanism.");
         }
         options.add("-d");
         options.add(getOutputClassDirectory().getPath());
@@ -387,9 +387,10 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         options.add(outputDirectory.getPath());
 
 
-        for (String option : options)
-        {
-            getLog().info("javac option: " + option);
+        if( getLog().isDebugEnabled() ) {
+            for (String option : options) {
+                getLog().debug("javac option: " + option);
+            }
         }
 
         DiagnosticListener<JavaFileObject> dl = null;
@@ -400,7 +401,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
                 public void report(Diagnostic< ? extends JavaFileObject> diagnostic)
                 {
-                    getLog().info("diagnostic " + diagnostic);
+                    getLog().debug("diagnostic " + diagnostic);
 
                 }
 
@@ -424,7 +425,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
             
             for ( Map.Entry<String,String> e : pSet ) 
             {
-                getLog().info( String.format("set system property : [%s] = [%s]",  e.getKey(), e.getValue() ));
+                getLog().debug( String.format("set system property : [%s] = [%s]",  e.getKey(), e.getValue() ));
                 System.setProperty(e.getKey(), e.getValue());
             }
 
@@ -556,7 +557,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                 if (!StringUtils.isEmpty(arg))
                 {
                     arg = arg.trim();
-                    getLog().info("Adding compiler arg: " + arg);
+                    getLog().debug("Adding compiler arg: " + arg);
                     options.add(arg);
                 }
             }
@@ -567,7 +568,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                 if( !StringUtils.isEmpty(e.getKey()) && e.getValue()!=null ) {
                     String opt = String.format("-A%s=%s", e.getKey().trim(), e.getValue().toString().trim());
                     options.add( opt );
-                    getLog().info("Adding compiler arg: " + opt);
+                    getLog().debug("Adding compiler arg: " + opt);
                 }
             }
                        
@@ -579,7 +580,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         final Boolean add = addOutputDirectoryToCompilationSources;
         if (add == null || add.booleanValue())
         {
-            getLog().info("Source directory: " + outputDirectory + " added");
+            getLog().debug("Source directory: " + outputDirectory + " added");
             addCompileSourceRoot(project, outputDirectory.getAbsolutePath());
         }
     }
