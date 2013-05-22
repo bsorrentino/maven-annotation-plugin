@@ -23,6 +23,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -177,7 +179,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
      *
      * @since 2.2.1
      */
-    @Parameter(property = "project.build.sourceEncoding", readonly = true, required = true)
+    @Parameter(property = "project.build.sourceEncoding")
     private String encoding;
 	
     /**
@@ -474,11 +476,30 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                 return;
             }
             
-            final StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, Charset.forName(encoding));
+            Charset charset = null; ;
+ 
+            if( encoding != null ) {
+                try {               
+                   charset = Charset.forName(encoding);
+                }
+                catch( IllegalCharsetNameException ex1 ) {
+                    getLog().warn( String.format("the given charset name [%s] is illegal!. default is used", encoding ));
+                    charset = null;
+                }
+                catch( UnsupportedCharsetException ex2 ) {
+                    getLog().warn( String.format("the given charset name [%s] is unsupported!. default is used", encoding ));
+                    charset = null;
+                }
+            }
+            
+            final StandardJavaFileManager fileManager = 
+                    compiler.getStandardFileManager(null, null, 
+                                                    (charset==null) ? 
+                                                    Charset.defaultCharset() : 
+                                                    charset);
     
             if( files!=null && !files.isEmpty() ) {
-                
-        
+                       
                 for( JavaFileObject f : fileManager.getJavaFileObjectsFromFiles(files) ) {
                     
                     allSources.add(f);
