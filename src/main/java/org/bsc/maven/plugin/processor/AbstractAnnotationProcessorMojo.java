@@ -35,6 +35,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.*;
+import javax.tools.Diagnostic.Kind;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -223,9 +224,9 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
         StringBuilder result = new StringBuilder();
 
-        int i = 0;
+        int i;
 
-        for (i = 0; i < processors.length - 1; ++i)
+        for ( i = 0; i < processors.length - 1; ++i)
         {
             result.append(processors[i]).append(',');
         }
@@ -391,35 +392,40 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
         if( getLog().isDebugEnabled() ) {
             for (String option : options) {
-                getLog().debug("javac option: " + option);
+                getLog().debug(String.format("javac option: %s", option));
             }
         }
 
-        DiagnosticListener<JavaFileObject> dl = null;
-        if (outputDiagnostics)
+        final DiagnosticListener<JavaFileObject> dl = new DiagnosticListener<JavaFileObject>()
         {
-            dl = new DiagnosticListener<JavaFileObject>()
-            {
+            public void report(Diagnostic< ? extends JavaFileObject> diagnostic) {
 
-                public void report(Diagnostic< ? extends JavaFileObject> diagnostic)
-                {
-                    getLog().debug("diagnostic " + diagnostic);
+                if (!outputDiagnostics) {
+                    return;
+                }
+                
+                final Kind kind = diagnostic.getKind();
+
+                if (Kind.ERROR == kind) {
+
+                    getLog().error(String.format("diagnostic: %s", diagnostic));
+
+                } else if (Kind.MANDATORY_WARNING == kind || Kind.WARNING == kind) {
+
+                    getLog().warn(String.format("diagnostic: %s", diagnostic));
+
+                } else if (Kind.NOTE == kind) {
+
+                    getLog().debug(String.format("diagnostic: %s", diagnostic));
+
+                } else if (Kind.OTHER == kind) {
+
+                    getLog().info(String.format("diagnostic: %s", diagnostic));
 
                 }
 
-            };
-        }
-        else
-        {
-            dl = new DiagnosticListener<JavaFileObject>()
-            {
-
-                public void report(Diagnostic< ? extends JavaFileObject> diagnostic)
-                {
-                }
-
-            };
-        }
+            }
+        };
 
         if (systemProperties != null)
         {
@@ -578,7 +584,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                 if (!StringUtils.isEmpty(arg))
                 {
                     arg = arg.trim();
-                    getLog().debug("Adding compiler arg: " + arg);
+                    getLog().debug(String.format("Adding compiler arg: %s", arg));
                     options.add(arg);
                 }
             }
@@ -589,7 +595,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                 if( !StringUtils.isEmpty(e.getKey()) && e.getValue()!=null ) {
                     String opt = String.format("-A%s=%s", e.getKey().trim(), e.getValue().toString().trim());
                     options.add( opt );
-                    getLog().debug("Adding compiler arg: " + opt);
+                    getLog().debug(String.format("Adding compiler arg: %s", opt));
                 }
             }
                        
@@ -601,7 +607,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         final Boolean add = addOutputDirectoryToCompilationSources;
         if (add == null || add.booleanValue())
         {
-            getLog().debug("Source directory: " + outputDirectory + " added");
+            getLog().debug(String.format("Source directory: %s added", outputDirectory));
             addCompileSourceRoot(project, outputDirectory.getAbsolutePath());
         }
     }
