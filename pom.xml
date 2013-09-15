@@ -13,7 +13,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
   <url>http://code.google.com/p/maven-annotation-plugin/</url>
  
 <prerequisites>
-    <maven>3.1.0</maven>
+    <maven>3.1</maven>
   </prerequisites>
    
   <distributionManagement>
