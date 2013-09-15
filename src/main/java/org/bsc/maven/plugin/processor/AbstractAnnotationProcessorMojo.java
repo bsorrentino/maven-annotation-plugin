@@ -26,7 +26,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -47,6 +46,18 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
+
+// 3.0.5
+import org.sonatype.aether.RepositorySystem;
+import org.sonatype.aether.RepositorySystemSession;
+import org.sonatype.aether.artifact.ArtifactTypeRegistry;
+import org.sonatype.aether.repository.RemoteRepository;
+import org.sonatype.aether.resolution.ArtifactRequest;
+import org.sonatype.aether.resolution.ArtifactResolutionException;
+import org.sonatype.aether.resolution.ArtifactResult;
+import org.sonatype.aether.util.artifact.DefaultArtifact;
+/*
+// 3.1.0
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.artifact.ArtifactType;
@@ -56,7 +67,7 @@ import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
-
+*/
 
 /**
  * 
