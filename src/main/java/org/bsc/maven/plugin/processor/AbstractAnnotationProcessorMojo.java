@@ -26,6 +26,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +38,7 @@ import java.util.zip.ZipFile;
 import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.*;
 import javax.tools.Diagnostic.Kind;
+import org.apache.maven.RepositoryUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -44,6 +47,15 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.artifact.ArtifactType;
+import org.eclipse.aether.artifact.ArtifactTypeRegistry;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.resolution.ArtifactRequest;
+import org.eclipse.aether.resolution.ArtifactResolutionException;
+import org.eclipse.aether.resolution.ArtifactResult;
 
 
 /**
@@ -53,7 +65,6 @@ import org.codehaus.plexus.util.StringUtils;
  */
 public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 {
-
     interface ArtifactClosure {
        
         void execute( Artifact artifact );
@@ -182,7 +193,48 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
      */
     @Parameter(property = "project.build.sourceEncoding")
     private String encoding;
-	
+
+  /**
+     * The entry point to Aether, i.e. the component doing all the work.
+     *
+     */
+    @Component
+    private RepositorySystem repoSystem;
+ 
+    /**
+     * The current repository/network configuration of Maven.
+     *
+     */
+    @Parameter( defaultValue = "${repositorySystemSession}",readonly = true )
+    private RepositorySystemSession repoSession;
+ 
+    /**
+     * The project's remote repositories to use for the resolution of plugins and their dependencies.
+     *
+     */
+    @Parameter( defaultValue = "${project.remoteProjectRepositories}",readonly = true )
+    private List<RemoteRepository> remoteRepos;    
+    
+    /**
+     * List of artifacts on which perform sources scanning
+     * 
+     * Each artifact must be specified in the form <b>grouId</b>:<b>artifactId</b>. 
+     * If you need to include all artifacts belonging a groupId, specify as artifactId the character '*'
+     * 
+     * <hr>
+     * e.g.
+     * <pre>
+     * 
+     * org.bsc.maven:maven-confluence-plugin
+     * org.bsc.maven:*
+     * 
+     * </pre>
+     * 
+     * @since 2.2.5
+     */
+    @Parameter()
+    private java.util.List<String> processSourceArtifacts = Collections.emptyList();
+    
     /**
      * for execution synchronization
      */
@@ -286,7 +338,8 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         }
         catch (Exception e1)
         {
-            super.getLog().error("error on execute: " + e1.getMessage());
+            super.getLog().error("error on execute: use -X to have details " );
+            super.getLog().debug(e1);
             if (failOnError)
             {
                 throw new MojoExecutionException("Error executing", e1);
@@ -624,17 +677,93 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         }
     }
 
-
-    private void processSourceArtifacts( ArtifactClosure closure ) {
-        if( ! appendSourceArtifacts ) {
-            return;
+    private boolean matchArtifact( Artifact dep/*, ArtifactFilter filter*/ ) {
+        
+        if(processSourceArtifacts == null || processSourceArtifacts.isEmpty()) {
+            return false;
         }
-        for (Artifact dep : this.project.getDependencyArtifacts()) {
-            if ((dep.hasClassifier()) && (dep.getClassifier().equals(SOURCE_CLASSIFIER))) {
+        
+        for( String a : processSourceArtifacts ) {
+            
+            if( a == null || a.isEmpty() ) {
+                continue;
+            }
+            
+            final String [] token = a.split(":");
+            
+            final boolean matchGroupId = dep.getGroupId().equals(token[0]);
+            
+            if( !matchGroupId ) {
+                continue;
+            }
+            
+            if( token.length == 1 ) {
+                return true;
+            }
+            
+            if( token[1].equals("*") ) {
+                return true;
                 
-                closure.execute(dep);
+            }
+            
+            return dep.getArtifactId().equals(token[1]);
+            
+        }
+        return false;
+    }
+    
+    private Artifact resolveSourceArtifact( Artifact dep ) throws ArtifactResolutionException {
+    
+        if( !matchArtifact(dep) ) {
+            return null;
+        }
+        
+        final ArtifactTypeRegistry typeReg = repoSession.getArtifactTypeRegistry();
+           
+        final String extension = null;
+        
+        final DefaultArtifact artifact = 
+                new DefaultArtifact( dep.getGroupId(),
+                                     dep.getArtifactId(),
+                                      SOURCE_CLASSIFIER,
+                                      extension, 
+                                      dep.getVersion(), 
+                                      typeReg.get(dep.getType()));
+        
+        final ArtifactRequest request = new ArtifactRequest();
+        request.setArtifact( artifact );
+        request.setRepositories(remoteRepos);
+
+        getLog().debug( String.format("Resolving artifact %s from %s", artifact, remoteRepos ));
+       
+        final ArtifactResult result = repoSystem.resolveArtifact( repoSession, request );
+          
+        return RepositoryUtils.toArtifact(result.getArtifact());
+    }
+    
+    private void processSourceArtifacts( ArtifactClosure closure ) {
+
+        for (Artifact dep : this.project.getDependencyArtifacts()) {
+            if (dep.hasClassifier() && SOURCE_CLASSIFIER.equals(dep.getClassifier()) ) {
+           
+                if( appendSourceArtifacts ) {
+                    closure.execute(dep);
+                }
                 //getLog().debug("Append source artifact to classpath: " + dep.getGroupId() + ":" + dep.getArtifactId());
                 //this.sourceArtifacts.add(dep.getFile());
+            }
+            else {
+                try {
+                    final Artifact sourcesDep = resolveSourceArtifact(dep);
+                    if( sourcesDep != null ) {
+                        closure.execute(sourcesDep);
+                    }
+                    
+                } catch (ArtifactResolutionException ex) {              
+                    getLog().warn( String.format(" sources for artifact [%s] not found!", dep.toString()));
+                    getLog().debug(ex);
+                    
+                }
             }
         }
     }

@@ -3,7 +3,7 @@
   <groupId>org.bsc.maven</groupId>
   <artifactId>maven-processor-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>2.2.5-SNAPSHOT</version>
+  <version>3.0.0-SNAPSHOT</version>
   <name>maven-processor-plugin - ${project.version}</name>
   <description>A maven plugin to process annotation for jdk6 at compile time
 
@@ -11,7 +11,11 @@ This plugin helps to use from maven the new annotation processing provided by JD
 
 This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.codehaus.org/apt-maven-plugin/ </description>
   <url>http://code.google.com/p/maven-annotation-plugin/</url>
-  
+ 
+<prerequisites>
+    <maven>3.0</maven>
+  </prerequisites>
+   
   <!--
     LEGACY MAVEN2 REPORTING
 
@@ -106,12 +110,12 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
   <dependency>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-plugin-api</artifactId>
-    <version>3.0.1</version>
+    <version>3.1.0</version>
   </dependency>
   <dependency>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-core</artifactId>
-    <version>3.0.1</version>
+    <version>3.1.0</version>
   </dependency>
 
  
@@ -120,22 +124,54 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
     <dependency>
       <groupId>org.apache.maven.plugin-tools</groupId>
       <artifactId>maven-plugin-annotations</artifactId>
-      <version>3.1</version>
+      <version>3.2</version>
     </dependency>
     <!-- generated help mojo has a dependency to plexus-utils -->
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>3.0.1</version>
+      <version>3.0.15</version>
     </dependency>
     
     
   <dependency>
     <groupId>junit</groupId>
     <artifactId>junit</artifactId>
-    <version>4.8.2</version>
+    <version>4.11</version>
     <scope>test</scope>
   </dependency>
+  
+<!--
+===========================================================
+AETHER
+===========================================================
+  
+    <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-aether-provider</artifactId>
+      <version>3.0.5</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+        <groupId>org.sonatype.aether</groupId>
+        <artifactId>aether-connector-wagon</artifactId>
+      <version>1.11</version>
+      <type>jar</type>
+    </dependency>   
+    <dependency>
+        <groupId>org.sonatype.aether</groupId>
+        <artifactId>aether-connector-file</artifactId>
+        <version>1.3</version>
+      </dependency>   
+      
+  <dependency>
+      <groupId>org.sonatype.aether</groupId>
+      <artifactId>aether-util</artifactId>
+      <version>1.13.1</version>
+      <scope>compile</scope>
+  </dependency>
+--> 
+
 </dependencies>
 
 
@@ -192,7 +228,7 @@ MAVEN3 SITE GENERATION
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
-            <version>3.1</version>
+            <version>3.2</version>
             <scope>runtime</scope>
         </dependency>
     </dependencies>
