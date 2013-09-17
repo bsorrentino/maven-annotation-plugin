@@ -534,6 +534,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                     
                 } catch (Exception ex) {
                     getLog().warn(String.format("Problem reading source archive [%s]", artifact.getFile().getPath()));
+                    getLog().debug(ex);
                 }
             }
         });
