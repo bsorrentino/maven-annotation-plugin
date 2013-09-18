@@ -71,7 +71,7 @@ public class ZipFileObject extends SimpleJavaFileObject
 
     public static ZipFileObject create(ZipFile zipFile, ZipEntry entry) {
         try {
-            final String uri = String.format("jar://%s!%s", zipFile.getName(), entry.getName() );
+            final String uri = String.format("jar://%s!%s", zipFile.getName().replace("\\", "/"), entry.getName() );
             return new ZipFileObject(zipFile, entry, new URI(uri));
         }
         catch (URISyntaxException e)
