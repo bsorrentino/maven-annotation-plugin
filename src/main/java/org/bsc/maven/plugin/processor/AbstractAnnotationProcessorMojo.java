@@ -481,7 +481,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
                 } else if (Kind.NOTE == kind) {
 
-                    getLog().debug(String.format("diagnostic: %s", diagnostic));
+                    getLog().info(String.format("diagnostic: %s", diagnostic));
 
                 } else if (Kind.OTHER == kind) {
 
