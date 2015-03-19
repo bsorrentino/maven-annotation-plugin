@@ -4,7 +4,9 @@ This plugin helps to use from maven the new annotation processing provided by JD
 
 This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.codehaus.org/apt-maven-plugin/
 
-## [Plugin Documentation](http://bsc-documentation-repo.googlecode.com/svn/trunk/maven-annotation-plugin/site/index.html) ##
+### [Documentation - v3](http://bsorrentino.github.io/maven-annotation-plugin/site3/index.html)
+
+### [Old documentation - v2](http://bsorrentino.github.io/maven-annotation-plugin/site/index.html) 
 
 ## Related plugin ##
 | [m2e-apt](https://github.com/jbosstools/m2e-apt) | eclipse plugin from Jboss |
@@ -158,7 +160,7 @@ If you want stay tuned on each update, use the SNAPSHOT version as shown below
       <version>2.1.1-SNAPSHOT</version>
 
    </plugin>
- 
+
 ```
 
 ## News ##
