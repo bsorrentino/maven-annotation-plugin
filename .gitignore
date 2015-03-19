@@ -1,9 +1,2 @@
-.classpath
-.project
-.settings/
-branch.sh
-release.sh
-sign-and-deploy.sh
-target/
-issue47.txt
-pom.xml.versionsBackup
+.DS_Store
+
