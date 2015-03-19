@@ -10,7 +10,7 @@
 This plugin helps to use from maven the new annotation processing provided by JDK6 integrated in java compiler
 
 This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.codehaus.org/apt-maven-plugin/ </description>
-  <url>http://code.google.com/p/maven-annotation-plugin/</url>
+  <url>https://github.com/bsorrentino/maven-annotation-plugin</url>
 
 <prerequisites>
     <maven>3.1</maven>
