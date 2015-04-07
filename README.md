@@ -157,7 +157,7 @@ If you want stay tuned on each update, use the SNAPSHOT version as shown below
    <plugin>
       <groupId>org.bsc.maven</groupId>
       <artifactId>maven-processor-plugin</artifactId>
-      <version>2.1.1-SNAPSHOT</version>
+      <version>x.x.x-SNAPSHOT</version>
 
    </plugin>
 
