@@ -248,6 +248,14 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     private java.util.List<String> processSourceArtifacts = Collections.emptyList();
     
     /**
+     * Set this to true to skip annotation processing.
+     * 
+     * @since 3.1.0
+     */
+    @Parameter(defaultValue = "false", property = "skipAnnotationProcessing")
+    protected boolean skip;
+
+    /**
      * for execution synchronization
      */
     private static final Lock syncExecutionLock = new ReentrantLock();
@@ -337,6 +345,12 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
      */
     public void execute() throws MojoExecutionException
     {
+        if (skip)
+        {
+            getLog().info("skipped");
+            return;
+        }
+
         if ("pom".equalsIgnoreCase(project.getPackaging())) // Issue 17
         {
             return;
