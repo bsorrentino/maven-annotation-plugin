@@ -249,6 +249,8 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     
     /**
      * Set this to true to skip annotation processing.
+     * 
+     * @since 3.1.0
      */
     @Parameter(defaultValue = "false", property = "skipAnnotationProcessing")
     protected boolean skip;
