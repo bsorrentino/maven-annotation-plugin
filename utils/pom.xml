@@ -6,7 +6,7 @@
   <version>1.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>java processor utils - ${project.version}</name>
+  <name>JAVA PROCESSOR UTILS - ${project.version}</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
