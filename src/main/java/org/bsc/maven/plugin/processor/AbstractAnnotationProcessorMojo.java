@@ -441,13 +441,15 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         }
        
 
-        String compileClassPath = buildCompileClasspath();
+        final String compileClassPath = buildCompileClasspath();
 
-        String processor = buildProcessor();
+        final String processor = buildProcessor();
 
-        List<String> options = new ArrayList<String>(10);
+        final List<String> options = new ArrayList<String>(10);
 
         options.add("-cp");
+        options.add(compileClassPath);
+        options.add("-sourcepath");
         options.add(compileClassPath);
         options.add("-proc:only");
 
