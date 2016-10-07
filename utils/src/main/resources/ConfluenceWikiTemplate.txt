@@ -1,0 +1,22 @@
+
+{toc}
+
+h1. SERVICES 
+\\
+<!-- $BeginBlock services -->h2. ${service.name}
+|*Description:* | ${service.description} |
+| *Since:* |  ${service.since} |
+| *Notes:* |  ${service.notes} |
+| *Security:* |  ${service.security} |
+| *Usage:* | ${service.verb}  ${service.path} | 
+| *Consumes* | ${service.consumes} |
+| *Produces:* | ${service.produces} |
+| *Response* | ${service.response} |
+| *Parameters* | {quote}
+|| name || default || description ||
+<!-- $BeginBlock parameters -->| ${param.name} | ${param.default} | ${param.description} |
+<!-- $EndBlock parameters -->
+{quote}|
+\\
+----
+<!-- $EndBlock services -->
