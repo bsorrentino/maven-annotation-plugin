@@ -1,6 +1,11 @@
-A maven plugin to process annotation for jdk6 at compile time
+## A maven plugin to process compile time annotation for jdk6 and above.
 
-This plugin helps to use from maven the new annotation processing provided by JDK6 integrated in java compiler
+<a href="http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22maven-processor-plugin%22"><img src="https://img.shields.io/maven-central/v/org.bsc.maven/maven-processor-plugin.svg">
+</a>&nbsp;<img src="https://img.shields.io/github/forks/bsorrentino/maven-processor-plugin.svg">&nbsp;
+<img src="https://img.shields.io/github/stars/bsorrentino/maven-processor-plugin.svg">&nbsp;<a href="https://github.com/bsorrentino/maven-processor-plugin/issues"><img src="https://img.shields.io/github/issues/bsorrentino/maven-processor-plugin.svg">
+</a>&nbsp;
+
+This plugin helps to use from maven the new annotation processing integrated in java compiler provided from JDK6 
 
 This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.codehaus.org/apt-maven-plugin/
 
@@ -14,6 +19,11 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
 | [m2e-annotations](https://github.com/ilx/m2e-annotations) | eclipse plugin |
 
 ## Releases ##
+|Oct 7,2016 | **Release 3.2.0**. | Available on **[MAVEN CENTRAL REPO](http://search.maven.org/#artifactdetails%7Corg.bsc.maven%7Cmaven-processor-plugin%7C3.2.0%7Cmaven-plugin)** |
+|:-----------|:-------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+  * [Issue 63](https://github.com/bsorrentino/maven-annotation-plugin/issues/63) - -sourcepath is not configured
+
 |Feb 2,2016 | **Release 3.1.0**. | Available on **[MAVEN CENTRAL REPO](http://search.maven.org/#artifactdetails%7Corg.bsc.maven%7Cmaven-processor-plugin%7C3.1.0%7Cmaven-plugin)** |
 |:-----------|:-------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------|
 
