@@ -44,6 +44,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.bsc.function.Consumer;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -310,6 +311,21 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
     protected abstract java.util.Set<String> getClasspathElements( java.util.Set<String> result );
 
+    private String buildCompileSourcepath( Consumer<String> onSuccess) {
+        
+        final java.util.List<String> roots = project.getCompileSourceRoots();
+        
+        if( roots == null || roots.isEmpty() ) {
+            return null;
+        }
+        
+        final String result = StringUtils.join(roots.iterator(), File.pathSeparator);
+        
+        onSuccess.accept( result );
+        
+        return result;
+    }
+    
     private String buildCompileClasspath()
     {
         
@@ -331,7 +347,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         
         getClasspathElements(pathElements);
         
-        StringBuilder result = new StringBuilder();
+        final StringBuilder result = new StringBuilder();
         
         for( String elem : pathElements ) {
             result.append(elem).append(File.pathSeparator);
@@ -441,14 +457,23 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         }
        
 
-        String compileClassPath = buildCompileClasspath();
+        final String compileClassPath = buildCompileClasspath();
 
-        String processor = buildProcessor();
+        final String processor = buildProcessor();
 
-        List<String> options = new ArrayList<String>(10);
+        final List<String> options = new ArrayList<String>(10);
 
         options.add("-cp");
         options.add(compileClassPath);
+        
+        buildCompileSourcepath( new Consumer<String>() {
+            public void accept(String sourcepath) {
+                
+                options.add("-sourcepath");
+                options.add(sourcepath);
+            }
+        });
+        
         options.add("-proc:only");
 
         addCompilerArguments(options);
