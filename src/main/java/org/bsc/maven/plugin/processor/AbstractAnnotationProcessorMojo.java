@@ -39,12 +39,15 @@ import javax.tools.*;
 import javax.tools.Diagnostic.Kind;
 import org.apache.maven.RepositoryUtils;
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.BuildPluginManager;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.bsc.function.Consumer;
+import org.codehaus.plexus.compiler.manager.CompilerManager;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -255,6 +258,26 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
      */
     @Parameter(defaultValue = "false", property = "skipAnnotationProcessing")
     protected boolean skip;
+
+    /**
+     * 
+     * @since 3.2.1
+     */
+    @Component
+    protected MavenSession session;
+    
+    /**
+     * 
+     * @since 3.2.1
+     */
+    @Component
+    protected BuildPluginManager pluginManager;    
+    
+    /**
+     * Plexus compiler manager.
+     */
+    @Component
+    protected CompilerManager compilerManager;
 
     /**
      * for execution synchronization
@@ -580,7 +603,10 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         
         //compileLock.lock();
         try {
-            final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+            final JavaCompiler compiler = 
+                    new AnnotationProcessorCompiler( compilerManager, project, session, pluginManager); 
+                    //ToolProvider.getSystemJavaCompiler();
+                    
             
             if( compiler==null ) {
                 getLog().error("JVM is not suitable for processing annotation! ToolProvider.getSystemJavaCompiler() is null.");
