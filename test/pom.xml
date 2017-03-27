@@ -36,10 +36,11 @@
     <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
+        <version>3.6.1</version>
         <configuration>
                 <source>1.7</source>
                 <target>1.7</target>
+                <proc>none</proc>
         </configuration>
     </plugin>
     
@@ -62,7 +63,7 @@ PROCESSOR PLUGIN
             
         </dependencies>
         <executions>
-
+<!--
             <execution>
 
                 <id>process-test</id>
@@ -73,14 +74,13 @@ PROCESSOR PLUGIN
                 <configuration>
                         <outputDirectory>${basedir}/src/site</outputDirectory>
                         
-                        <additionalSourceDirectories>
+                        <additionalSourceDirectories>                         
                             <item>${user.home}/src</item>
                             <item>./src/main/java</item>                          
                         </additionalSourceDirectories>    
                         
                         <failOnError>false</failOnError>
                         <processors>
-                                <!-- list of processors to use -->
                             <processor>org.bsc.maven.plugin.processor.test.TESTWikiProcessor</processor>
                             <processor>org.bsc.jaxrs.JAXRSWikiProcessor</processor>
                         </processors>
@@ -91,6 +91,7 @@ PROCESSOR PLUGIN
                 
 
             </execution>
+--> 
             <execution>
 
                 <id>process</id>
@@ -102,14 +103,18 @@ PROCESSOR PLUGIN
                         <outputDirectory>${basedir}/src/site</outputDirectory>
                         
                         <additionalSourceDirectories>
-                            <item>${basedir}/src/main/java</item>                            
+                            <item>${basedir}/src/main/java</item> 
+                            <!--                           
                             <item>${user.home}/src</item>
+                            -->
                         </additionalSourceDirectories>    
                         
                         <failOnError>false</failOnError>
                         <processors>
-                                <!-- list of processors to use -->
+                            <processor>org.bsc.maven.plugin.processor.test.TESTWikiProcessor</processor>
+                            <!--
                             <processor>org.bsc.jaxrs.JAXRSWikiProcessor</processor>
+                            -->
                         </processors>
 
                         <options>
@@ -140,7 +145,7 @@ PROCESSOR PLUGIN
  </execution>
  <execution>
    <id>add-test-source</id>
-   <phase>generate-sources</phase>
+   <phase>generate-test-sources</phase>
    <goals>
      <goal>add-test-source</goal>
    </goals>

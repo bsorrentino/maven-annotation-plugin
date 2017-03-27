@@ -22,9 +22,11 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.BuildPluginManager;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.compiler.CompilerConfiguration;
+import org.codehaus.plexus.compiler.CompilerException;
+import org.codehaus.plexus.compiler.CompilerMessage;
+import org.codehaus.plexus.compiler.CompilerResult;
 import org.codehaus.plexus.compiler.manager.CompilerManager;
 
 /**
@@ -59,7 +61,19 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
         
     }
 */
-    private void executePlugin(final Iterable<String> options) throws Exception {
+    
+    private void printCommand( final org.codehaus.plexus.compiler.Compiler javac, final CompilerConfiguration javacConf ) throws CompilerException {
+        System.out.println();
+        System.out.println();
+        System.out.println( "javac \\");
+        for( String c : javac.createCommandLine(javacConf) ) 
+            System.out.printf( "%s \\\n", c);
+        System.out.println();
+        System.out.println();
+        System.out.println();
+
+    }
+    private void executePlugin(final Iterable<String> options, final Iterable<? extends JavaFileObject> compilationUnits) throws Exception {
         
         final CompilerConfiguration javacConf = new CompilerConfiguration();
 
@@ -99,22 +113,32 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
                 javacConf.setGeneratedSourcesDirectory( new java.io.File(ii.next()));
             }
             
-            javacConf.setSourceVersion("1.6");
-            javacConf.setTargetVersion("1.6");
+            javacConf.setSourceVersion("1.7");
+            javacConf.setTargetVersion("1.7");
+            javacConf.setWorkingDirectory(project.getBasedir());
             
+            final java.util.Set<java.io.File> sourceFiles = 
+                    new java.util.HashSet<java.io.File>();
+            for( JavaFileObject src : compilationUnits ) {
+                sourceFiles.add( new java.io.File( src.toUri() ) );
+            }
+                    
+            javacConf.setSourceFiles(sourceFiles);
         }
-
-        javacConf.setFork(false);
-               
+        javacConf.setDebug(true);
+        javacConf.setFork(true);
+        javacConf.setVerbose(true);
+        //javacConf.setExecutable("javac");
         final org.codehaus.plexus.compiler.Compiler javac = plexusCompiler.getCompiler("javac");   
         
-        String[] cli = javac.createCommandLine(javacConf);
+        //printCommand(javac, javacConf);
         
-        for( String c : cli ) {
-            System.out.printf( "CLI: [%s]\n", c);
-        }
-        javac.performCompile( javacConf );
-        
+        final CompilerResult result = javac.performCompile( javacConf );
+                
+        for( CompilerMessage m : result.getCompilerMessages()) 
+            System.out.printf( "message [%s]\n", m.getMessage() );
+
+        System.out.printf( "Compiler success [%b]\n", result.isSuccess());
     }
     
     @Override
@@ -158,7 +182,7 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
                 }
 
                 try {
-                    executePlugin(options);
+                    executePlugin(options, compilationUnits);
                     return true;
                 } catch (final Exception ex) {
                     diagnosticListener.report( new Diagnostic<JavaFileObject>() {
