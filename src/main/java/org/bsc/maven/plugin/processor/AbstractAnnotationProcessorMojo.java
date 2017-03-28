@@ -41,7 +41,6 @@ import org.apache.maven.RepositoryUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.BuildPluginManager;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -260,21 +259,26 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     protected boolean skip;
 
     /**
+     * Allows running the compiler in a separate process. 
+     * If false it uses the built in compiler, while if true it will use an executable.
      * 
-     * @since 3.2.1
+     * @since 3.3
+     */
+    @Parameter(defaultValue = "false", property = "fork")
+    protected boolean fork;
+
+    /**
+     * Maven Session
+     * 
+     * @since 3.3
      */
     @Component
     protected MavenSession session;
-    
-    /**
-     * 
-     * @since 3.2.1
-     */
-    @Component
-    protected BuildPluginManager pluginManager;    
-    
+        
     /**
      * Plexus compiler manager.
+     * 
+     * @since 3.3
      */
     @Component
     protected CompilerManager compilerManager;
@@ -525,6 +529,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
         final DiagnosticListener<JavaFileObject> dl = new DiagnosticListener<JavaFileObject>()
         {
+            @Override
             public void report(Diagnostic< ? extends JavaFileObject> diagnostic) {
 
                 if (!outputDiagnostics) {
@@ -533,22 +538,23 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                 
                 final Kind kind = diagnostic.getKind();
 
-                if (Kind.ERROR == kind) {
-
-                    getLog().error(String.format("diagnostic: %s", diagnostic));
-
-                } else if (Kind.MANDATORY_WARNING == kind || Kind.WARNING == kind) {
-
-                    getLog().warn(String.format("diagnostic: %s", diagnostic));
-
-                } else if (Kind.NOTE == kind) {
-
-                    getLog().info(String.format("diagnostic: %s", diagnostic));
-
-                } else if (Kind.OTHER == kind) {
-
-                    getLog().info(String.format("diagnostic: %s", diagnostic));
-
+                if (null != kind) 
+                    switch (kind) {
+                    case ERROR:
+                        getLog().error(String.format("diagnostic: %s", diagnostic));
+                        break;
+                    case MANDATORY_WARNING:
+                    case WARNING:
+                        getLog().warn(String.format("diagnostic: %s", diagnostic));
+                        break;
+                    case NOTE:
+                        getLog().info(String.format("diagnostic: %s", diagnostic));
+                        break;
+                    case OTHER:
+                        getLog().info(String.format("diagnostic: %s", diagnostic));
+                        break;
+                    default:
+                        break;
                 }
 
             }
@@ -573,6 +579,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         
         processSourceArtifacts( new ArtifactClosure() {
 
+            @Override
             public void execute(Artifact artifact) {
                 try {
                     
@@ -603,9 +610,11 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         
         //compileLock.lock();
         try {
-            final JavaCompiler compiler = 
-                    new AnnotationProcessorCompiler( compilerManager, project, session, pluginManager); 
-                    //ToolProvider.getSystemJavaCompiler();
+            
+            
+            final JavaCompiler compiler = (fork) ?
+                    AnnotationProcessorCompiler.createOutProcess(compilerManager, project, session ) :
+                    AnnotationProcessorCompiler.createInProcess();
                     
             
             if( compiler==null ) {

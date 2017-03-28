@@ -4,12 +4,14 @@
 
   <groupId>org.bsc.maven</groupId>
   <artifactId>maven-processor-plugin-test</artifactId>
-  <version>3.2.1-SNAPSHOT</version>
+  <version>3.3-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>MAVEN PROCESSOR PLUGIN TEST- ${project.version}</name>
   <description></description>
 
   <properties>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
     <!--  
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     -->
@@ -33,17 +35,6 @@
     
     
 <plugins>
-    <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.6.1</version>
-        <configuration>
-                <source>1.7</source>
-                <target>1.7</target>
-                <proc>none</proc>
-        </configuration>
-    </plugin>
-    
 <!-- 
 ===================================================================
 PROCESSOR PLUGIN
@@ -119,6 +110,7 @@ PROCESSOR PLUGIN
 
                         <options>
                         </options>
+                        <fork>true</fork>
                 </configuration>
                 
 
