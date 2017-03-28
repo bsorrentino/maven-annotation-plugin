@@ -1,9 +1,7 @@
 .classpath
 .project
 .settings/
-branch.sh
-release.sh
-sign-and-deploy.sh
+*.sh
 target/
 issue47.txt
-pom.xml.versionsBackup
+maven-compiler-plugin/

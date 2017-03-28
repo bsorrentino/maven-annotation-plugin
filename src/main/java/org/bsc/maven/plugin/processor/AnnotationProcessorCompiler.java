@@ -28,7 +28,205 @@ import org.codehaus.plexus.compiler.CompilerException;
 import org.codehaus.plexus.compiler.CompilerMessage;
 import org.codehaus.plexus.compiler.CompilerResult;
 import org.codehaus.plexus.compiler.manager.CompilerManager;
+import org.codehaus.plexus.util.Os;
+import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.cli.CommandLineUtils;
+import org.codehaus.plexus.util.cli.Commandline;
 
+class PlexusJavaCompilerWithOutput {
+
+    static final PlexusJavaCompilerWithOutput INSTANCE = new PlexusJavaCompilerWithOutput();
+    
+    private PlexusJavaCompilerWithOutput() {     
+    }
+    
+    private String getJavacExecutable(CompilerConfiguration config )
+        throws java.io.IOException
+    {
+        if( !StringUtils.isEmpty(config.getExecutable())) {
+            return config.getExecutable();
+        }
+        
+        final String javacCommand = "javac" + ( Os.isFamily( Os.FAMILY_WINDOWS ) ? ".exe" : "" );
+
+        String javaHome = System.getProperty( "java.home" );
+        java.io.File javacExe;
+        if ( Os.isName( "AIX" ) )
+        {
+            javacExe = new java.io.File( javaHome + java.io.File.separator + ".." + java.io.File.separator + "sh", javacCommand );
+        }
+        else if ( Os.isName( "Mac OS X" ) )
+        {
+            javacExe = new java.io.File( javaHome + java.io.File.separator + "bin", javacCommand );
+        }
+        else
+        {
+            javacExe = new java.io.File( javaHome + java.io.File.separator + ".." + java.io.File.separator + "bin", javacCommand );
+        }
+
+        // ----------------------------------------------------------------------
+        // Try to find javacExe from JAVA_HOME environment variable
+        // ----------------------------------------------------------------------
+        if ( !javacExe.isFile() )
+        {
+            java.util.Properties env = CommandLineUtils.getSystemEnvVars();
+            javaHome = env.getProperty( "JAVA_HOME" );
+            if ( StringUtils.isEmpty( javaHome ) )
+            {
+                throw new java.io.IOException( "The environment variable JAVA_HOME is not correctly set." );
+            }
+            if ( !new java.io.File( javaHome ).isDirectory() )
+            {
+                throw new java.io.IOException(
+                    "The environment variable JAVA_HOME=" + javaHome + " doesn't exist or is not a valid directory." );
+            }
+
+            javacExe = new java.io.File( env.getProperty( "JAVA_HOME" ) + java.io.File.separator + "bin", javacCommand );
+        }
+
+        if ( !javacExe.isFile() )
+        {
+            throw new java.io.IOException( "The javadoc executable '" + javacExe
+                                       + "' doesn't exist or is not a file. Verify the JAVA_HOME environment variable." );
+        }
+
+        return javacExe.getAbsolutePath();
+    }    
+    /**
+     * 
+     * @param args
+     * @return
+     * @throws java.io.IOException 
+     */
+    private java.io.File createFileWithArguments( String[] args, String outputDirectory )
+        throws java.io.IOException
+    {
+        java.io.PrintWriter writer = null;
+        try
+        {
+            final java.io.File tempFile;
+            {
+                tempFile = java.io.File.createTempFile( org.codehaus.plexus.compiler.javac.JavacCompiler.class.getName(), "arguments" );
+                tempFile.deleteOnExit();
+            }
+
+            writer = new java.io.PrintWriter( new java.io.FileWriter( tempFile ) );
+
+            for ( String arg : args )
+            {
+                String argValue = arg.replace( java.io.File.separatorChar, '/' );
+
+                writer.write( "\"" + argValue + "\"" );
+
+                writer.println();
+            }
+
+            writer.flush();
+
+            return tempFile;
+
+        }
+        finally
+        {
+            if ( writer != null )
+            {
+                writer.close();
+            }
+        }
+    }
+    
+    private CompilerResult compileOutOfProcess( CompilerConfiguration config, String executable, String[] args )
+        throws CompilerException
+    {
+        Commandline cli = new Commandline();
+
+        cli.setWorkingDirectory( config.getWorkingDirectory().getAbsolutePath() );
+
+        cli.setExecutable( executable );
+
+        try
+        {
+            
+            final java.io.File argumentsFile = createFileWithArguments( args, config.getOutputLocation() );
+            cli.addArguments(
+                new String[]{ "@" + argumentsFile.getCanonicalPath().replace( java.io.File.separatorChar, '/' ) } );
+               
+            if ( !StringUtils.isEmpty( config.getMaxmem() ) )
+            {
+                cli.addArguments( new String[]{ "-J-Xmx" + config.getMaxmem() } );
+            }
+
+            if ( !StringUtils.isEmpty( config.getMeminitial() ) )
+            {
+                cli.addArguments( new String[]{ "-J-Xms" + config.getMeminitial() } );
+            }
+
+            for ( String key : config.getCustomCompilerArgumentsAsMap().keySet() )
+            {
+                if ( StringUtils.isNotEmpty( key ) && key.startsWith( "-J" ) )
+                {
+                    cli.addArguments( new String[]{ key } );
+                }
+            }
+        }
+        catch ( java.io.IOException e )
+        {
+            throw new CompilerException( "Error creating file with javac arguments", e );
+        }
+
+        final CommandLineUtils.StringStreamConsumer out = new CommandLineUtils.StringStreamConsumer();
+
+        int returnCode;
+
+        final java.util.List<CompilerMessage> messages = java.util.Collections.emptyList();
+
+        try
+        {
+            returnCode = CommandLineUtils.executeCommandLine( cli, out, out );
+        }
+        catch ( Exception e )
+        {
+            throw new CompilerException( "Error while executing the external compiler.", e );
+        }
+
+        boolean success = returnCode == 0;
+        return new CompilerResult( success, messages ) {
+            @Override
+            public String toString() {
+                return out.getOutput();
+            }
+        };
+    }
+    
+    private String[] getSourceFiles( CompilerConfiguration config ) throws java.io.IOException {
+        
+        final java.util.Set<String> sourceFiles = 
+                    new java.util.HashSet<String>();
+        for( java.io.File src : config.getSourceFiles() ) {
+            sourceFiles.add( src.getCanonicalPath() );
+        }
+        
+        return sourceFiles.toArray( new String[sourceFiles.size()] );
+    }
+    /**
+     * 
+     * @param config
+     * @return 
+     */
+    protected CompilerResult performCompile( CompilerConfiguration config ) throws CompilerException, java.io.IOException {
+        
+        final java.util.Set<String> sourceFiles = 
+                    new java.util.HashSet<String>();
+        for( java.io.File src : config.getSourceFiles() ) {
+            sourceFiles.add( src.getCanonicalPath() );
+        }
+        
+        final String[] compilerArguments = 
+                org.codehaus.plexus.compiler.javac.JavacCompiler.buildCompilerArguments(config, getSourceFiles(config) );
+        return compileOutOfProcess( config, getJavacExecutable(config), compilerArguments );
+        
+    }
+}
 /**
  *
  * @author softphone
@@ -49,18 +247,6 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
         this.pluginManager = pluginManager;
         this.plexusCompiler = plexusCompiler;
     }
-
-/*    
-    private String find( final Iterable<String> options, String key, String def ) {
-
-        for( String option : options ) {
-            if( option.equals(key)) {
-                return 
-            }
-        }
-        
-    }
-*/
     
     private void printCommand( final org.codehaus.plexus.compiler.Compiler javac, final CompilerConfiguration javacConf ) throws CompilerException {
         System.out.println();
@@ -121,24 +307,32 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
                     new java.util.HashSet<java.io.File>();
             for( JavaFileObject src : compilationUnits ) {
                 sourceFiles.add( new java.io.File( src.toUri() ) );
+                
             }
                     
             javacConf.setSourceFiles(sourceFiles);
         }
-        javacConf.setDebug(true);
+        javacConf.setDebug(false);
         javacConf.setFork(true);
-        javacConf.setVerbose(true);
+        javacConf.setVerbose(false);
         //javacConf.setExecutable("javac");
-        final org.codehaus.plexus.compiler.Compiler javac = plexusCompiler.getCompiler("javac");   
+            
+        CompilerResult result;
         
+        // USING STANDARD PLEXUS
+        /*
+        final org.codehaus.plexus.compiler.Compiler javac = plexusCompiler.getCompiler("javac");       
         //printCommand(javac, javacConf);
-        
-        final CompilerResult result = javac.performCompile( javacConf );
-                
+        result = javac.performCompile( javacConf );
         for( CompilerMessage m : result.getCompilerMessages()) 
-            System.out.printf( "message [%s]\n", m.getMessage() );
-
-        System.out.printf( "Compiler success [%b]\n", result.isSuccess());
+            System.out.println( m.getMessage() );
+        */
+        
+        // USING CUSTOM PLEXUS
+        
+        result = PlexusJavaCompilerWithOutput.INSTANCE.performCompile(javacConf);
+        
+        System.out.println( result.toString() );
     }
     
     @Override
@@ -164,23 +358,6 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
 
             @Override
             public Boolean call() {
-                System.out.println("OPTIONS");
-                for( String option : options ) {
-                    System.out.printf("OPTION:\t[%s]\n", option);            
-                }
-                System.out.println("CLASSES");
-                if( classes != null ) {
-                    for( String clazz : classes ) {
-                        System.out.printf("CLASS:\t[%s]\n", clazz);            
-                    }
-                }
-                System.out.println("COMPILATION UNITS");
-                if( compilationUnits != null ) {
-                    for( JavaFileObject cu : compilationUnits ) {
-                        System.out.printf("CUNIT:\t[%s]\n", cu);            
-                    }
-                }
-
                 try {
                     executePlugin(options, compilationUnits);
                     return true;
@@ -261,5 +438,5 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
     public int isSupportedOption(String option) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }
