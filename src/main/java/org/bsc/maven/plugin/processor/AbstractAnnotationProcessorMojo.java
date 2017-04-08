@@ -45,6 +45,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.toolchain.ToolchainManager;
 import org.bsc.function.Consumer;
 import org.codehaus.plexus.compiler.manager.CompilerManager;
 import org.codehaus.plexus.util.FileUtils;
@@ -283,6 +284,13 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     @Component
     protected CompilerManager compilerManager;
 
+    /**
+     *
+     * @since 3.3
+     */
+    @Component
+    private ToolchainManager toolchainManager;
+    
     /**
      * for execution synchronization
      */
