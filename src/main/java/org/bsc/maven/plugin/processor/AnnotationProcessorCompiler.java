@@ -239,6 +239,14 @@ class PlexusJavaCompilerWithOutput {
  * @author softphone
  */
 public class AnnotationProcessorCompiler implements JavaCompiler {
+    private static final String COMPILER_TARGET = "maven.compiler.target";
+    private static final String COMPILER_SOURCE = "maven.compiler.source";
+
+    private static final String PROCESSOR_TARGET = "maven.processor.target";
+    private static final String PROCESSOR_SOURCE = "maven.processor.source";
+
+    private static final String DEFAULT_SOURCE_VERSION = "1.7";
+    private static final String DEFAULT_TARGET_VERSION = DEFAULT_SOURCE_VERSION ;
 
     final JavaCompiler systemJavaCompiler = ToolProvider.getSystemJavaCompiler();
     
@@ -379,8 +387,13 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
                 javacConf.setGeneratedSourcesDirectory( new java.io.File(ii.next()));
             }
             
-            javacConf.setSourceVersion( project.getProperties().getProperty("maven.compiler.source", "1.7") );
-            javacConf.setTargetVersion( project.getProperties().getProperty("maven.compiler.target", "1.7"));
+            final java.util.Properties props = project.getProperties();
+            
+            final String sourceVersion = props.getProperty(PROCESSOR_SOURCE,props.getProperty(COMPILER_SOURCE, DEFAULT_SOURCE_VERSION));
+            final String targetVersion = props.getProperty(PROCESSOR_TARGET,props.getProperty(COMPILER_TARGET, DEFAULT_TARGET_VERSION));
+            
+            javacConf.setSourceVersion(sourceVersion );
+            javacConf.setTargetVersion(targetVersion);
             javacConf.setWorkingDirectory(project.getBasedir());
             
             final java.util.Set<java.io.File> sourceFiles = 
