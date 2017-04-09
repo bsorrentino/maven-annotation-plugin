@@ -616,12 +616,21 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
             }
         });
         
+        // If toolchain is set force fork compilation
+        if( toolchainManager != null ) {
+            fork = true;
+        }
+        
         //compileLock.lock();
         try {
             
             
             final JavaCompiler compiler = (fork) ?
-                    AnnotationProcessorCompiler.createOutProcess(compilerManager, project, session ) :
+                    AnnotationProcessorCompiler.createOutProcess(   
+                                                    toolchainManager,                                                                 
+                                                    compilerManager, 
+                                                    project, 
+                                                    session ) :
                     AnnotationProcessorCompiler.createInProcess();
                     
             

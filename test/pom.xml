@@ -33,8 +33,23 @@
   
 <build>
     
-    
+<pluginManagement>
+    <plugins>
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>1.7</version>
+        </plugin>
+        <plugin>
+           <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-toolchains-plugin</artifactId>
+           <version>1.1</version>
+        </plugin>
+    </plugins>
+        
+</pluginManagement>    
 <plugins>
+    
 <!-- 
 ===================================================================
 PROCESSOR PLUGIN
@@ -54,104 +69,136 @@ PROCESSOR PLUGIN
             
         </dependencies>
         <executions>
-<!--
+
             <execution>
 
                 <id>process-test</id>
                 <goals>
-                        <goal>process-test</goal>
+                    <goal>process-test</goal>
                 </goals>
                 <phase>process-test-classes</phase>
                 <configuration>
-                        <outputDirectory>${basedir}/src/site</outputDirectory>
+                    <outputDirectory>${basedir}/src/site</outputDirectory>
                         
-                        <additionalSourceDirectories>                         
-                            <item>${user.home}/src</item>
-                            <item>./src/main/java</item>                          
-                        </additionalSourceDirectories>    
+                    <additionalSourceDirectories>                         
+                        <item>${user.home}/src</item>
+                        <item>./src/main/java</item>                          
+                    </additionalSourceDirectories>    
                         
-                        <failOnError>false</failOnError>
-                        <processors>
-                            <processor>org.bsc.maven.plugin.processor.test.TESTWikiProcessor</processor>
-                            <processor>org.bsc.jaxrs.JAXRSWikiProcessor</processor>
-                        </processors>
+                    <failOnError>false</failOnError>
+                    <processors>
+                        <processor>org.bsc.maven.plugin.processor.test.TESTWikiProcessor</processor>
+                        <!--processor>org.bsc.jaxrs.JAXRSWikiProcessor</processor-->
+                    </processors>
 
-                        <options>
-                        </options>
+                    <options>
+                    </options>
                 </configuration>
                 
 
             </execution>
---> 
+                    
             <execution>
 
                 <id>process</id>
                 <goals>
-                        <goal>process</goal>
+                    <goal>process</goal>
                 </goals>
                 <phase>process-classes</phase>
                 <configuration>
-                        <outputDirectory>${basedir}/src/site</outputDirectory>
-                        
-                        <additionalSourceDirectories>
-                            <item>${basedir}/src/main/java</item> 
-                            <!--                           
-                            <item>${user.home}/src</item>
-                            -->
-                        </additionalSourceDirectories>    
-                        
-                        <failOnError>false</failOnError>
-                        <processors>
-                            <processor>org.bsc.maven.plugin.processor.test.TESTWikiProcessor</processor>
-                            <!--
-                            <processor>org.bsc.jaxrs.JAXRSWikiProcessor</processor>
-                            -->
-                        </processors>
+                    <outputDirectory>${basedir}/src/site</outputDirectory>
 
-                        <options>
-                        </options>
-                        <fork>true</fork>
+                    <additionalSourceDirectories>
+                        <item>${basedir}/src/main/java</item> 
+                        <!--                           
+                        <item>${user.home}/src</item>
+                        -->
+                    </additionalSourceDirectories>    
+
+                    <failOnError>false</failOnError>
+                    <processors>
+                        <processor>org.bsc.maven.plugin.processor.test.TESTWikiProcessor</processor>
+                        <!--
+                        <processor>org.bsc.jaxrs.JAXRSWikiProcessor</processor>
+                        -->
+                    </processors>
+
+                    <options>
+                    </options>
+                    <fork>true</fork>
                 </configuration>
-                
+
 
             </execution>
         </executions>
     </plugin>
 
-<plugin>
- <groupId>org.codehaus.mojo</groupId>
- <artifactId>build-helper-maven-plugin</artifactId>
- <version>1.7</version>
- <executions>
-   <execution>
-     <id>add-source</id>
-   <phase>generate-sources</phase>
-   <goals>
-     <goal>add-source</goal>
-   </goals>
-   <configuration>
-     <sources>
-       <source>${basedir}/src-generated/src</source>
-     </sources>
-   </configuration>
- </execution>
- <execution>
-   <id>add-test-source</id>
-   <phase>generate-test-sources</phase>
-   <goals>
-     <goal>add-test-source</goal>
-   </goals>
-   <configuration>
-     <sources>
-       <source>${basedir}/src-generated/test</source>
-     </sources>
-   </configuration>
- </execution>
+    <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+            <execution>
+                <id>add-source</id>
+                <phase>generate-sources</phase>
+                <goals>
+                    <goal>add-source</goal>
+                </goals>
+                <configuration>
+                    <sources>
+                        <source>${basedir}/src-generated/src</source>
+                    </sources>
+                </configuration>
+            </execution>
+            <execution>
+                <id>add-test-source</id>
+                <phase>generate-test-sources</phase>
+                <goals>
+                    <goal>add-test-source</goal>
+                </goals>
+                <configuration>
+                    <sources>
+                        <source>${basedir}/src-generated/test</source>
+                    </sources>
+                </configuration>
+            </execution>
 
- </executions>
- </plugin>    
+        </executions>
+    </plugin>    
 </plugins>    
     
 </build>  
+
+<profiles>
+    <profile>
+        <id>toolchain</id>
+        <build>
+            <plugins>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-toolchains-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>toolchain</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <toolchains>
+                            <jdk>
+                                <version>1.6</version>
+                                <vendor>sun</vendor>
+                            </jdk>
+                        </toolchains>
+                    </configuration>
+                </plugin>
+
+            </plugins>
+
+        </build>
+    </profile>
+
+</profiles>
 
 </project>

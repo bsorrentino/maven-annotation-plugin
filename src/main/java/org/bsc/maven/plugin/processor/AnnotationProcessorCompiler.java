@@ -8,7 +8,6 @@ package org.bsc.maven.plugin.processor;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Writer;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -25,7 +24,6 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import org.apache.maven.execution.MavenSession;
-import org.apache.maven.plugin.BuildPluginManager;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.toolchain.Toolchain;
 import org.apache.maven.toolchain.ToolchainManager;
@@ -188,6 +186,9 @@ class PlexusJavaCompilerWithOutput {
 
         try
         {
+            // ==> DEBUG
+            //out.consumeLine( cli.toString() );
+            
             returnCode = CommandLineUtils.executeCommandLine( cli, out, out );
         }
         catch ( Exception e )
@@ -241,13 +242,18 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
 
     final JavaCompiler systemJavaCompiler = ToolProvider.getSystemJavaCompiler();
     
-    final MavenProject project;
-    final MavenSession session;
-    final CompilerManager plexusCompiler;
+    final MavenProject      project;
+    final MavenSession      session;
+    final CompilerManager   plexusCompiler;
+    final ToolchainManager  toolchainManager;
     
-    public static JavaCompiler createOutProcess( CompilerManager plexusCompiler, MavenProject project, MavenSession session ) {
+    public static JavaCompiler createOutProcess(    ToolchainManager toolchainManager, 
+                                                    CompilerManager plexusCompiler, 
+                                                    MavenProject project, 
+                                                    MavenSession session ) 
+    {
      
-        return new AnnotationProcessorCompiler( plexusCompiler, project, session);
+        return new AnnotationProcessorCompiler( toolchainManager, plexusCompiler, project, session);
     }
 
     public static JavaCompiler createInProcess() {
@@ -255,9 +261,25 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
         return ToolProvider.getSystemJavaCompiler();
     }
     
+    private static void printCommand(  final org.codehaus.plexus.compiler.Compiler javac, 
+                                final CompilerConfiguration javacConf,
+                                final java.io.PrintWriter out ) throws CompilerException 
+    {
+        out.println();
+        out.println();
+        out.println( "javac \\");
+        for( String c : javac.createCommandLine(javacConf) ) 
+            out.printf( "%s \\\n", c);
+        out.println();
+        out.println();
+        out.println();
+
+    }
+    
+
     //TODO remove the part with ToolchainManager lookup once we depend on
     //3.0.9 (have it as prerequisite). Define as regular component field then.
-    private Toolchain getToolchain(final ToolchainManager toolchainManager, final Map<String, String> jdkToolchain)
+    private Toolchain getToolchain(final Map<String, String> jdkToolchain)
     {
         Toolchain tc = null;
         
@@ -298,27 +320,17 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
         return tc;
     }
 
-    private AnnotationProcessorCompiler( CompilerManager plexusCompiler, MavenProject project, MavenSession session ) {
+    private AnnotationProcessorCompiler( ToolchainManager toolchainManager, 
+                                         CompilerManager plexusCompiler, 
+                                         MavenProject project, 
+                                         MavenSession session ) 
+    {
     
         this.project = project;
         this.session = session;
         this.plexusCompiler = plexusCompiler;
+        this.toolchainManager = toolchainManager;
                 
-    }
-    
-    private void printCommand(  final org.codehaus.plexus.compiler.Compiler javac, 
-                                final CompilerConfiguration javacConf,
-                                final java.io.PrintWriter out ) throws CompilerException 
-    {
-        out.println();
-        out.println();
-        out.println( "javac \\");
-        for( String c : javac.createCommandLine(javacConf) ) 
-            out.printf( "%s \\\n", c);
-        out.println();
-        out.println();
-        out.println();
-
     }
     
     
@@ -383,8 +395,20 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
         javacConf.setDebug(false);
         javacConf.setFork(true);
         javacConf.setVerbose(false);
-        //javacConf.setExecutable("javac");
             
+        if( toolchainManager != null ) {
+            final java.util.Map<String,String> jdkToolchain = 
+                    java.util.Collections.emptyMap();
+            
+            final Toolchain tc = getToolchain( jdkToolchain );
+            
+            if( tc!=null ) {
+                final String executable = tc.findTool( "javac");
+                //out.print( "==> TOOLCHAIN EXECUTABLE: "); out.println( executable );
+                javacConf.setExecutable(executable);
+            }
+            
+        }
         CompilerResult result;
         
         // USING STANDARD PLEXUS
@@ -437,41 +461,6 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
                         }
 
                         @Override
-                        public JavaFileObject getSource() {
-                            return null;
-                        }
-
-                        @Override
-                        public long getPosition() {
-                            return -1;
-                        }
-
-                        @Override
-                        public long getStartPosition() {
-                            return -1;
-                        }
-
-                        @Override
-                        public long getEndPosition() {
-                            return -1;
-                        }
-
-                        @Override
-                        public long getLineNumber() {
-                            return -1;
-                        }
-
-                        @Override
-                        public long getColumnNumber() {
-                            return -1;
-                        }
-
-                        @Override
-                        public String getCode() {
-                            return null;
-                        }
-
-                        @Override
                         public String getMessage(Locale locale) {
                             return ex.getLocalizedMessage();
                         }
@@ -480,6 +469,27 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
                             return ex.getLocalizedMessage();
                         }
                         
+                        @Override
+                        public JavaFileObject getSource() { return null;}
+
+                        @Override
+                        public long getPosition() { return -1; }
+
+                        @Override
+                        public long getStartPosition() { return -1; }
+
+                        @Override
+                        public long getEndPosition() { return -1; }
+
+                        @Override
+                        public long getLineNumber() { return -1; }
+
+                        @Override
+                        public long getColumnNumber() { return -1; }
+
+                        @Override
+                        public String getCode() { return null; }
+
                     });
                     return false;
                 }
@@ -494,17 +504,17 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
 
     @Override
     public int run(InputStream in, OutputStream out, OutputStream err, String... arguments) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public Set<SourceVersion> getSourceVersions() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public int isSupportedOption(String option) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }
