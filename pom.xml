@@ -243,9 +243,9 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
           <build>
               <plugins>
                   <!--
-                  =====================================================================
-                  mvn -Prelease release:perform -Darguments=-Dgpg.passphrase=thephrase
-                  =====================================================================
+                  ========================================================================
+                  mvn source:jar javadoc:jar deploy -P release -Dgpg.passphrase=thephrase
+                  ========================================================================
                   -->
                   <plugin>
                       <groupId>org.apache.maven.plugins</groupId>
@@ -287,6 +287,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
                   <!--
                  =====================================================
                  DEPLOY SITE TO GITHUB
+                 mvn site -P report
                  =====================================================
                   -->
 
