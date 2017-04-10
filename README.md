@@ -5,20 +5,28 @@
 <img src="https://img.shields.io/github/stars/bsorrentino/maven-annotation-plugin.svg">&nbsp;<a href="https://github.com/bsorrentino/maven-annotation-plugin/issues"><img src="https://img.shields.io/github/issues/bsorrentino/maven-annotation-plugin.svg">
 </a>&nbsp;
 
-This plugin helps to use from maven the new annotation processing integrated in java compiler provided from JDK6 
+This plugin helps to use from maven the new annotation processing integrated in java compiler provided from JDK6
 
 This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.codehaus.org/apt-maven-plugin/
 
-### [Documentation - v3](http://bsorrentino.github.io/maven-annotation-plugin/index.html)
+### Documentation
 
-### [Old documentation - v2](http://bsorrentino.github.io/maven-annotation-plugin/site2/index.html)
+* [Version 3](http://bsorrentino.github.io/maven-annotation-plugin/index.html)
+
+* [Version 2 (old)](http://bsorrentino.github.io/maven-annotation-plugin/site2/index.html)
 
 ## Related plugin ##
-| [m2e-apt](https://github.com/jbosstools/m2e-apt) | eclipse plugin from Jboss |
-|:-------------------------------------------------|:--------------------------|
-| [m2e-annotations](https://github.com/ilx/m2e-annotations) | eclipse plugin |
+[m2e-apt](https://github.com/jbosstools/m2e-apt) | eclipse plugin from Jboss
+----|----
+[m2e-annotations](https://github.com/ilx/m2e-annotations) | eclipse plugin
 
 ## Releases ##
+Apr 10,2017 | **Release 3.3**. | Available on **[MAVEN CENTRAL REPO](http://search.maven.org/#artifactdetails%7Corg.bsc.maven%7Cmaven-processor-plugin%7C3.3%7Cmaven-plugin)** |
+----|----|----
+
+* [Issue 64](https://github.com/bsorrentino/maven-annotation-plugin/issues/64) - Add option to `fork` for JDK9 support
+* [Issue 65](https://github.com/bsorrentino/maven-annotation-plugin/issues/65) - Add support for `maven-toolchains-plugin`
+
 |Oct 7,2016 | **Release 3.2.0**. | Available on **[MAVEN CENTRAL REPO](http://search.maven.org/#artifactdetails%7Corg.bsc.maven%7Cmaven-processor-plugin%7C3.2.0%7Cmaven-plugin)** |
 |:-----------|:-------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------|
 

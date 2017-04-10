@@ -39,12 +39,15 @@ import javax.tools.*;
 import javax.tools.Diagnostic.Kind;
 import org.apache.maven.RepositoryUtils;
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.toolchain.ToolchainManager;
 import org.bsc.function.Consumer;
+import org.codehaus.plexus.compiler.manager.CompilerManager;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -256,6 +259,38 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     @Parameter(defaultValue = "false", property = "skipAnnotationProcessing")
     protected boolean skip;
 
+    /**
+     * Allows running the compiler in a separate process. 
+     * If false it uses the built in compiler, while if true it will use an executable.
+     * 
+     * @since 3.3
+     */
+    @Parameter(defaultValue = "false", property = "fork")
+    protected boolean fork;
+
+    /**
+     * Maven Session
+     * 
+     * @since 3.3
+     */
+    @Component
+    protected MavenSession session;
+        
+    /**
+     * Plexus compiler manager.
+     * 
+     * @since 3.3
+     */
+    @Component
+    protected CompilerManager compilerManager;
+
+    /**
+     *
+     * @since 3.3
+     */
+    @Component
+    private ToolchainManager toolchainManager;
+    
     /**
      * for execution synchronization
      */
@@ -502,6 +537,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
         final DiagnosticListener<JavaFileObject> dl = new DiagnosticListener<JavaFileObject>()
         {
+            @Override
             public void report(Diagnostic< ? extends JavaFileObject> diagnostic) {
 
                 if (!outputDiagnostics) {
@@ -510,22 +546,23 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                 
                 final Kind kind = diagnostic.getKind();
 
-                if (Kind.ERROR == kind) {
-
-                    getLog().error(String.format("diagnostic: %s", diagnostic));
-
-                } else if (Kind.MANDATORY_WARNING == kind || Kind.WARNING == kind) {
-
-                    getLog().warn(String.format("diagnostic: %s", diagnostic));
-
-                } else if (Kind.NOTE == kind) {
-
-                    getLog().info(String.format("diagnostic: %s", diagnostic));
-
-                } else if (Kind.OTHER == kind) {
-
-                    getLog().info(String.format("diagnostic: %s", diagnostic));
-
+                if (null != kind) 
+                    switch (kind) {
+                    case ERROR:
+                        getLog().error(String.format("diagnostic: %s", diagnostic));
+                        break;
+                    case MANDATORY_WARNING:
+                    case WARNING:
+                        getLog().warn(String.format("diagnostic: %s", diagnostic));
+                        break;
+                    case NOTE:
+                        getLog().info(String.format("diagnostic: %s", diagnostic));
+                        break;
+                    case OTHER:
+                        getLog().info(String.format("diagnostic: %s", diagnostic));
+                        break;
+                    default:
+                        break;
                 }
 
             }
@@ -550,6 +587,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         
         processSourceArtifacts( new ArtifactClosure() {
 
+            @Override
             public void execute(Artifact artifact) {
                 try {
                     
@@ -578,9 +616,23 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
             }
         });
         
+        // If toolchain is set force fork compilation
+        if( toolchainManager != null ) {
+            fork = true;
+        }
+        
         //compileLock.lock();
         try {
-            final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+            
+            
+            final JavaCompiler compiler = (fork) ?
+                    AnnotationProcessorCompiler.createOutProcess(   
+                                                    toolchainManager,                                                                 
+                                                    compilerManager, 
+                                                    project, 
+                                                    session ) :
+                    AnnotationProcessorCompiler.createInProcess();
+                    
             
             if( compiler==null ) {
                 getLog().error("JVM is not suitable for processing annotation! ToolProvider.getSystemJavaCompiler() is null.");
