@@ -4,7 +4,11 @@
 
   <groupId>org.bsc.maven</groupId>
   <artifactId>maven-processor-plugin-test</artifactId>
+<<<<<<< HEAD
   <version>3.3.2-SNAPSHOT</version>
+=======
+  <version>3.3.1</version>
+>>>>>>> hotfix/test_version
   <packaging>jar</packaging>
   <name>MAVEN PROCESSOR PLUGIN TEST- ${project.version}</name>
   <description></description>
