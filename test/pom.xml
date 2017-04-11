@@ -4,7 +4,7 @@
 
   <groupId>org.bsc.maven</groupId>
   <artifactId>maven-processor-plugin-test</artifactId>
-  <version>3.3</version>
+  <version>3.3.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>MAVEN PROCESSOR PLUGIN TEST- ${project.version}</name>
   <description></description>
@@ -92,6 +92,7 @@ PROCESSOR PLUGIN
                     </processors>
 
                     <options>
+                        <test>true</test>
                     </options>
                 </configuration>
                 
@@ -124,8 +125,8 @@ PROCESSOR PLUGIN
                     </processors>
 
                     <options>
+                        <test>false</test>
                     </options>
-                    <fork>true</fork>
                 </configuration>
 
 

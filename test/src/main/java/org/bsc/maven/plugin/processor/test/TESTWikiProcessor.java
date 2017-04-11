@@ -117,10 +117,12 @@ public class TESTWikiProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         if (roundEnv.processingOver())      return false;
 
+        
+        final java.util.Map<String,String> optionMap = processingEnv.getOptions();
+        
         System.out.println( "====> PROCESSOR RUN");
-        
-        java.util.Map<String,String> optionMap = processingEnv.getOptions();
-        
+        for( java.util.Map.Entry<String,String> k : optionMap.entrySet() )
+            System.out.printf( "\t[%s] = [%s]\n", k.getKey(), k.getValue());
             
         for( TypeElement e : annotations ) {
 

@@ -21,6 +21,12 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
 [m2e-annotations](https://github.com/ilx/m2e-annotations) | eclipse plugin
 
 ## Releases ##
+Apr 11,2017 | **Release 3.3.1**. | Available on **[MAVEN CENTRAL REPO](http://search.maven.org/#artifactdetails%7Corg.bsc.maven%7Cmaven-processor-plugin%7C3.3.1%7Cmaven-plugin)** |
+----|----|----
+
+* [Issue 66](https://github.com/bsorrentino/maven-annotation-plugin/issues/66) - source 1.8 ignored
+* [Issue 67](https://github.com/bsorrentino/maven-annotation-plugin/issues/67) - options are not taking in consideration
+
 Apr 10,2017 | **Release 3.3**. | Available on **[MAVEN CENTRAL REPO](http://search.maven.org/#artifactdetails%7Corg.bsc.maven%7Cmaven-processor-plugin%7C3.3%7Cmaven-plugin)** |
 ----|----|----
 

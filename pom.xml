@@ -3,7 +3,7 @@
   <groupId>org.bsc.maven</groupId>
   <artifactId>maven-processor-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>3.3</version>
+  <version>3.3.1</version>
   <name>MAVEN PROCESSOR PLUGIN - ${project.version}</name>
   <description>A maven plugin to process annotation for jdk6 at compile time
 

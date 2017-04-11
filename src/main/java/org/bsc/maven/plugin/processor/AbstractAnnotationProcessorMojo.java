@@ -22,6 +22,7 @@ package org.bsc.maven.plugin.processor;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
@@ -45,6 +46,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.toolchain.Toolchain;
 import org.apache.maven.toolchain.ToolchainManager;
 import org.bsc.function.Consumer;
 import org.codehaus.plexus.compiler.manager.CompilerManager;
@@ -263,6 +265,11 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
      * Allows running the compiler in a separate process. 
      * If false it uses the built in compiler, while if true it will use an executable.
      * 
+     * to set source and target use 
+     * <pre>
+     *  maven.processor.source
+     *  maven.processor.target
+     * </pre>
      * @since 3.3
      */
     @Parameter(defaultValue = "false", property = "fork")
@@ -428,6 +435,54 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
     }
 
+    /**
+     * TODO remove the part with ToolchainManager lookup once we depend on
+     * 3.0.9 (have it as prerequisite). Define as regular component field then.
+     * 
+     * @param jdkToolchain
+     */
+    private Toolchain getToolchain(final Map<String, String> jdkToolchain)
+    {
+        Toolchain tc = null;
+        
+        if ( jdkToolchain != null && !jdkToolchain.isEmpty())
+        {
+            // Maven 3.3.1 has plugin execution scoped Toolchain Support
+            try
+            {
+                final Method getToolchainsMethod =
+                    toolchainManager.getClass().getMethod(  "getToolchains", 
+                                                            MavenSession.class, 
+                                                            String.class,
+                                                            Map.class );
+
+                @SuppressWarnings( "unchecked" )
+                final List<Toolchain> tcs =
+                    (List<Toolchain>) getToolchainsMethod.invoke(   toolchainManager, 
+                                                                    session, 
+                                                                    "jdk",
+                                                                    jdkToolchain );
+
+                if ( tcs != null && tcs.size() > 0 )
+                {
+                    tc = tcs.get( 0 );
+                }
+            }
+            catch ( Exception e )
+            {
+                // ignore
+            }
+        }
+        
+        if ( tc == null )
+        {
+            tc = toolchainManager.getToolchainFromBuildContext( "jdk", session );
+        }
+        
+        return tc;
+    }
+
+     
     @SuppressWarnings("unchecked")
     private void executeWithExceptionsHandled() throws Exception
     {
@@ -615,10 +670,19 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                 }
             }
         });
+
+        final java.util.Map<String,String> jdkToolchain = 
+                    java.util.Collections.emptyMap();
+        
+        final Toolchain tc = getToolchain(jdkToolchain);
         
         // If toolchain is set force fork compilation
-        if( toolchainManager != null ) {
+        if( tc != null ) {
             fork = true;
+        }
+        
+        if( fork ) {
+            getLog().debug( "PROCESSOR COMPILER FORKED!");
         }
         
         //compileLock.lock();
@@ -627,7 +691,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
             
             final JavaCompiler compiler = (fork) ?
                     AnnotationProcessorCompiler.createOutProcess(   
-                                                    toolchainManager,                                                                 
+                                                    tc,                                                                 
                                                     compilerManager, 
                                                     project, 
                                                     session ) :
