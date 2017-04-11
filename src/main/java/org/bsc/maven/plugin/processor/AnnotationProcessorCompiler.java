@@ -8,11 +8,8 @@ package org.bsc.maven.plugin.processor;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Writer;
-import java.lang.reflect.Method;
 import java.nio.charset.Charset;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import javax.annotation.processing.Processor;
 import javax.lang.model.SourceVersion;
@@ -26,7 +23,6 @@ import javax.tools.ToolProvider;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.toolchain.Toolchain;
-import org.apache.maven.toolchain.ToolchainManager;
 import org.codehaus.plexus.compiler.CompilerConfiguration;
 import org.codehaus.plexus.compiler.CompilerException;
 import org.codehaus.plexus.compiler.CompilerMessage;
@@ -230,6 +226,7 @@ class PlexusJavaCompilerWithOutput {
         
         final String[] compilerArguments = 
                 org.codehaus.plexus.compiler.javac.JavacCompiler.buildCompilerArguments(config, getSourceFiles(config) );
+
         return compileOutOfProcess( config, getJavacExecutable(config), compilerArguments );
         
     }
@@ -253,15 +250,15 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
     final MavenProject      project;
     final MavenSession      session;
     final CompilerManager   plexusCompiler;
-    final ToolchainManager  toolchainManager;
+    final Toolchain         toolchain;
     
-    public static JavaCompiler createOutProcess(    ToolchainManager toolchainManager, 
+    public static JavaCompiler createOutProcess(    Toolchain toolchain, 
                                                     CompilerManager plexusCompiler, 
                                                     MavenProject project, 
                                                     MavenSession session ) 
     {
      
-        return new AnnotationProcessorCompiler( toolchainManager, plexusCompiler, project, session);
+        return new AnnotationProcessorCompiler( toolchain, plexusCompiler, project, session);
     }
 
     public static JavaCompiler createInProcess() {
@@ -285,50 +282,7 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
     }
     
 
-    //TODO remove the part with ToolchainManager lookup once we depend on
-    //3.0.9 (have it as prerequisite). Define as regular component field then.
-    private Toolchain getToolchain(final Map<String, String> jdkToolchain)
-    {
-        Toolchain tc = null;
-        
-        if ( jdkToolchain != null && !jdkToolchain.isEmpty())
-        {
-            // Maven 3.3.1 has plugin execution scoped Toolchain Support
-            try
-            {
-                final Method getToolchainsMethod =
-                    toolchainManager.getClass().getMethod(  "getToolchains", 
-                                                            MavenSession.class, 
-                                                            String.class,
-                                                            Map.class );
-
-                @SuppressWarnings( "unchecked" )
-                final List<Toolchain> tcs =
-                    (List<Toolchain>) getToolchainsMethod.invoke(   toolchainManager, 
-                                                                    session, 
-                                                                    "jdk",
-                                                                    jdkToolchain );
-
-                if ( tcs != null && tcs.size() > 0 )
-                {
-                    tc = tcs.get( 0 );
-                }
-            }
-            catch ( Exception e )
-            {
-                // ignore
-            }
-        }
-        
-        if ( tc == null )
-        {
-            tc = toolchainManager.getToolchainFromBuildContext( "jdk", session );
-        }
-        
-        return tc;
-    }
-
-    private AnnotationProcessorCompiler( ToolchainManager toolchainManager, 
+   private AnnotationProcessorCompiler( Toolchain toolchain, 
                                          CompilerManager plexusCompiler, 
                                          MavenProject project, 
                                          MavenSession session ) 
@@ -337,7 +291,7 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
         this.project = project;
         this.session = session;
         this.plexusCompiler = plexusCompiler;
-        this.toolchainManager = toolchainManager;
+        this.toolchain = toolchain;
                 
     }
     
@@ -354,7 +308,6 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
         final java.util.Iterator<String> ii = options.iterator();
       
         while( ii.hasNext() ) {
-            
             final String option = ii.next();
             
             if( "-cp".equals(option)) {
@@ -386,7 +339,10 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
             else if( "-s".equals(option) ) {
                 javacConf.setGeneratedSourcesDirectory( new java.io.File(ii.next()));
             }
-            
+            else if( option.startsWith("-A") ) {
+                javacConf.addCompilerCustomArgument(option, "");   
+                
+            }
             final java.util.Properties props = project.getProperties();
             
             final String sourceVersion = props.getProperty(PROCESSOR_SOURCE,props.getProperty(COMPILER_SOURCE, DEFAULT_SOURCE_VERSION));
@@ -409,19 +365,12 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
         javacConf.setFork(true);
         javacConf.setVerbose(false);
             
-        if( toolchainManager != null ) {
-            final java.util.Map<String,String> jdkToolchain = 
-                    java.util.Collections.emptyMap();
-            
-            final Toolchain tc = getToolchain( jdkToolchain );
-            
-            if( tc!=null ) {
-                final String executable = tc.findTool( "javac");
-                //out.print( "==> TOOLCHAIN EXECUTABLE: "); out.println( executable );
-                javacConf.setExecutable(executable);
-            }
-            
+        if( toolchain != null ) {
+            final String executable = toolchain.findTool( "javac");
+            //out.print( "==> TOOLCHAIN EXECUTABLE: "); out.println( executable );
+            javacConf.setExecutable(executable);
         }
+        
         CompilerResult result;
         
         // USING STANDARD PLEXUS
