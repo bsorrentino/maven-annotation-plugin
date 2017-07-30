@@ -1,6 +1,7 @@
 .classpath
 .project
 .settings/
+.vscode/
 *.sh
 target/
 issue47.txt
