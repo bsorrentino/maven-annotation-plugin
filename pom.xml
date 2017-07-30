@@ -3,7 +3,7 @@
   <groupId>org.bsc.maven</groupId>
   <artifactId>maven-processor-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>3.3.1</version>
+  <version>3.3.2-SNAPSHOT</version>
   <name>MAVEN PROCESSOR PLUGIN - ${project.version}</name>
   <description>A maven plugin to process annotation for jdk6 at compile time
 
@@ -75,8 +75,8 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
   </contributors>
   <licenses>
       <license>
-          <name>GNU LESSER GENERAL PUBLIC LICENSE</name>
-          <url>http://www.gnu.org/licenses/lgpl.html</url>
+          <name>The MIT License</name>
+          <url>https://opensource.org/licenses/MIT</url>
       </license>
   </licenses>
 
