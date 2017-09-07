@@ -314,7 +314,7 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
                 javacConf.addClasspathEntry(ii.next());
             }
             else if( "-sourcepath".equals(option) ) {
-                String [] sourceLocations = ii.next().split(":");
+                String [] sourceLocations = ii.next().split(java.util.regex.Pattern.quote(java.io.File.pathSeparator));
                 for( String path : sourceLocations ) {
                     
                     final java.io.File dir = new java.io.File( path );
@@ -341,26 +341,28 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
             }
             else if( option.startsWith("-A") ) {
                 javacConf.addCompilerCustomArgument(option, "");   
-                
             }
-            final java.util.Properties props = project.getProperties();
-            
-            final String sourceVersion = props.getProperty(PROCESSOR_SOURCE,props.getProperty(COMPILER_SOURCE, DEFAULT_SOURCE_VERSION));
-            final String targetVersion = props.getProperty(PROCESSOR_TARGET,props.getProperty(COMPILER_TARGET, DEFAULT_TARGET_VERSION));
-            
-            javacConf.setSourceVersion(sourceVersion );
-            javacConf.setTargetVersion(targetVersion);
-            javacConf.setWorkingDirectory(project.getBasedir());
-            
-            final java.util.Set<java.io.File> sourceFiles = 
-                    new java.util.HashSet<java.io.File>();
-            for( JavaFileObject src : compilationUnits ) {
-                sourceFiles.add( new java.io.File( src.toUri() ) );
-                
+            else {
+                // Just pass through any other arguments
+                javacConf.addCompilerCustomArgument(option, "");
             }
-                    
-            javacConf.setSourceFiles(sourceFiles);
         }
+        final java.util.Properties props = project.getProperties();
+
+        final String sourceVersion = props.getProperty(PROCESSOR_SOURCE,props.getProperty(COMPILER_SOURCE, DEFAULT_SOURCE_VERSION));
+        final String targetVersion = props.getProperty(PROCESSOR_TARGET,props.getProperty(COMPILER_TARGET, DEFAULT_TARGET_VERSION));
+
+        javacConf.setSourceVersion(sourceVersion );
+        javacConf.setTargetVersion(targetVersion);
+        javacConf.setWorkingDirectory(project.getBasedir());
+
+        final java.util.Set<java.io.File> sourceFiles = 
+                new java.util.HashSet<java.io.File>();
+        for( JavaFileObject src : compilationUnits ) {
+            sourceFiles.add( new java.io.File( src.toUri() ) );
+        }
+
+        javacConf.setSourceFiles(sourceFiles);
         javacConf.setDebug(false);
         javacConf.setFork(true);
         javacConf.setVerbose(false);
