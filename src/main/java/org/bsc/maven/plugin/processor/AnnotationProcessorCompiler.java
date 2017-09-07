@@ -280,7 +280,7 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
         out.println();
 
     }
-    
+    	
 
    private AnnotationProcessorCompiler( Toolchain toolchain, 
                                          CompilerManager plexusCompiler, 
@@ -339,12 +339,9 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
             else if( "-s".equals(option) ) {
                 javacConf.setGeneratedSourcesDirectory( new java.io.File(ii.next()));
             }
-            else if( option.startsWith("-A") ) {
-                javacConf.addCompilerCustomArgument(option, "");   
-            }
-            else {
+            else /*if( option.startsWith("-A") ) */  { // view pull #70
                 // Just pass through any other arguments
-                javacConf.addCompilerCustomArgument(option, "");
+                javacConf.addCompilerCustomArgument(option, "");   
             }
         }
         final java.util.Properties props = project.getProperties();
