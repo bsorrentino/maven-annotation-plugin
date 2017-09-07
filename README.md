@@ -20,6 +20,10 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
 ----|----
 [m2e-annotations](https://github.com/ilx/m2e-annotations) | eclipse plugin
 
+## Develop an annotation processor
+
+* [ANNOTATION PROCESSING 101](http://hannesdorfmann.com/annotation-processing/annotationprocessing101)
+
 ## Releases
 
 currently | **Release 3.3.3-SNAPSHOT** | available from  **[MAVEN CENTRAL REPO](https://oss.sonatype.org/content/repositories/snapshots/org/bsc/maven/maven-processor-plugin/3.3.3-SNAPSHOT/)** |
