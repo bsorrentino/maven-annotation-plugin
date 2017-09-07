@@ -22,7 +22,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
 
 ## Releases
 
-- | **Release 3.3.3-SNAPSHOT** | available from  **[MAVEN CENTRAL REPO](https://oss.sonatype.org/content/repositories/snapshots/org/bsc/maven/maven-processor-plugin/3.3.3-SNAPSHOT/)** |
+currently | **Release 3.3.3-SNAPSHOT** | available from  **[MAVEN CENTRAL REPO](https://oss.sonatype.org/content/repositories/snapshots/org/bsc/maven/maven-processor-plugin/3.3.3-SNAPSHOT/)** |
 ---- | ---- | ----
 
 
