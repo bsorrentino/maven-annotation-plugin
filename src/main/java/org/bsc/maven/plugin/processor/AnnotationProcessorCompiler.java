@@ -314,7 +314,7 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
                 javacConf.addClasspathEntry(ii.next());
             }
             else if( "-sourcepath".equals(option) ) {
-                String [] sourceLocations = ii.next().split(":");
+                String [] sourceLocations = ii.next().split(java.util.regex.Pattern.quote(java.io.File.pathSeparator));
                 for( String path : sourceLocations ) {
                     
                     final java.io.File dir = new java.io.File( path );
