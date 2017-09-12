@@ -24,15 +24,10 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
 
 * [ANNOTATION PROCESSING 101](http://hannesdorfmann.com/annotation-processing/annotationprocessing101)
 
-<<<<<<< HEAD
 ## Releases
 
 currently | **Release 3.3.3-SNAPSHOT** | available from  **[MAVEN CENTRAL REPO](https://oss.sonatype.org/content/repositories/snapshots/org/bsc/maven/maven-processor-plugin/3.3.3-SNAPSHOT/)** |
 ---- | ---- | ----
-
-=======
-## Releases ##
->>>>>>> hotfix/doc
 
 Sep 7,2017 | **Release 3.3.2**. | Available on **[MAVEN CENTRAL REPO](http://search.maven.org/#artifactdetails%7Corg.bsc.maven%7Cmaven-processor-plugin%7C3.3.2%7Cmaven-plugin)** |
 ----|----|----
