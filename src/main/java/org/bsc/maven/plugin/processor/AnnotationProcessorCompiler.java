@@ -339,6 +339,9 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
             else if( "-s".equals(option) ) {
                 javacConf.setGeneratedSourcesDirectory( new java.io.File(ii.next()));
             }
+            else if( "--release".equals(option) ) {
+                javacConf.setReleaseVersion(ii.next());
+            }
             else /*if( option.startsWith("-A") ) */  { // view pull #70
                 // Just pass through any other arguments
                 javacConf.addCompilerCustomArgument(option, "");   
