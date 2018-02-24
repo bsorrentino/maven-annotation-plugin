@@ -3,7 +3,7 @@
   <groupId>org.bsc.maven</groupId>
   <artifactId>maven-processor-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>3.3.3-SNAPSHOT</version>
+  <version>3.3.3</version>
   <name>MAVEN PROCESSOR PLUGIN - ${project.version}</name>
   <description>A maven plugin to process annotation for jdk6 at compile time
 
@@ -33,6 +33,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
   </distributionManagement>
 
   <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <maven.release>3.1.0</maven.release>
       <!-- SONATYPE REPO -->
       <snapshot.repo.id>sonatype-repo</snapshot.repo.id>
@@ -146,7 +147,22 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
 
   </dependencies>
 
-
+ <reporting>
+ <plugins>
+	<plugin>
+	    <groupId>org.apache.maven.plugins</groupId>
+	    <artifactId>maven-plugin-plugin</artifactId>
+	    <version>3.1</version>
+	</plugin>
+	
+	<plugin>
+	    <groupId>org.apache.maven.plugins</groupId>
+	    <artifactId>maven-project-info-reports-plugin</artifactId>
+	    <version>2.4</version>
+	</plugin>
+ </plugins>
+ </reporting>
+ 
   <build>
 
       <plugins>
@@ -205,20 +221,6 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
                   </dependency>
               </dependencies>
               <configuration>
-                  <reportPlugins>
-
-                      <plugin>
-                          <groupId>org.apache.maven.plugins</groupId>
-                          <artifactId>maven-plugin-plugin</artifactId>
-                          <version>3.1</version>
-                      </plugin>
-
-                      <plugin>
-                          <groupId>org.apache.maven.plugins</groupId>
-                          <artifactId>maven-project-info-reports-plugin</artifactId>
-                          <version>2.4</version>
-                      </plugin>
-                  </reportPlugins>
               </configuration>
           </plugin>
 
