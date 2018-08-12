@@ -91,6 +91,14 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     private static final String SOURCE_CLASSIFIER = "sources";
 
     /**
+     * value of -release parameter in java 9+
+     * 
+     * @since 3.3.3
+     */
+    @Parameter
+    private String releaseVersion;
+    
+    /**
      * 
      */
     //@MojoParameter(expression = "${project}", readonly = true, required = true)
@@ -483,7 +491,6 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     }
 
      
-    @SuppressWarnings("unchecked")
     private void executeWithExceptionsHandled() throws Exception
     {
         if (outputDirectory == null)
@@ -582,6 +589,11 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
         options.add("-s");
         options.add(outputDirectory.getPath());
+
+        if( releaseVersion!=null  ) {
+            options.add("--release");
+            options.add(	releaseVersion );        	
+        }
 
 
         if( getLog().isDebugEnabled() ) {
