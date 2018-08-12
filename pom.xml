@@ -3,7 +3,7 @@
   <groupId>org.bsc.maven</groupId>
   <artifactId>maven-processor-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>3.3.3-SNAPSHOT</version>
+  <version>3.3.3</version>
   <name>MAVEN PROCESSOR PLUGIN - ${project.version}</name>
   <description>A maven plugin to process annotation for jdk6 at compile time
 
@@ -33,6 +33,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
   </distributionManagement>
 
   <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <maven.release>3.1.0</maven.release>
       <!-- SONATYPE REPO -->
       <snapshot.repo.id>sonatype-repo</snapshot.repo.id>
@@ -82,7 +83,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
 
   <dependencyManagement>
       <dependencies>
-    <dependency>      
+    <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-compiler-api</artifactId>
       <version>2.8.2</version>
@@ -99,7 +100,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
       <scope>compile</scope>
     </dependency>
       </dependencies>
-  </dependencyManagement>  
+  </dependencyManagement>
   <dependencies>
       <dependency>
           <groupId>org.apache.maven</groupId>
@@ -124,7 +125,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
           <artifactId>plexus-utils</artifactId>
           <version>3.0.15</version>
       </dependency>
-          <dependency>      
+          <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-compiler-api</artifactId>
     </dependency>
@@ -145,7 +146,6 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
       </dependency>
 
   </dependencies>
-
 
   <build>
 
@@ -203,6 +203,19 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
                       <version>3.4</version>
                       <scope>runtime</scope>
                   </dependency>
+
+                  <dependency>
+                      <groupId>org.apache.maven.reporting</groupId>
+                      <artifactId>maven-reporting-exec</artifactId>
+                      <version>1.2</version>
+                  </dependency>
+
+                  <dependency>
+                      <groupId>org.apache.maven.doxia</groupId>
+                      <artifactId>doxia-module-markdown</artifactId>
+                      <version>1.6</version>
+                  </dependency>
+
               </dependencies>
               <configuration>
                   <reportPlugins>
@@ -210,13 +223,18 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
                       <plugin>
                           <groupId>org.apache.maven.plugins</groupId>
                           <artifactId>maven-plugin-plugin</artifactId>
-                          <version>3.1</version>
+                          <version>3.4</version>
                       </plugin>
 
                       <plugin>
                           <groupId>org.apache.maven.plugins</groupId>
                           <artifactId>maven-project-info-reports-plugin</artifactId>
                           <version>2.4</version>
+
+                          <configuration>
+                              <!-- @see https://www.mkyong.com/maven/maven-site-build-is-very-slow-dependency-report/ -->
+                              <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                          </configuration>
                       </plugin>
                   </reportPlugins>
               </configuration>
@@ -233,6 +251,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
             </extension>
       </extensions>
       -->
+
 
   </build>
 
