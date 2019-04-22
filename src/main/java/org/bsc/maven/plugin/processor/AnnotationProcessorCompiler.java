@@ -266,7 +266,7 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
         return ToolProvider.getSystemJavaCompiler();
     }
     
-    private static void printCommand(  final org.codehaus.plexus.compiler.Compiler javac, 
+    static void printCommand(  final org.codehaus.plexus.compiler.Compiler javac, 
                                 final CompilerConfiguration javacConf,
                                 final java.io.PrintWriter out ) throws CompilerException 
     {
@@ -413,6 +413,11 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
             }
 
             @Override
+            public void addModules(Iterable<String> moduleNames) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+            
+            @Override
             public Boolean call() {
                 try {
                     execute(options, compilationUnits, out);
@@ -457,6 +462,7 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
                     });
                     return false;
                 }
+                
             }
         };
     }
