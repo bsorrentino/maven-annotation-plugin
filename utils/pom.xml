@@ -3,7 +3,7 @@
 
   <groupId>org.bsc.util</groupId>
   <artifactId>processor-utils</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>2.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>JAVA PROCESSOR UTILS - ${project.version}</name>
@@ -13,15 +13,14 @@
   </properties>
 
     <scm>
-        <connection>scm:git:https://bartolomeo.sorrentino@code.google.com/p/maven-annotation-plugin.utils/ </connection>
-        <developerConnection>scm:git:https://bartolomeo.sorrentino@code.google.com/p/maven-annotation-plugin.utils/ </developerConnection>
-        <url>https://bartolomeo.sorrentino@code.google.com/p/maven-annotation-plugin.utils/ </url>
-      <tag>HEAD</tag>
+        <connection>scm:git:https://github.com/bsorrentino/maven-annotation-plugin.git </connection>
+        <developerConnection>scm:git:https://github.com/bsorrentino/maven-annotation-plugin.git</developerConnection>
+        <url>https://github.com/bsorrentino/maven-annotation-plugin/tree/master/utils</url>
   </scm>
 
 <inceptionYear>2013</inceptionYear>
 <description>Utilities for java annotation processor implementation JSR-269</description>
-<url>https://code.google.com/p/maven-annotation-plugin/</url>
+<url>https://github.com/bsorrentino/maven-annotation-plugin/tree/master/utils</url>
 
 <licenses>
     <license>
@@ -46,7 +45,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.10</version>
+      <version>4.12</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -60,10 +59,10 @@
     <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
+        <version>3.0</version>
         <configuration>
-            <source>1.6</source>
-            <target>1.6</target>
+            <source>1.8</source>
+            <target>1.8</target>
         </configuration>
     </plugin>
     
@@ -90,16 +89,16 @@
     <id>sonatype</id>
     <build>
         <plugins>
-            <!-- 
-            ===================================================================== 
-            mvn -Prelease release:perform -Darguments=-Dgpg.passphrase=thephrase 
-            ===================================================================== 
+            <!--
+            ====================================================================================
+            # https://github.com/keybase/keybase-issues/issues/2798
+            export GPG_TTY=$(tty)
+            mvn -Prelease source:jar javadoc:jar deploy -Dgpg.passphrase=thephrase
+            ====================================================================================
             -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.3</version>
-
+                <version>1.6</version>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
@@ -109,10 +108,24 @@
                         </goals>
                     </execution>
                 </executions>
-
+                <configuration>
+                  <gpgArguments>
+                    <arg>--pinentry-mode</arg>
+                    <arg>loopback</arg>
+                  </gpgArguments>
+                </configuration>
             </plugin>
-
-
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.5.1</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>sonatype-server</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <stagingProfileId />
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </profile>
