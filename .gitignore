@@ -6,3 +6,4 @@
 target/
 issue47.txt
 maven-compiler-plugin/
+.factorypath
