@@ -1,9 +1,25 @@
+# MacOS
+.DS_Store
+
+# Eclipse
 .classpath
 .project
 .settings/
+.factorypath
+
+# VSCode
 .vscode/
-*.sh
+
+# maven
 target/
+
+# intelliJ
+*.iml
+.idea/
+
+# Other
+*.sh
 issue47.txt
 maven-compiler-plugin/
-.factorypath
+
+
