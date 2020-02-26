@@ -33,8 +33,7 @@ import org.apache.maven.project.MavenProject;
  *
  */
 @Mojo(name="process-test",threadSafe=true,requiresDependencyResolution= ResolutionScope.TEST,defaultPhase= LifecyclePhase.GENERATE_TEST_SOURCES)
-public class TestAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
-{
+public class TestAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo {
 
     /** 
      * project classpath 
@@ -69,26 +68,25 @@ public class TestAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
     private File outputClassDirectory;
 
     @Override
-    protected void addCompileSourceRoot(MavenProject project, String dir)
-    {
+    protected void addCompileSourceRoot(MavenProject project, String dir) {
+
         project.addTestCompileSourceRoot(dir);
     }
 
     @Override
-    public File getDefaultOutputDirectory()
-    {
+    public File getDefaultOutputDirectory() {
+
         return defaultOutputDirectory;
     }
 
     @Override
-    protected File getOutputClassDirectory()
-    {
+    protected File getOutputClassDirectory() {
+
         return outputClassDirectory;
     }
 
     @Override
-    public java.util.Set<File> getSourceDirectories( final java.util.Set<File> result )
-    {
+    public java.util.Set<File> getSourceDirectories( final java.util.Set<File> result ) {
         result.add( sourceDirectory );
         
         return result;
@@ -97,9 +95,8 @@ public class TestAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
 
     @SuppressWarnings("unchecked")
     @Override
-    protected java.util.Set<String> getClasspathElements( final java.util.Set<String> result )
-    {
-        List<Resource> resources = project.getTestResources();
+    protected java.util.Set<String> getClasspathElements( final java.util.Set<String> result ) {
+        final List<Resource> resources = project.getTestResources();
 
         if( resources!=null ) {
             for( Resource r : resources ) {

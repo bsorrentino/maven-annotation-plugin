@@ -69,26 +69,25 @@ public class MainAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
     private File outputClassDirectory;
 
     @Override
-    protected File getOutputClassDirectory()
-    {
+    protected File getOutputClassDirectory() {
+
         return outputClassDirectory;
     }
 
     @Override
-    protected void addCompileSourceRoot(MavenProject project, String dir)
-    {
+    protected void addCompileSourceRoot(MavenProject project, String dir) {
+
         project.addCompileSourceRoot(dir);
     }
 
     @Override
-    public File getDefaultOutputDirectory()
-    {
+    public File getDefaultOutputDirectory() {
+
         return defaultOutputDirectory;
     }
 
     @Override
-    public java.util.Set<File> getSourceDirectories( final java.util.Set<File> result )
-    {
+    public java.util.Set<File> getSourceDirectories( final java.util.Set<File> result ) {
         result.add( sourceDirectory );
         
         return result;
@@ -96,8 +95,7 @@ public class MainAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
 
     @Override
     @SuppressWarnings("unchecked")
-    protected java.util.Set<String> getClasspathElements( final java.util.Set<String> result)
-    {
+    protected java.util.Set<String> getClasspathElements( final java.util.Set<String> result) {
         
         List<Resource> resources = project.getResources();
 
