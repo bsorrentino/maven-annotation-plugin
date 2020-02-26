@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bsc.maven</groupId>
-  <artifactId>maven-processor-plugin</artifactId>
-  <packaging>maven-plugin</packaging>
-  <version>3.4-SNAPSHOT</version>
-  <name>MAVEN PROCESSOR PLUGIN - ${project.version}</name>
+  <artifactId>maven-processor-plugin-parent</artifactId>
+  <packaging>pom</packaging>
+  <version>4.0-SNAPSHOT</version>
+  <name>MAVEN PROCESSOR PLUGIN :: PARENT</name>
   <description>A maven plugin to process annotation for jdk6 at compile time
 
 This plugin helps to use from maven the new annotation processing provided by JDK6 integrated in java compiler
@@ -13,7 +13,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
   <url>https://github.com/bsorrentino/maven-annotation-plugin</url>
 
   <prerequisites>
-      <maven>3.1</maven>
+      <maven>3.5</maven>
   </prerequisites>
 
   <distributionManagement>
@@ -26,15 +26,12 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
           <url>${snapshot.repo.url}</url>
           <uniqueVersion>false</uniqueVersion>
       </snapshotRepository>
-      <site>
-          <id>${release.site.id}</id>
-          <url>${release.site.url}</url>
-      </site>
   </distributionManagement>
 
   <properties>
+      <maven.compiler.source>1.9</maven.compiler.source>
+      <maven.compiler.target>1.9</maven.compiler.target>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <maven.release>3.1.0</maven.release>
       <!-- SONATYPE REPO -->
       <snapshot.repo.id>sonatype-repo</snapshot.repo.id>
       <snapshot.repo.url>https://oss.sonatype.org/content/repositories/snapshots</snapshot.repo.url>
@@ -81,261 +78,137 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
       </license>
   </licenses>
 
-  <dependencyManagement>
-      <dependencies>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-compiler-api</artifactId>
-      <version>2.8.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-compiler-manager</artifactId>
-      <version>2.8.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-compiler-javac</artifactId>
-      <version>2.8.2</version>
-      <scope>compile</scope>
-    </dependency>
-      </dependencies>
-  </dependencyManagement>
-  <dependencies>
-      <dependency>
-          <groupId>org.apache.maven</groupId>
-          <artifactId>maven-plugin-api</artifactId>
-          <version>${maven.release}</version>
-      </dependency>
-      <dependency>
-          <groupId>org.apache.maven</groupId>
-          <artifactId>maven-core</artifactId>
-          <version>${maven.release}</version>
-      </dependency>
+    <modules>
+        <module>processor</module>
+        <module>utils</module>
+        <module>test</module>
+    </modules>
+    <dependencyManagement>
+        <dependencies>
+        </dependencies>
+    </dependencyManagement>
 
-      <!-- dependencies to annotations -->
-      <dependency>
-          <groupId>org.apache.maven.plugin-tools</groupId>
-          <artifactId>maven-plugin-annotations</artifactId>
-          <version>3.2</version>
-      </dependency>
-      <!-- generated help mojo has a dependency to plexus-utils -->
-      <dependency>
-          <groupId>org.codehaus.plexus</groupId>
-          <artifactId>plexus-utils</artifactId>
-          <version>3.0.15</version>
-      </dependency>
-          <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-compiler-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-compiler-manager</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-compiler-javac</artifactId>
-    </dependency>
+    <dependencies>
 
       <dependency>
           <groupId>junit</groupId>
           <artifactId>junit</artifactId>
-          <version>4.11</version>
+          <version>4.13</version>
           <scope>test</scope>
       </dependency>
 
   </dependencies>
 
   <build>
+      <pluginManagement>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.8.2</version>
+            </plugin>
+
+        </plugins>
+
+      </pluginManagement>
 
       <plugins>
 
-
-          <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-compiler-plugin</artifactId>
-              <version>3.1</version>
-              <configuration>
-                  <source>1.6</source>
-                  <target>1.6</target>
-              </configuration>
-          </plugin>
-
-          <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-plugin-plugin</artifactId>
-              <version>3.1</version>
-              <configuration>
-                  <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
-              </configuration>
-              <executions>
-                  <execution>
-                      <id>mojo-descriptor</id>
-                      <goals>
-                          <goal>descriptor</goal>
-                      </goals>
-                  </execution>
-                  <!-- if you want to generate help goal -->
-                  <execution>
-                      <id>help-goal</id>
-                      <goals>
-                          <goal>helpmojo</goal>
-                      </goals>
-                  </execution>
-              </executions>
-          </plugin>
-
           <!--
-          =====================================================
-          MAVEN3 SITE GENERATION
-          =====================================================
+          mvn git-changelog-maven-plugin:git-changelog -N -DtoRef=refs/heads/release/...
           -->
           <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-site-plugin</artifactId>
-              <version>3.4</version>
-
-              <dependencies>
-                  <dependency>
-                      <groupId>org.apache.maven.plugin-tools</groupId>
-                      <artifactId>maven-plugin-annotations</artifactId>
-                      <version>3.4</version>
-                      <scope>runtime</scope>
-                  </dependency>
-
-                  <dependency>
-                      <groupId>org.apache.maven.reporting</groupId>
-                      <artifactId>maven-reporting-exec</artifactId>
-                      <version>1.2</version>
-                  </dependency>
-
-                  <dependency>
-                      <groupId>org.apache.maven.doxia</groupId>
-                      <artifactId>doxia-module-markdown</artifactId>
-                      <version>1.6</version>
-                  </dependency>
-
-              </dependencies>
+              <groupId>se.bjurr.gitchangelog</groupId>
+              <artifactId>git-changelog-maven-plugin</artifactId>
+              <inherited>false</inherited>
+              <version>1.60</version>
+              <!-- Minimal config // -->
               <configuration>
-                  <reportPlugins>
-
-                      <plugin>
-                          <groupId>org.apache.maven.plugins</groupId>
-                          <artifactId>maven-plugin-plugin</artifactId>
-                          <version>3.4</version>
-                      </plugin>
-
-                      <plugin>
-                          <groupId>org.apache.maven.plugins</groupId>
-                          <artifactId>maven-project-info-reports-plugin</artifactId>
-                          <version>2.4</version>
-
-                          <configuration>
-                              <!-- @see https://www.mkyong.com/maven/maven-site-build-is-very-slow-dependency-report/ -->
-                              <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-                          </configuration>
-                      </plugin>
-                  </reportPlugins>
+                  <settingsFile>changelog.json</settingsFile>
+                  <file>CHANGELOG.md</file>
               </configuration>
           </plugin>
+
 
       </plugins>
 
-      <!--
-      <extensions>
-            <extension>
-              <groupId>org.jvnet.wagon-svn</groupId>
-              <artifactId>wagon-svn</artifactId>
-              <version>1.8</version>
-            </extension>
-      </extensions>
-      -->
-
-
   </build>
 
-  <profiles>
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
 
-      <profile>
-          <id>release</id>
-          <build>
-              <plugins>
-                  <!--
-                  ========================================================================
-                  mvn source:jar javadoc:jar deploy -P release -Dgpg.passphrase=thephrase
-                  ========================================================================
-                  -->
-                  <plugin>
-                      <groupId>org.apache.maven.plugins</groupId>
-                      <artifactId>maven-gpg-plugin</artifactId>
-                      <version>1.3</version>
+                <plugins>
 
-                      <executions>
-                          <execution>
-                              <id>sign-artifacts</id>
-                              <phase>verify</phase>
-                              <goals>
-                                  <goal>sign</goal>
-                              </goals>
-                          </execution>
-                      </executions>
-
-                  </plugin>
-
-                <plugin>
-                  <groupId>org.sonatype.plugins</groupId>
-                  <artifactId>nexus-staging-maven-plugin</artifactId>
-                  <version>1.5.1</version>
-                  <extensions>true</extensions>
-                  <configuration>
-                    <serverId>sonatype-server</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <stagingProfileId />
-                  </configuration>
-                </plugin>
-
-              </plugins>
-          </build>
-      </profile>
-      <profile>
-          <id>report</id>
-
-          <build>
-              <plugins>
-                  <!--
-                 =====================================================
-                 DEPLOY SITE TO GITHUB
-                 mvn site -P report
-                 =====================================================
-                  -->
-
-                  <plugin>
-                      <groupId>com.github.github</groupId>
-                      <artifactId>site-maven-plugin</artifactId>
-                      <version>0.10</version>
-                      <configuration>
-                          <message>Creating site for ${project.version}</message>
-                          <server>github</server>
-                          <repositoryName>maven-annotation-plugin</repositoryName>
-                          <repositoryOwner>bsorrentino</repositoryOwner>
-                      </configuration>
-                      <executions>
-                          <execution>
-                              <goals>
-                                  <goal>site</goal>
-                              </goals>
-                              <phase>site</phase>
-                          </execution>
-                      </executions>
-                  </plugin>
-
-
-              </plugins>
-
-          </build>
-      </profile>
-
-  </profiles>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>enforce-no-snapshots</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <phase>verify</phase>
+                                <configuration>
+                                    <rules>
+                                        <requireReleaseDeps>
+                                            <message>No Snapshots Allowed!</message>
+                                        </requireReleaseDeps>
+                                    </rules>
+                                    <fail>true</fail>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!--
+                    ====================================================================================
+                    # https://github.com/keybase/keybase-issues/issues/2798
+                    export GPG_TTY=$(tty)
+                    mvn -Prelease source:jar javadoc:jar deploy -Dgpg.passphrase=thephrase
+                    ====================================================================================
+                    -->
+                    <plugin>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.5.1</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>sonatype-server</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <stagingProfileId />
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

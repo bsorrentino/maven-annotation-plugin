@@ -1,11 +1,23 @@
+# MacOS
+.DS_Store
+
+# Eclipse
 .classpath
 .project
 .settings/
-.vscode/
-*.sh
-target/
-issue47.txt
-maven-compiler-plugin/
 .factorypath
+
+# VSCode
+.vscode/
+
+# maven
+target/
+
+# intelliJ
 *.iml
 .idea/
+
+# Other
+*.sh
+issue47.txt
+.okhttpcache/

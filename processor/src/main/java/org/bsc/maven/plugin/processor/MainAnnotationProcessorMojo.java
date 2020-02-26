@@ -32,74 +32,72 @@ import org.apache.maven.project.MavenProject;
  * @author bsorrentino
  *
  */
-@Mojo(name="process-test",threadSafe=true,requiresDependencyResolution= ResolutionScope.TEST,defaultPhase= LifecyclePhase.GENERATE_TEST_SOURCES)
-public class TestAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
+@Mojo(name="process",threadSafe=true,requiresDependencyResolution= ResolutionScope.COMPILE,defaultPhase= LifecyclePhase.GENERATE_SOURCES)
+public class MainAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
 {
-
     /** 
      * project classpath 
      * 
      */
     @SuppressWarnings("rawtypes")
-    //@MojoParameter(expression = "${project.testClasspathElements}", required = true, readonly = true)
-    @Parameter( defaultValue="${project.testClasspathElements}", required=true, readonly=true)
+    //@MojoParameter(expression = "${project.compileClasspathElements}", required = true, readonly = true)
+    @Parameter( defaultValue="${project.compileClasspathElements}", required=true, readonly=true)
     private List classpathElements;
 
-
-    /**
+    /** 
+     * project sourceDirectory 
      * 
      */
-    //@MojoParameter(expression = "${project.build.testSourceDirectory}", required = true)
-    @Parameter( defaultValue="${project.build.testSourceDirectory}", required = true)
+    //@MojoParameter(expression = "${project.build.sourceDirectory}", required = true)
+    @Parameter( defaultValue="${project.build.sourceDirectory}", required = true)
     private File sourceDirectory;
 
     /**
+     * default output directory
      * 
      */
-    //@MojoParameter(expression = "${project.build.directory}/generated-sources/apt-test", required = true)
-    @Parameter( defaultValue="${project.build.directory}/generated-sources/apt-test", required = true)
+    //@MojoParameter(expression = "${project.build.directory}/generated-sources/apt", required = true)
+    @Parameter( defaultValue="${project.build.directory}/generated-sources/apt", required = true)
     private File defaultOutputDirectory;
 
     /**
      * Set the destination directory for class files (same behaviour of -d option)
      * 
      */
-    //@MojoParameter(required = false, expression="${project.build.testOutputDirectory}", description = "Set the destination directory for class files (same behaviour of -d option)")
-    @Parameter( defaultValue="${project.build.testOutputDirectory}")
+    //@MojoParameter(required = false, expression="${project.build.outputDirectory}", description = "Set the destination directory for class files (same behaviour of -d option)")
+    @Parameter( defaultValue="${project.build.outputDirectory}")
     private File outputClassDirectory;
 
     @Override
-    protected void addCompileSourceRoot(MavenProject project, String dir)
-    {
-        project.addTestCompileSourceRoot(dir);
-    }
+    protected File getOutputClassDirectory() {
 
-    @Override
-    public File getDefaultOutputDirectory()
-    {
-        return defaultOutputDirectory;
-    }
-
-    @Override
-    protected File getOutputClassDirectory()
-    {
         return outputClassDirectory;
     }
 
     @Override
-    public java.util.Set<File> getSourceDirectories( final java.util.Set<File> result )
-    {
+    protected void addCompileSourceRoot(MavenProject project, String dir) {
+
+        project.addCompileSourceRoot(dir);
+    }
+
+    @Override
+    public File getDefaultOutputDirectory() {
+
+        return defaultOutputDirectory;
+    }
+
+    @Override
+    public java.util.Set<File> getSourceDirectories( final java.util.Set<File> result ) {
         result.add( sourceDirectory );
         
         return result;
     }
 
-
-    @SuppressWarnings("unchecked")
     @Override
-    protected java.util.Set<String> getClasspathElements( final java.util.Set<String> result )
-    {
-        List<Resource> resources = project.getTestResources();
+    @SuppressWarnings("unchecked")
+    protected java.util.Set<String> getClasspathElements( final java.util.Set<String> result) {
+        
+        List<Resource> resources = project.getResources();
 
         if( resources!=null ) {
             for( Resource r : resources ) {
@@ -108,9 +106,9 @@ public class TestAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
         }
 
         result.addAll( classpathElements );
-
+        
         return result;
-    }
+     }
 
 
 }
