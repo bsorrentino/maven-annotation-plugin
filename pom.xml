@@ -179,6 +179,21 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
               <version>3.8.1</version>
           </plugin>
 
+          <!--
+          mvn git-changelog-maven-plugin:git-changelog -N -DtoRef=refs/heads/release/...
+          -->
+          <plugin>
+              <groupId>se.bjurr.gitchangelog</groupId>
+              <artifactId>git-changelog-maven-plugin</artifactId>
+              <inherited>false</inherited>
+              <version>1.60</version>
+              <!-- Minimal config // -->
+              <configuration>
+                  <settingsFile>changelog.json</settingsFile>
+                  <file>CHANGELOG.md</file>
+              </configuration>
+          </plugin>
+
           <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-plugin-plugin</artifactId>

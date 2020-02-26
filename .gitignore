@@ -20,6 +20,4 @@ target/
 # Other
 *.sh
 issue47.txt
-maven-compiler-plugin/
-
-
+.okhttpcache/
