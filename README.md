@@ -28,14 +28,14 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
 ## Snapshot
 
  Date  | Info   
---- | --- 
+--- | ---
 Currently | **[Release 4.0-SNAPSHOT](https://oss.sonatype.org/content/repositories/snapshots/org/bsc/maven/maven-processor-plugin/4.0-SNAPSHOT/)**  | available from  **[MAVEN CENTRAL REPO]** |
 
 ## Releases
 
  Date  | Info   
 --- | ---
- **Mar 02, 2020** | [Release 4.0-beta1](https://github.com/bsorrentino/maven-confluence-plugin/releases/tag/v4.0-beta1)
+ **Mar 02, 2020** | [Release 4.0-beta1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-beta1)
 
 
 ## History
