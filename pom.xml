@@ -4,7 +4,7 @@
   <artifactId>maven-processor-plugin-parent</artifactId>
   <packaging>pom</packaging>
   <version>4.0-SNAPSHOT</version>
-  <name>MAVEN PROCESSOR PLUGIN :: PARENT</name>
+  <name>MAVEN PROCESSOR PLUGIN PARENT</name>
   <description>A maven plugin to process annotation for jdk6 at compile time
 
 This plugin helps to use from maven the new annotation processing provided by JDK6 integrated in java compiler
@@ -115,6 +115,11 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
                 <version>3.8.2</version>
             </plugin>
 
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.33.0</version>
+            </plugin>
         </plugins>
 
       </pluginManagement>
