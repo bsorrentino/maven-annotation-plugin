@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import javax.tools.JavaCompiler.CompilationTask;
@@ -48,7 +49,6 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.toolchain.Toolchain;
 import org.apache.maven.toolchain.ToolchainManager;
-import org.bsc.function.Consumer;
 import org.codehaus.plexus.compiler.manager.CompilerManager;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
@@ -101,8 +101,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     /**
      * 
      */
-    //@MojoParameter(expression = "${project}", readonly = true, required = true)
-    @Component
+    @Parameter( defaultValue = "${project}", readonly = true )
     protected MavenProject project;
 
     /**
@@ -288,7 +287,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
      * 
      * @since 3.3
      */
-    @Component
+    @Parameter( defaultValue = "${session}", readonly = true )
     protected MavenSession session;
         
     /**
@@ -379,7 +378,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     private String buildCompileClasspath()
     {
         
-        java.util.Set<String> pathElements = new java.util.LinkedHashSet<String>();
+        final java.util.Set<String> pathElements = new java.util.LinkedHashSet<>();
             
         if( pluginArtifacts!=null  ) {
 
@@ -522,14 +521,12 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         if( additionalSourceDirectories != null && !additionalSourceDirectories.isEmpty() ) {
             sourceDirs.addAll( additionalSourceDirectories );
         }
-        
-        
+
         if( sourceDirs == null ) {
             throw new IllegalStateException("getSourceDirectories is null!");
         }
-        
-        
-        List<File> files = new java.util.ArrayList<File>();
+
+        final List<File> files = new java.util.ArrayList<>();
         
         for( File sourceDir : sourceDirs ) {
             
@@ -548,35 +545,29 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                 getLog().warn( String.format("source directory [%s] is invalid! Processor task will be skipped!", sourceDir.getPath()));
                 continue;                        
             }
-        
 
             files.addAll( FileUtils.getFiles(sourceDir, includesString, excludesString) );
         }
-       
 
         final String compileClassPath = buildCompileClasspath();
 
         final String processor = buildProcessor();
 
-        final List<String> options = new ArrayList<String>(10);
+        final List<String> options = new ArrayList<>(10);
 
         options.add("-cp");
         options.add(compileClassPath);
         
-        buildCompileSourcepath( new Consumer<String>() {
-            public void accept(String sourcepath) {
-                
+        buildCompileSourcepath( sourcepath -> {
                 options.add("-sourcepath");
                 options.add(sourcepath);
-            }
         });
         
         options.add("-proc:only");
 
         addCompilerArguments(options);
 
-        if (processor != null)
-        {
+        if (processor != null) {
             options.add("-processor");
             options.add(processor);
         }
@@ -602,45 +593,39 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
             }
         }
 
-        final DiagnosticListener<JavaFileObject> dl = new DiagnosticListener<JavaFileObject>()
-        {
-            @Override
-            public void report(Diagnostic< ? extends JavaFileObject> diagnostic) {
+        final DiagnosticListener<JavaFileObject> dl = diagnostic -> {
 
-                if (!outputDiagnostics) {
-                    return;
-                }
-                
-                final Kind kind = diagnostic.getKind();
-
-                if (null != kind) 
-                    switch (kind) {
-                    case ERROR:
-                        getLog().error(String.format("diagnostic: %s", diagnostic));
-                        break;
-                    case MANDATORY_WARNING:
-                    case WARNING:
-                        getLog().warn(String.format("diagnostic: %s", diagnostic));
-                        break;
-                    case NOTE:
-                        getLog().info(String.format("diagnostic: %s", diagnostic));
-                        break;
-                    case OTHER:
-                        getLog().info(String.format("diagnostic: %s", diagnostic));
-                        break;
-                    default:
-                        break;
-                }
-
+            if (!outputDiagnostics) {
+                return;
             }
+
+            final Kind kind = diagnostic.getKind();
+
+            if (null != kind)
+                switch (kind) {
+                case ERROR:
+                    getLog().error(String.format("diagnostic: %s", diagnostic));
+                    break;
+                case MANDATORY_WARNING:
+                case WARNING:
+                    getLog().warn(String.format("diagnostic: %s", diagnostic));
+                    break;
+                case NOTE:
+                    getLog().info(String.format("diagnostic: %s", diagnostic));
+                    break;
+                case OTHER:
+                    getLog().info(String.format("diagnostic: %s", diagnostic));
+                    break;
+                default:
+                    break;
+            }
+
         };
 
-        if (systemProperties != null)
-        {
+        if (systemProperties != null) {
             java.util.Set< Map.Entry<String,String>> pSet = systemProperties.entrySet();
             
-            for ( Map.Entry<String,String> e : pSet ) 
-            {
+            for ( Map.Entry<String,String> e : pSet ) {
                 getLog().debug( String.format("set system property : [%s] = [%s]",  e.getKey(), e.getValue() ));
                 System.setProperty(e.getKey(), e.getValue());
             }
@@ -650,36 +635,32 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         //
         // add to allSource the files coming out from source archives
         // 
-        final List<JavaFileObject> allSources = new java.util.ArrayList<JavaFileObject>();
+        final List<JavaFileObject> allSources = new java.util.ArrayList<>();
         
-        processSourceArtifacts( new ArtifactClosure() {
+        processSourceArtifacts( artifact -> {
+            try {
 
-            @Override
-            public void execute(Artifact artifact) {
-                try {
-                    
-                    java.io.File f = artifact.getFile();
+                File f = artifact.getFile();
 
-                    ZipFile zipFile = new ZipFile(f);
-                    Enumeration<? extends ZipEntry> entries = zipFile.entries();
-                    int sourceCount = 0;
+                ZipFile zipFile = new ZipFile(f);
+                Enumeration<? extends ZipEntry> entries = zipFile.entries();
+                int sourceCount = 0;
 
-                    while (entries.hasMoreElements()) {
-                        ZipEntry entry = (ZipEntry) entries.nextElement();
+                while (entries.hasMoreElements()) {
+                    final ZipEntry entry = entries.nextElement();
 
-                        if (entry.getName().endsWith(".java")) {
-                            ++sourceCount;
-                            allSources.add(ZipFileObject.create(zipFile, entry));
+                    if (entry.getName().endsWith(".java")) {
+                        ++sourceCount;
+                        allSources.add(ZipFileObject.create(zipFile, entry));
 
-                        }
                     }
-
-                    getLog().debug(String.format("** Discovered %d java sources in %s", sourceCount, f.getAbsolutePath()));
-                    
-                } catch (Exception ex) {
-                    getLog().warn(String.format("Problem reading source archive [%s]", artifact.getFile().getPath()));
-                    getLog().debug(ex);
                 }
+
+                getLog().debug(String.format("** Discovered %d java sources in %s", sourceCount, f.getAbsolutePath()));
+
+            } catch (Exception ex) {
+                getLog().warn(String.format("Problem reading source archive [%s]", artifact.getFile().getPath()));
+                getLog().debug(ex);
             }
         });
 
@@ -743,26 +724,20 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                     
                     allSources.add(f);
                 };
-                
-                
-                
+
             }
-            
-            
-            
+
             if( allSources.isEmpty() ) {
                 getLog().warn( "no source file(s) detected! Processor task will be skipped");
                 return;
             }
     
-            final Iterable<String> classes = null;
-            
-            CompilationTask task = compiler.getTask(
+            final CompilationTask task = compiler.getTask(
                     new PrintWriter(System.out),
                     fileManager,
                     dl,
                     options, 
-                    classes,
+                    null,
                     allSources);
     
             /*
@@ -775,9 +750,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
              */
 
             // Perform the compilation task.
-            if (!task.call())
-            {
-    
+            if (!task.call()) {
                 throw new Exception("error during compilation");
             }
         }
@@ -804,18 +777,14 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         final String includesString = ( includes==null || includes.length==0) ? "**/*.java" : StringUtils.join(includes, ",");
         final String excludesString = ( excludes==null || excludes.length==0) ? null : StringUtils.join(excludes, ",");
 
-        List<File> files = FileUtils.getFiles(sourceDir, includesString, excludesString);
+        final List<File> files = FileUtils.getFiles(sourceDir, includesString, excludesString);
         return files;
     }
 
-    private void addCompilerArguments(List<String> options)
-    {
-        if (!StringUtils.isEmpty(compilerArguments))
-        {
-            for (String arg : compilerArguments.split(" "))
-            {
-                if (!StringUtils.isEmpty(arg))
-                {
+    private void addCompilerArguments(List<String> options) {
+        if (!StringUtils.isEmpty(compilerArguments)) {
+            for (String arg : compilerArguments.split(" ")) {
+                if (!StringUtils.isEmpty(arg)) {
                     arg = arg.trim();
                     getLog().debug(String.format("Adding compiler arg: %s", arg));
                     options.add(arg);
@@ -838,8 +807,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     private void addOutputToSourcesIfNeeded()
     {
         final Boolean add = addOutputDirectoryToCompilationSources;
-        if (add == null || add.booleanValue())
-        {
+        if (add == null || add.booleanValue()) {
             getLog().debug(String.format("Source directory: %s added", outputDirectory));
             addCompileSourceRoot(project, outputDirectory.getAbsolutePath());
         }
@@ -848,8 +816,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     private void ensureOutputDirectoryExists()
     {
         final File f = outputDirectory;
-        if (!f.exists())
-        {
+        if (!f.exists()) {
             f.mkdirs();
         }
         if( !getOutputClassDirectory().exists()) {
@@ -900,13 +867,11 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         
         final ArtifactTypeRegistry typeReg = repoSession.getArtifactTypeRegistry();
            
-        final String extension = null;
-        
-        final DefaultArtifact artifact = 
+        final DefaultArtifact artifact =
                 new DefaultArtifact( dep.getGroupId(),
                                      dep.getArtifactId(),
                                       SOURCE_CLASSIFIER,
-                                      extension, 
+                                      null,
                                       dep.getVersion(), 
                                       typeReg.get(dep.getType()));
         

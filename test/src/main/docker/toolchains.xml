@@ -1,0 +1,13 @@
+<toolchains>
+    <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>1.9</version>
+            <vendor>open</vendor>
+            <id>openjdk9</id>
+        </provides>
+        <configuration>
+            <jdkHome>/opt/java/openjdk</jdkHome>
+        </configuration>
+    </toolchain>
+</toolchains>

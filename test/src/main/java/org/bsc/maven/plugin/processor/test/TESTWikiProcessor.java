@@ -5,6 +5,8 @@
 
 package org.bsc.maven.plugin.processor.test;
 
+import org.bsc.processor.BaseAbstractProcessor;
+
 import java.io.IOException;
 import java.util.Set;
 
@@ -23,37 +25,11 @@ import javax.tools.StandardLocation;
  * 
  * 
  */
-@SupportedSourceVersion(SourceVersion.RELEASE_7)
+@SupportedSourceVersion(SourceVersion.RELEASE_9)
 @SupportedAnnotationTypes( "*" )
 //@SupportedOptions( {"subfolder", "filepath", "templateUri"})
 //@SupportedAnnotationTypes( {"javax.ws.rs.GET", "javax.ws.rs.PUT", "javax.ws.rs.POST", "javax.ws.rs.DELETE"})
-public class TESTWikiProcessor extends AbstractProcessor {
-
-   protected void info( String msg ) {
-        processingEnv.getMessager().printMessage(Kind.NOTE, msg );
-    }
-
-    protected void warn( String msg ) {
-        //logger.warning(msg);
-        processingEnv.getMessager().printMessage(Kind.WARNING, msg );
-    }
-
-    protected void warn( String msg, Throwable t ) {
-        //logger.log(Level.WARNING, msg, t );
-        processingEnv.getMessager().printMessage(Kind.WARNING, msg );
-        t.printStackTrace(System.err);
-    }
-
-    protected void error( String msg ) {
-        //logger.severe(msg);
-        processingEnv.getMessager().printMessage(Kind.ERROR, msg );
-    }
-
-    protected void error( String msg, Throwable t ) {
-        //logger.log(Level.SEVERE, msg, t );
-        processingEnv.getMessager().printMessage(Kind.ERROR, msg );
-        t.printStackTrace(System.err);
-    }
+public class TESTWikiProcessor extends BaseAbstractProcessor {
 
      /**
      * 
@@ -74,45 +50,7 @@ public class TESTWikiProcessor extends AbstractProcessor {
         
         return f;
     }
-    
-    
-    /**
-     * 
-     * @param subfolder subfolder (e.g. confluence)
-     * @param filePath relative path (e.g. children/file.wiki)
-     * @return
-     * @throws IOException 
-     */
-    protected FileObject getOutputFile( Filer filer, String subfolder, String filePath ) throws IOException {
-        
-    	Element e = null;
-    	FileObject res = 
-        		filer.createResource(StandardLocation.SOURCE_OUTPUT, 
-        								subfolder, 
-        								filePath, 
-        								e);
 
-        return res;
-    }
-    
-    /**
-     * 
-     * @param e
-     * @return
-     * @throws ClassNotFoundException
-     */
-    protected Class<?> getClassFromElement( Element e ) throws ClassNotFoundException {
-    	if( null==e ) throw new IllegalArgumentException("e is null!");
-    	if( ElementKind.CLASS!=e.getKind() ) throw new IllegalArgumentException( String.format("element [%s] is not a class!", e));
-    	
-    	TypeElement te = (TypeElement) e;
-    	
-    	info( String.format("loading class [%s]", te.getQualifiedName().toString()));
-    	
-    	return Class.forName(te.getQualifiedName().toString());
-    	
-    }
-    
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         if (roundEnv.processingOver())      return false;
