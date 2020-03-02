@@ -5,15 +5,97 @@
 ## Next release
 ### Generic changes
 
+**update ignore**
+
+
+[0d2cb8114432cbd](https://github.com/bsorrentino/maven-annotation-plugin/commit/0d2cb8114432cbd) bartolomeo sorrentino *2020-03-02 18:59:31*
+
+**add changelog support**
+
+
+[57b41626d1e6ab3](https://github.com/bsorrentino/maven-annotation-plugin/commit/57b41626d1e6ab3) bsorrentino *2020-02-26 02:30:48*
+
+**move to next developer version**
+
+
+[abd261ca0b3e498](https://github.com/bsorrentino/maven-annotation-plugin/commit/abd261ca0b3e498) bsorrentino *2020-02-24 23:31:45*
+
+**move to next developer version**
+
+
+[6b5f170872c766f](https://github.com/bsorrentino/maven-annotation-plugin/commit/6b5f170872c766f) bsorrentino *2020-02-24 23:23:43*
+
+**update ignore**
+
+
+[03482b5e2d2f909](https://github.com/bsorrentino/maven-annotation-plugin/commit/03482b5e2d2f909) bsorrentino *2020-02-24 23:21:23*
+
+**update ignore**
+
+
+[23cfeff0350f118](https://github.com/bsorrentino/maven-annotation-plugin/commit/23cfeff0350f118) Bartolomeo Sorrentino *2019-04-23 15:36:20*
+
+**modernize code**
+
+
+[5cc364404c3ba1c](https://github.com/bsorrentino/maven-annotation-plugin/commit/5cc364404c3ba1c) Bartolomeo Sorrentino *2019-04-23 15:36:10*
+
+**update pom for next major release**
+
+
+[0f00f5860ba309f](https://github.com/bsorrentino/maven-annotation-plugin/commit/0f00f5860ba309f) Bartolomeo Sorrentino *2019-04-23 15:28:09*
+
 **remove netbeans references**
 
 
 [04a8f939627a8ac](https://github.com/bsorrentino/maven-annotation-plugin/commit/04a8f939627a8ac) Bartolomeo Sorrentino *2019-04-22 17:00:51*
 
+**override method addModules in javax.tools.JavaCompiler.CompilationTask**
+
+
+[b7434e5617baa16](https://github.com/bsorrentino/maven-annotation-plugin/commit/b7434e5617baa16) bsorrentino *2019-04-12 15:07:59*
+
+**update readme**
+
+
+[8065847d06dde32](https://github.com/bsorrentino/maven-annotation-plugin/commit/8065847d06dde32) bsorrentino *2018-08-12 13:56:30*
+
 **update readme**
 
 
 [2d639c43eb66e2a](https://github.com/bsorrentino/maven-annotation-plugin/commit/2d639c43eb66e2a) bsorrentino *2018-08-12 13:54:32*
+
+
+###  [#79](https://github.com/bsorrentino/maven-annotation-plugin/issues/79) move to java9 and above    *enhancement*  
+
+**#79 add maven shell in docker**
+
+
+[8000153b4e6b00a](https://github.com/bsorrentino/maven-annotation-plugin/commit/8000153b4e6b00a) bartolomeo sorrentino *2020-03-02 19:00:40*
+
+**#79 update readme**
+
+
+[41242f465f6b338](https://github.com/bsorrentino/maven-annotation-plugin/commit/41242f465f6b338) bartolomeo sorrentino *2020-03-02 18:58:10*
+
+**#79 add docker to test jdk version**
+
+
+[afcff71d8a5b9f4](https://github.com/bsorrentino/maven-annotation-plugin/commit/afcff71d8a5b9f4) bartolomeo sorrentino *2020-03-02 18:56:28*
+
+**issue #79**
+
+ * make multimodule project
+
+[3ec2718dfe15dab](https://github.com/bsorrentino/maven-annotation-plugin/commit/3ec2718dfe15dab) bsorrentino *2020-02-26 03:37:03*
+
+**issue #79**
+
+ * code refactoring
+ * update source / target to java 9
+ * upgrade dependencies
+
+[f84460766d58da5](https://github.com/bsorrentino/maven-annotation-plugin/commit/f84460766d58da5) bsorrentino *2020-02-26 02:09:21*
 
 
 ## v3.3.3
