@@ -20,9 +20,12 @@
     	<item name="Summary" href="project-summary.html"/>
     	<item name="Goals" href="plugin-info.html"/>
     	<item name="Usage" href="usage.html"/>
-      <item name="Q&amp;A" href="qa.html"/>
+        <item name="Q&amp;A" href="qa.html"/>
 
     </menu>
+      <menu name="Utils module">
+          <item name="javadoc" href="utils-apidocs/index.html"/>
+      </menu>
 
     <menu name="Summary" >
 
@@ -30,8 +33,6 @@
     	<item name="Source" href="source-repository.html" />
 
     </menu>
-
-
 
 <!--
 	<menu name="summary" ref="reports" />
