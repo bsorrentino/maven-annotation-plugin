@@ -2,7 +2,7 @@
 
 ## Steps for test 
 
-Deploy project assets. (valid only for the SNAPSHOT)
+Deploy project assets. (need only for the SNAPSHOT)
 > let's go in root folder and run
 >```dockerfile
 >mvn deploy 
