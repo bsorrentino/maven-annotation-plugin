@@ -5,6 +5,11 @@
 ## Next release
 ### Generic changes
 
+**update changelog**
+
+
+[42d5623ace037c2](https://github.com/bsorrentino/maven-annotation-plugin/commit/42d5623ace037c2) bartolomeo sorrentino *2020-03-02 19:02:33*
+
 **update ignore**
 
 
@@ -66,7 +71,7 @@
 [2d639c43eb66e2a](https://github.com/bsorrentino/maven-annotation-plugin/commit/2d639c43eb66e2a) bsorrentino *2018-08-12 13:54:32*
 
 
-###  [#79](https://github.com/bsorrentino/maven-annotation-plugin/issues/79) move to java9 and above    *enhancement*  
+###  [#79](https://github.com/bsorrentino/maven-annotation-plugin/issues/79) move to java9    *enhancement*  
 
 **#79 add maven shell in docker**
 

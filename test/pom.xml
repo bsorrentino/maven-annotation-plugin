@@ -6,7 +6,7 @@
     <artifactId>maven-processor-plugin-test</artifactId>
     <packaging>jar</packaging>
     <name>MAVEN PROCESSOR PLUGIN TEST</name>
-    <version>4.0-SNAPSHOT</version>
+    <version>4.0-beta1</version>
     <description></description>
 
     <properties>
