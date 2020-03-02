@@ -24,10 +24,21 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
 
 * [ANNOTATION PROCESSING 101](http://hannesdorfmann.com/annotation-processing/annotationprocessing101)
 
+
+## Snapshot
+
+ Date  | Info   
+--- | --- 
+Currently | **[Release 4.0-SNAPSHOT](https://oss.sonatype.org/content/repositories/snapshots/org/bsc/maven/maven-processor-plugin/4.0-SNAPSHOT/)**  | available from  **[MAVEN CENTRAL REPO]** |
+
 ## Releases
 
-Currently | **Release 3.3.3-SNAPSHOT** | available from  **[MAVEN CENTRAL REPO](https://oss.sonatype.org/content/repositories/snapshots/org/bsc/maven/maven-processor-plugin/3.3.3-SNAPSHOT/)** |
----- | ---- | ----
+ Date  | Info   
+--- | ---
+ **Mar 02, 2020** | [Release 4.0-beta1](https://github.com/bsorrentino/maven-confluence-plugin/releases/tag/v4.0-beta1)
+
+
+## History
 
 Aug 12,2018 | **Release 3.3.3**. | Available on **[MAVEN CENTRAL REPO](http://search.maven.org/#artifactdetails%7Corg.bsc.maven%7Cmaven-processor-plugin%7C3.3.3%7Cmaven-plugin)** |
 ----|----|----
