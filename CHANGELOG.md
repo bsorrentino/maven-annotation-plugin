@@ -1,9 +1,33 @@
-# Maven Confluence Plugin - Changelog
+# Maven Annotation Plugin - Changelog
 
 <!-- Changelog for bsorrentino maven-annotation-plugin. -->
 
 ## Next release
 ### Generic changes
+
+**add utils javadoc to the site**
+
+
+[2dda14ced574f7a](https://github.com/bsorrentino/maven-annotation-plugin/commit/2dda14ced574f7a) bartolomeo sorrentino *2020-03-02 21:50:12*
+
+**update readme**
+
+
+[bcfd9b3ecc46e6a](https://github.com/bsorrentino/maven-annotation-plugin/commit/bcfd9b3ecc46e6a) bsorrentino *2020-03-02 20:03:36*
+
+
+## v4.0-beta1
+### Generic changes
+
+**remove test module**
+
+
+[fb66eab913100ea](https://github.com/bsorrentino/maven-annotation-plugin/commit/fb66eab913100ea) bsorrentino *2020-03-02 19:56:29*
+
+**prepare for release**
+
+
+[167f62179553548](https://github.com/bsorrentino/maven-annotation-plugin/commit/167f62179553548) bartolomeo sorrentino *2020-03-02 19:39:55*
 
 **update changelog**
 
