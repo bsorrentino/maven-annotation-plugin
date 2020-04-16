@@ -604,10 +604,10 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
             options.add(	releaseVersion );        	
         }
 
-        options.add("-source");
-        options.add("9");
-        options.add("-target");
-        options.add("9");
+//        options.add("-source");
+//        options.add("9");
+//        options.add("-target");
+//        options.add("9");
 
         if( getLog().isDebugEnabled() ) {
             for (String option : options) {
