@@ -3,7 +3,8 @@
 <a href="http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22maven-processor-plugin%22"><img src="https://img.shields.io/maven-central/v/org.bsc.maven/maven-processor-plugin.svg">
 </a>&nbsp;<img src="https://img.shields.io/github/forks/bsorrentino/maven-annotation-plugin.svg">&nbsp;
 <img src="https://img.shields.io/github/stars/bsorrentino/maven-annotation-plugin.svg">&nbsp;<a href="https://github.com/bsorrentino/maven-annotation-plugin/issues"><img src="https://img.shields.io/github/issues/bsorrentino/maven-annotation-plugin.svg">
-</a>&nbsp;
+</a>&nbsp;[![Join the chat at https://gitter.im/bsorrentino/maven-annotation-plugin](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bsorrentino/maven-annotation-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 
 This plugin helps to use from maven the new annotation processing integrated in java compiler provided from JDK6
 
