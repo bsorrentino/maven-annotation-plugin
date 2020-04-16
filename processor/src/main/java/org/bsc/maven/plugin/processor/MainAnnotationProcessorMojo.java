@@ -20,6 +20,8 @@ package org.bsc.maven.plugin.processor;
 
 import java.io.File;
 import java.util.List;
+import java.util.Set;
+
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -94,16 +96,21 @@ public class MainAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    protected java.util.Set<String> getClasspathElements( final java.util.Set<String> result) {
-        
-        List<Resource> resources = project.getResources();
+    protected Set<String> getResourcesElements(Set<String> result) {
+        final List<Resource> resources = project.getResources();
 
         if( resources!=null ) {
             for( Resource r : resources ) {
                 result.add(r.getDirectory());
             }
         }
+
+        return result;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected java.util.Set<String> getClasspathElements( final java.util.Set<String> result) {
 
         result.addAll( classpathElements );
         

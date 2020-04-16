@@ -34,6 +34,8 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import javax.tools.JavaCompiler.CompilationTask;
@@ -358,6 +360,8 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         return result.toString();
     }
 
+    protected abstract java.util.Set<String> getResourcesElements( java.util.Set<String> result );
+
     protected abstract java.util.Set<String> getClasspathElements( java.util.Set<String> result );
 
     private String buildCompileSourcepath( Consumer<String> onSuccess) {
@@ -379,7 +383,11 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     {
         
         final java.util.Set<String> pathElements = new java.util.LinkedHashSet<>();
-            
+
+        getResourcesElements(pathElements);
+
+        getClasspathElements(pathElements);
+
         if( pluginArtifacts!=null  ) {
 
             for( Artifact a : pluginArtifacts ) {
@@ -389,13 +397,13 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                     java.io.File f = a.getFile();
                     
                     if( f!=null ) pathElements.add( a.getFile().getAbsolutePath() );
+
                 }
             
             }
         }
-        
-        getClasspathElements(pathElements);
-        
+
+
         final StringBuilder result = new StringBuilder();
         
         for( String elem : pathElements ) {
@@ -404,6 +412,13 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         return result.toString();
     }
 
+    private String buildModulePath()
+    {
+
+        return getClasspathElements(new java.util.LinkedHashSet<>())
+                .stream()
+                .collect(Collectors.joining( File.pathSeparator) );
+    }
 
     /**
      * 
@@ -557,7 +572,10 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
         options.add("-cp");
         options.add(compileClassPath);
-        
+
+        options.add("--module-path");
+        options.add( buildModulePath() );
+
         buildCompileSourcepath( sourcepath -> {
                 options.add("-sourcepath");
                 options.add(sourcepath);
@@ -586,6 +604,10 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
             options.add(	releaseVersion );        	
         }
 
+        options.add("-source");
+        options.add("9");
+        options.add("-target");
+        options.add("9");
 
         if( getLog().isDebugEnabled() ) {
             for (String option : options) {
