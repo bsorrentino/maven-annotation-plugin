@@ -3,7 +3,7 @@
   <groupId>org.bsc.maven</groupId>
   <artifactId>maven-processor-plugin-parent</artifactId>
   <packaging>pom</packaging>
-  <version>4.0-beta1</version>
+  <version>4.0-rc1</version>
   <name>MAVEN PROCESSOR PLUGIN PARENT</name>
   <description>A maven plugin to process annotation for jdk6 at compile time
 
@@ -130,7 +130,26 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
       </pluginManagement>
 
       <plugins>
-
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-enforcer-plugin</artifactId>
+              <version>3.0.0-M3</version>
+              <executions>
+                  <execution>
+                      <id>enforce-maven</id>
+                      <goals>
+                          <goal>enforce</goal>
+                      </goals>
+                      <configuration>
+                          <rules>
+                              <requireMavenVersion>
+                                  <version>3.5.2</version>
+                              </requireMavenVersion>
+                          </rules>
+                      </configuration>
+                  </execution>
+              </executions>
+          </plugin>
           <!--
           mvn git-changelog-maven-plugin:git-changelog -N -DtoRef=refs/heads/release/...
           -->
