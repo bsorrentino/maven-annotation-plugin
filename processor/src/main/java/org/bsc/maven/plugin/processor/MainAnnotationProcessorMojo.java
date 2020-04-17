@@ -41,10 +41,9 @@ public class MainAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
      * project classpath 
      * 
      */
-    @SuppressWarnings("rawtypes")
     //@MojoParameter(expression = "${project.compileClasspathElements}", required = true, readonly = true)
     @Parameter( defaultValue="${project.compileClasspathElements}", required=true, readonly=true)
-    private List classpathElements;
+    private List<String> classpathElements;
 
     /** 
      * project sourceDirectory 
@@ -109,7 +108,6 @@ public class MainAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     protected java.util.Set<String> getClasspathElements( final java.util.Set<String> result) {
 
         result.addAll( classpathElements );

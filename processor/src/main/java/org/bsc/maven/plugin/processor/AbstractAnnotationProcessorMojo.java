@@ -19,28 +19,6 @@
 
 package org.bsc.maven.plugin.processor;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.reflect.Method;
-import java.nio.charset.Charset;
-import java.nio.charset.IllegalCharsetNameException;
-import java.nio.charset.UnsupportedCharsetException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Consumer;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import javax.tools.JavaCompiler.CompilationTask;
-import javax.tools.*;
-import javax.tools.Diagnostic.Kind;
 import org.apache.maven.RepositoryUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.execution.MavenSession;
@@ -54,6 +32,35 @@ import org.apache.maven.toolchain.ToolchainManager;
 import org.codehaus.plexus.compiler.manager.CompilerManager;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.artifact.ArtifactTypeRegistry;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.resolution.ArtifactRequest;
+import org.eclipse.aether.resolution.ArtifactResolutionException;
+import org.eclipse.aether.resolution.ArtifactResult;
+
+import javax.tools.Diagnostic.Kind;
+import javax.tools.DiagnosticListener;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaCompiler.CompilationTask;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardJavaFileManager;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.lang.reflect.Method;
+import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.UnsupportedCharsetException;
+import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 // 3.0.5
 /*
@@ -66,16 +73,8 @@ import org.sonatype.aether.resolution.ArtifactResolutionException;
 import org.sonatype.aether.resolution.ArtifactResult;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
 */
-
 // 3.1.0
-import org.eclipse.aether.RepositorySystem;
-import org.eclipse.aether.RepositorySystemSession;
-import org.eclipse.aether.artifact.ArtifactTypeRegistry;
-import org.eclipse.aether.artifact.DefaultArtifact;
-import org.eclipse.aether.repository.RemoteRepository;
-import org.eclipse.aether.resolution.ArtifactRequest;
-import org.eclipse.aether.resolution.ArtifactResolutionException;
-import org.eclipse.aether.resolution.ArtifactResult;
+import static java.util.Optional.ofNullable;
 
 
 /**
@@ -85,11 +84,7 @@ import org.eclipse.aether.resolution.ArtifactResult;
  */
 public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 {
-    interface ArtifactClosure {
-       
-        void execute( Artifact artifact );
-    }
-    
+
     private static final String SOURCE_CLASSIFIER = "sources";
 
     /**
@@ -520,7 +515,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         final String includesString = ( includes==null || includes.length==0) ? "**/*.java" : StringUtils.join(includes, ",");
         final String excludesString = ( excludes==null || excludes.length==0) ? null : StringUtils.join(excludes, ",");
 
-        java.util.Set<File> sourceDirs = getSourceDirectories(new java.util.HashSet<File>( 5 ));
+        java.util.Set<File> sourceDirs = getSourceDirectories(new java.util.HashSet<>( 5 ));
         
         if( addCompileSourceRoots ) {
             final java.util.List<String> sourceRoots = project.getCompileSourceRoots();
@@ -599,15 +594,22 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         options.add("-s");
         options.add(outputDirectory.getPath());
 
-        if( releaseVersion!=null  ) {
+        ofNullable(releaseVersion).ifPresent( release -> {
             options.add("--release");
-            options.add(	releaseVersion );        	
-        }
+            options.add( releaseVersion );
+        });
 
-//        options.add("-source");
-//        options.add("9");
-//        options.add("-target");
-//        options.add("9");
+        ofNullable(project.getProperties()).ifPresent( properties -> {
+
+            ofNullable(properties.getProperty( "maven.compiler.source" )).ifPresent( source -> {
+                options.add("-source");
+                options.add(source);
+            });
+            ofNullable(properties.getProperty( "maven.compiler.target" )) .ifPresent( target -> {
+                options.add("-target");
+                options.add(target);
+            });
+        });
 
         if( getLog().isDebugEnabled() ) {
             for (String option : options) {
@@ -908,13 +910,13 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         return RepositoryUtils.toArtifact(result.getArtifact());
     }
     
-    private void processSourceArtifacts( ArtifactClosure closure ) {
+    private void processSourceArtifacts( Consumer<Artifact>  closure ) {
 
         for (Artifact dep : this.project.getDependencyArtifacts()) {
             if (dep.hasClassifier() && SOURCE_CLASSIFIER.equals(dep.getClassifier()) ) {
            
                 if( appendSourceArtifacts ) {
-                    closure.execute(dep);
+                    closure.accept(dep);
                 }
                 //getLog().debug("Append source artifact to classpath: " + dep.getGroupId() + ":" + dep.getArtifactId());
                 //this.sourceArtifacts.add(dep.getFile());
@@ -923,7 +925,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                 try {
                     final Artifact sourcesDep = resolveSourceArtifact(dep);
                     if( sourcesDep != null ) {
-                        closure.execute(sourcesDep);
+                        closure.accept(sourcesDep);
                     }
                     
                 } catch (ArtifactResolutionException ex) {              

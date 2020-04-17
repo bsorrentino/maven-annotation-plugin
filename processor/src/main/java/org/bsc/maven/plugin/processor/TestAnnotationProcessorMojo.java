@@ -41,10 +41,9 @@ public class TestAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
      * project classpath 
      * 
      */
-    @SuppressWarnings("rawtypes")
     //@MojoParameter(expression = "${project.testClasspathElements}", required = true, readonly = true)
     @Parameter( defaultValue="${project.testClasspathElements}", required=true, readonly=true)
-    private List classpathElements;
+    private List<String> classpathElements;
 
 
     /**
@@ -71,19 +70,16 @@ public class TestAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
 
     @Override
     protected void addCompileSourceRoot(MavenProject project, String dir) {
-
         project.addTestCompileSourceRoot(dir);
     }
 
     @Override
     public File getDefaultOutputDirectory() {
-
         return defaultOutputDirectory;
     }
 
     @Override
     protected File getOutputClassDirectory() {
-
         return outputClassDirectory;
     }
 
@@ -107,7 +103,6 @@ public class TestAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
         return result;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected java.util.Set<String> getClasspathElements( final java.util.Set<String> result ) {
 
