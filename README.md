@@ -36,10 +36,12 @@ Currently | **[Release 4.0-SNAPSHOT](https://oss.sonatype.org/content/repositori
 
  Date  | Info   
 --- | ---
- **Mar 02, 2020** | [Release 4.0-beta1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-beta1)
+**Apr 17, 2020** | [Release 4.0-rc1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-rc1)
+**Mar 02, 2020** | [Release 4.0-beta1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-beta1)
 
 
 ## History
+
 
 Aug 12,2018 | **Release 3.3.3**. | Available on **[MAVEN CENTRAL REPO](http://search.maven.org/#artifactdetails%7Corg.bsc.maven%7Cmaven-processor-plugin%7C3.3.3%7Cmaven-plugin)** |
 ----|----|----

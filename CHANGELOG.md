@@ -5,6 +5,36 @@
 ## Next release
 ### Generic changes
 
+**move to next release version**
+
+
+[4146d73e88ea389](https://github.com/bsorrentino/maven-annotation-plugin/commit/4146d73e88ea389) bartolomeo sorrentino *2020-04-17 15:37:40*
+
+**remove default source and target compiler option**
+
+
+[5ef8f3b48474e13](https://github.com/bsorrentino/maven-annotation-plugin/commit/5ef8f3b48474e13) bartolomeo sorrentino *2020-04-16 23:55:38*
+
+**add maven enforcer**
+
+
+[8efac77492e7274](https://github.com/bsorrentino/maven-annotation-plugin/commit/8efac77492e7274) bartolomeo sorrentino *2020-04-16 22:24:57*
+
+**update readme**
+
+
+[807678003bfcd70](https://github.com/bsorrentino/maven-annotation-plugin/commit/807678003bfcd70) bartolomeo sorrentino *2020-04-16 18:39:07*
+
+**update changelog template**
+
+
+[8ae0d2f095d87b0](https://github.com/bsorrentino/maven-annotation-plugin/commit/8ae0d2f095d87b0) bartolomeo sorrentino *2020-03-20 09:22:18*
+
+**update changelog**
+
+
+[7e2cd9fb361848e](https://github.com/bsorrentino/maven-annotation-plugin/commit/7e2cd9fb361848e) bartolomeo sorrentino *2020-03-20 09:22:00*
+
 **add utils javadoc to the site**
 
 
@@ -14,6 +44,26 @@
 
 
 [bcfd9b3ecc46e6a](https://github.com/bsorrentino/maven-annotation-plugin/commit/bcfd9b3ecc46e6a) bsorrentino *2020-03-02 20:03:36*
+
+**move to next developer version**
+
+
+[785c31b31785d2f](https://github.com/bsorrentino/maven-annotation-plugin/commit/785c31b31785d2f) bsorrentino *2020-03-02 19:59:10*
+
+
+###  [#80](https://github.com/bsorrentino/maven-annotation-plugin/issues/80) How to exclude module-info.java file?    *work in progress*  
+
+**issue #80**
+
+ * add support for -source and -target compiler options that are filled by maven.compiler.* properties
+
+[18212a3518d162e](https://github.com/bsorrentino/maven-annotation-plugin/commit/18212a3518d162e) bartolomeo sorrentino *2020-04-17 15:32:19*
+
+**issue #80**
+
+ * add support of javac option --module-path
+
+[8d6d9c34e0c5722](https://github.com/bsorrentino/maven-annotation-plugin/commit/8d6d9c34e0c5722) bartolomeo sorrentino *2020-04-16 23:37:10*
 
 
 ## v4.0-beta1
