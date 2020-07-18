@@ -296,7 +296,7 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
     }
     
     
-    private void execute(   final Iterable<String> options, 
+    private boolean execute(   final Iterable<String> options,
                             final Iterable<? extends JavaFileObject> compilationUnits,
                             final Writer w ) throws Exception 
     {
@@ -389,6 +389,8 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
         result = PlexusJavaCompilerWithOutput.INSTANCE.performCompile(javacConf);
         
         out.println( result.toString() ); out.flush();
+
+        return result.isSuccess();
     }
     
     @Override
@@ -420,8 +422,7 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
             @Override
             public Boolean call() {
                 try {
-                    execute(options, compilationUnits, out);
-                    return true;
+                    return execute(options, compilationUnits, out);
                 } catch (final Exception ex) {
                     diagnosticListener.report( new Diagnostic<JavaFileObject>() {
                         @Override
