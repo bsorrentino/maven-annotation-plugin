@@ -3,11 +3,7 @@
   <groupId>org.bsc.maven</groupId>
   <artifactId>maven-processor-plugin-parent</artifactId>
   <packaging>pom</packaging>
-<<<<<<< HEAD
-  <version>4.0-SNAPSHOT</version>
-=======
   <version>4.0</version>
->>>>>>> release/4.0
   <name>MAVEN PROCESSOR PLUGIN PARENT</name>
   <description>A maven plugin to process annotation for jdk6 at compile time
 
