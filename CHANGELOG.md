@@ -3,7 +3,26 @@
 <!-- Changelog for bsorrentino maven-annotation-plugin. -->
 
 ## Next release
+###  [#81](https://github.com/bsorrentino/maven-annotation-plugin/issues/81) Compilation errors ignored during processing    *under investigation*  
+
+**issue #81 add compilation result**
+
+
+[85ba56d3b87e40a](https://github.com/bsorrentino/maven-annotation-plugin/commit/85ba56d3b87e40a) bartolomeo sorrentino *2020-07-17 13:19:03*
+
+
+## v4.0-rc1
 ### Generic changes
+
+**update readme**
+
+
+[2262a4d28954925](https://github.com/bsorrentino/maven-annotation-plugin/commit/2262a4d28954925) bsorrentino *2020-04-17 16:16:12*
+
+**update chagelog**
+
+
+[d444f63f9c4bed9](https://github.com/bsorrentino/maven-annotation-plugin/commit/d444f63f9c4bed9) bartolomeo sorrentino *2020-04-17 15:40:13*
 
 **move to next release version**
 
@@ -51,7 +70,7 @@
 [785c31b31785d2f](https://github.com/bsorrentino/maven-annotation-plugin/commit/785c31b31785d2f) bsorrentino *2020-03-02 19:59:10*
 
 
-###  [#80](https://github.com/bsorrentino/maven-annotation-plugin/issues/80) How to exclude module-info.java file?    *work in progress*  
+###  [#80](https://github.com/bsorrentino/maven-annotation-plugin/issues/80) How to exclude module-info.java file?  
 
 **issue #80**
 
