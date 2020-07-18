@@ -25,20 +25,14 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
 
 * [ANNOTATION PROCESSING 101](http://hannesdorfmann.com/annotation-processing/annotationprocessing101)
 
-
-## Snapshot
-
- Date  | Info   
---- | ---
-Currently | **[Release 4.0-SNAPSHOT](https://oss.sonatype.org/content/repositories/snapshots/org/bsc/maven/maven-processor-plugin/4.0-SNAPSHOT/)**  | available from  **[MAVEN CENTRAL REPO]** |
-
 ## Releases
 
  Date  | Info   
 --- | ---
+
+**Jul 18, 2020** | [Release 4.0](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0)
 **Apr 17, 2020** | [Release 4.0-rc1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-rc1)
 **Mar 02, 2020** | [Release 4.0-beta1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-beta1)
-
 
 ## History
 
