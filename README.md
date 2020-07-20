@@ -29,7 +29,6 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
 
  Date  | Info   
 --- | ---
-
 **Jul 18, 2020** | [Release 4.0](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0)
 **Apr 17, 2020** | [Release 4.0-rc1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-rc1)
 **Mar 02, 2020** | [Release 4.0-beta1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-beta1)
