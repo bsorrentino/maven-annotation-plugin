@@ -6,14 +6,13 @@
     <artifactId>maven-processor-plugin-test</artifactId>
     <packaging>jar</packaging>
     <name>MAVEN PROCESSOR PLUGIN TEST</name>
-    <version>4.0-SNAPSHOT</version>
     <description></description>
 
-    <properties>
-        <maven.compiler.source>1.9</maven.compiler.source>
-        <maven.compiler.target>1.9</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <parent>
+        <groupId>org.bsc.maven</groupId>
+        <artifactId>maven-processor-plugin-parent</artifactId>
+        <version>4.1-SNAPSHOT</version>
+    </parent>
 
   <dependencies>
 
