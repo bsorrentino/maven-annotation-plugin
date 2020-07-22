@@ -499,7 +499,72 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         return tc;
     }
 
-     
+    private  List<String>  prepareOptions( JavaCompiler compiler ) {
+
+        final List<String> options = new ArrayList<>(10);
+
+        final String compileClassPath = buildCompileClasspath();
+
+        final String processor = buildProcessor();
+
+        options.add("-cp");
+        options.add(compileClassPath);
+
+        if( compiler.isSupportedOption("--module-path") == 1 ) {
+            options.add("--module-path");
+            options.add(buildModulePath());
+        }
+
+        buildCompileSourcepath( sourcepath -> {
+            options.add("-sourcepath");
+            options.add(sourcepath);
+        });
+
+        options.add("-proc:only");
+
+        addCompilerArguments(options);
+
+        if (processor != null) {
+            options.add("-processor");
+            options.add(processor);
+        }
+        else
+        {
+            getLog().warn("No processors specified. Using default discovery mechanism.");
+        }
+        options.add("-d");
+        options.add(getOutputClassDirectory().getPath());
+
+        options.add("-s");
+        options.add(outputDirectory.getPath());
+
+        ofNullable(releaseVersion).ifPresent( release -> {
+            options.add("--release");
+            options.add( releaseVersion );
+        });
+
+        ofNullable(project.getProperties()).ifPresent( properties -> {
+
+            ofNullable(properties.getProperty( "maven.compiler.source" )).ifPresent( source -> {
+                options.add("-source");
+                options.add(source);
+            });
+            ofNullable(properties.getProperty( "maven.compiler.target" )) .ifPresent( target -> {
+                options.add("-target");
+                options.add(target);
+            });
+        });
+
+        if( getLog().isDebugEnabled() ) {
+            for (String option : options) {
+                getLog().debug(String.format("javac option: %s", option));
+            }
+        }
+
+        return options;
+
+    }
+
     private void executeWithExceptionsHandled() throws Exception
     {
         if (outputDirectory == null)
@@ -557,64 +622,6 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
             }
 
             files.addAll( FileUtils.getFiles(sourceDir, includesString, excludesString) );
-        }
-
-        final String compileClassPath = buildCompileClasspath();
-
-        final String processor = buildProcessor();
-
-        final List<String> options = new ArrayList<>(10);
-
-        options.add("-cp");
-        options.add(compileClassPath);
-
-        options.add("--module-path");
-        options.add( buildModulePath() );
-
-        buildCompileSourcepath( sourcepath -> {
-                options.add("-sourcepath");
-                options.add(sourcepath);
-        });
-        
-        options.add("-proc:only");
-
-        addCompilerArguments(options);
-
-        if (processor != null) {
-            options.add("-processor");
-            options.add(processor);
-        }
-        else
-        {
-            getLog().warn("No processors specified. Using default discovery mechanism.");
-        }
-        options.add("-d");
-        options.add(getOutputClassDirectory().getPath());
-
-        options.add("-s");
-        options.add(outputDirectory.getPath());
-
-        ofNullable(releaseVersion).ifPresent( release -> {
-            options.add("--release");
-            options.add( releaseVersion );
-        });
-
-        ofNullable(project.getProperties()).ifPresent( properties -> {
-
-            ofNullable(properties.getProperty( "maven.compiler.source" )).ifPresent( source -> {
-                options.add("-source");
-                options.add(source);
-            });
-            ofNullable(properties.getProperty( "maven.compiler.target" )) .ifPresent( target -> {
-                options.add("-target");
-                options.add(target);
-            });
-        });
-
-        if( getLog().isDebugEnabled() ) {
-            for (String option : options) {
-                getLog().debug(String.format("javac option: %s", option));
-            }
         }
 
         final DiagnosticListener<JavaFileObject> dl = diagnostic -> {
@@ -704,8 +711,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         
         //compileLock.lock();
         try {
-            
-            
+
             final JavaCompiler compiler = (fork) ?
                     AnnotationProcessorCompiler.createOutProcess(   
                                                     tc,                                                                 
@@ -719,7 +725,8 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                 getLog().error("JVM is not suitable for processing annotation! ToolProvider.getSystemJavaCompiler() is null.");
                 return;
             }
-            
+
+
             Charset charset = null; ;
  
             if( encoding != null ) {
@@ -755,7 +762,9 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                 getLog().warn( "no source file(s) detected! Processor task will be skipped");
                 return;
             }
-    
+
+            final List<String> options = prepareOptions( compiler );
+
             final CompilationTask task = compiler.getTask(
                     new PrintWriter(System.out),
                     fileManager,

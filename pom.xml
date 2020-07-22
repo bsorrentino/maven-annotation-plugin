@@ -29,8 +29,6 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
   </distributionManagement>
 
   <properties>
-      <maven.compiler.source>1.9</maven.compiler.source>
-      <maven.compiler.target>1.9</maven.compiler.target>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <!-- SONATYPE REPO -->
       <snapshot.repo.id>sonatype-repo</snapshot.repo.id>
@@ -81,6 +79,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
     <modules>
         <module>processor</module>
         <module>utils</module>
+        <module>test</module>
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -238,6 +237,33 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
                 </plugins>
             </build>
         </profile>
+
+        <!-- exact JDK 1.8 -->
+        <profile>
+            <id>JDK8</id>
+            <activation>
+                <jdk>1.8</jdk>
+            </activation>
+            <properties>
+                <maven.compiler.source>1.8</maven.compiler.source>
+                <maven.compiler.target>1.8</maven.compiler.target>
+            </properties>
+
+        </profile>
+
+        <!-- Equal and Greater Than of JDK 1.9 -->
+        <profile>
+            <id>JDK9.and.beyond</id>
+            <activation>
+                <jdk>[1.9,)</jdk>
+            </activation>
+            <properties>
+                <maven.compiler.source>1.9</maven.compiler.source>
+                <maven.compiler.target>1.9</maven.compiler.target>
+            </properties>
+        </profile>
+
     </profiles>
+
 
 </project>
