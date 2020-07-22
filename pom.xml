@@ -79,6 +79,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
     <modules>
         <module>processor</module>
         <module>utils</module>
+        <module>test</module>
     </modules>
     <dependencyManagement>
         <dependencies>
