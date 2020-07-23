@@ -6,19 +6,20 @@
 </a>&nbsp;[![Join the chat at https://gitter.im/bsorrentino/maven-annotation-plugin](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bsorrentino/maven-annotation-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
-This plugin helps to use from maven the new annotation processing integrated in java compiler provided from JDK6
+This plugin helps to use from maven the new annotation processing integrated in java compiler provided from JDK8
 
 This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.codehaus.org/apt-maven-plugin/
 
-### Documentation
+## Documentation
 
-* [Version 3](http://bsorrentino.github.io/maven-annotation-plugin/index.html)
-
+* [Last Version](http://bsorrentino.github.io/maven-annotation-plugin/index.html)
 * [Version 2 (old)](http://bsorrentino.github.io/maven-annotation-plugin/site2/index.html)
 
 ## Related plugin
+
+ plugin | info
+--- | ---
 [m2e-apt](https://github.com/jbosstools/m2e-apt) | eclipse plugin from Jboss
-----|----
 [m2e-annotations](https://github.com/ilx/m2e-annotations) | eclipse plugin
 
 ## Develop an annotation processor
@@ -27,14 +28,14 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
 
 ## Releases
 
- Date  | Info   
---- | ---
-**Jul 18, 2020** | [Release 4.0](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0)
-**Apr 17, 2020** | [Release 4.0-rc1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-rc1)
-**Mar 02, 2020** | [Release 4.0-beta1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-beta1)
+ Date  | Version  | Info
+--- | --- | ---
+**Jul 21, 2020** | [Release 4.0-jdk8](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-jdk8) | Maintenance release compatible with JDK8
+**Jul 18, 2020** | [Release 4.0](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0) | Release based on JDK9 and above
+**Apr 17, 2020** | [Release 4.0-rc1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-rc1) | 
+**Mar 02, 2020** | [Release 4.0-beta1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-beta1) | 
 
 ## History
-
 
 Aug 12,2018 | **Release 3.3.3**. | Available on **[MAVEN CENTRAL REPO](http://search.maven.org/#artifactdetails%7Corg.bsc.maven%7Cmaven-processor-plugin%7C3.3.3%7Cmaven-plugin)** |
 ----|----|----
