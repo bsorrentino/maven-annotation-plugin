@@ -482,12 +482,12 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
 
     @Override
     public Set<SourceVersion> getSourceVersions() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return systemJavaCompiler.getSourceVersions();
     }
 
     @Override
     public int isSupportedOption(String option) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return systemJavaCompiler.isSupportedOption(option);
     }
 
 }
