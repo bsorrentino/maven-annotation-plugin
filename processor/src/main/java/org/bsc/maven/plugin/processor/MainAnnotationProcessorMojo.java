@@ -82,6 +82,11 @@ public class MainAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
     }
 
     @Override
+    protected List<String> getAllCompileSourceRoots() {
+        return project.getCompileSourceRoots();
+    }
+
+    @Override
     public File getDefaultOutputDirectory() {
 
         return defaultOutputDirectory;

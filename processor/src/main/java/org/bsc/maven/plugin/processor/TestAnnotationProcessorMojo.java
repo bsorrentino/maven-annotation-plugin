@@ -19,6 +19,7 @@
 package org.bsc.maven.plugin.processor;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -71,6 +72,14 @@ public class TestAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
     @Override
     protected void addCompileSourceRoot(MavenProject project, String dir) {
         project.addTestCompileSourceRoot(dir);
+    }
+
+    @Override
+    protected List<String> getAllCompileSourceRoots() {
+        final List<String> all = new ArrayList<>();
+        all.addAll(project.getCompileSourceRoots());
+        all.addAll(project.getTestCompileSourceRoots());
+        return all;
     }
 
     @Override
