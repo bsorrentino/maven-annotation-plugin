@@ -359,10 +359,12 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
     protected abstract java.util.Set<String> getClasspathElements( java.util.Set<String> result );
 
+    protected abstract java.util.List<String> getAllCompileSourceRoots();
+
     private String buildCompileSourcepath( Consumer<String> onSuccess) {
         
-        final java.util.List<String> roots = project.getCompileSourceRoots();
-        
+        final java.util.List<String> roots = getAllCompileSourceRoots();
+
         if( roots == null || roots.isEmpty() ) {
             return null;
         }
