@@ -150,7 +150,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
               </executions>
           </plugin>
           <!--
-          mvn git-changelog-maven-plugin:git-changelog -N -DtoRef=refs/heads/release/...
+          mvn git-changelog-maven-plugin:git-changelog -N -DtoRef=refs/heads/support/4.x-jdk8
           -->
           <plugin>
               <groupId>se.bjurr.gitchangelog</groupId>
