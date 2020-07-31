@@ -8,7 +8,7 @@
 
 This plugin helps to use from maven the new annotation processing integrated in java compiler provided from JDK8
 
-This plugin was born as the 'alter ego' of maven apt plugin http://mojo.codehaus.org/apt-maven-plugin/
+This plugin was born as the 'alter ego' of maven apt plugin [apt-maven-plugin](https://search.maven.org/artifact/org.codehaus.mojo/apt-maven-plugin/1.0-alpha-5/maven-plugin)
 
 ## Documentation
 
