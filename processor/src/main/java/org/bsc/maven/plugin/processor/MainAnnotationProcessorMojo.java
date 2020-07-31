@@ -41,7 +41,6 @@ public class MainAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
      * project classpath 
      * 
      */
-    //@MojoParameter(expression = "${project.compileClasspathElements}", required = true, readonly = true)
     @Parameter( defaultValue="${project.compileClasspathElements}", required=true, readonly=true)
     private List<String> classpathElements;
 
@@ -49,7 +48,6 @@ public class MainAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
      * project sourceDirectory 
      * 
      */
-    //@MojoParameter(expression = "${project.build.sourceDirectory}", required = true)
     @Parameter( defaultValue="${project.build.sourceDirectory}", required = true)
     private File sourceDirectory;
 
@@ -57,7 +55,6 @@ public class MainAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
      * default output directory
      * 
      */
-    //@MojoParameter(expression = "${project.build.directory}/generated-sources/apt", required = true)
     @Parameter( defaultValue="${project.build.directory}/generated-sources/apt", required = true)
     private File defaultOutputDirectory;
 
@@ -65,7 +62,6 @@ public class MainAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
      * Set the destination directory for class files (same behaviour of -d option)
      * 
      */
-    //@MojoParameter(required = false, expression="${project.build.outputDirectory}", description = "Set the destination directory for class files (same behaviour of -d option)")
     @Parameter( defaultValue="${project.build.outputDirectory}")
     private File outputClassDirectory;
 
@@ -79,6 +75,11 @@ public class MainAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
     protected void addCompileSourceRoot(MavenProject project, String dir) {
 
         project.addCompileSourceRoot(dir);
+    }
+
+    @Override
+    protected List<String> getAllCompileSourceRoots() {
+        return project.getCompileSourceRoots();
     }
 
     @Override
