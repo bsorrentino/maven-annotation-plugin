@@ -42,7 +42,6 @@ public class TestAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
      * project classpath 
      * 
      */
-    //@MojoParameter(expression = "${project.testClasspathElements}", required = true, readonly = true)
     @Parameter( defaultValue="${project.testClasspathElements}", required=true, readonly=true)
     private List<String> classpathElements;
 
@@ -50,14 +49,12 @@ public class TestAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
     /**
      * 
      */
-    //@MojoParameter(expression = "${project.build.testSourceDirectory}", required = true)
     @Parameter( defaultValue="${project.build.testSourceDirectory}", required = true)
     private File sourceDirectory;
 
     /**
      * 
      */
-    //@MojoParameter(expression = "${project.build.directory}/generated-sources/apt-test", required = true)
     @Parameter( defaultValue="${project.build.directory}/generated-sources/apt-test", required = true)
     private File defaultOutputDirectory;
 
@@ -65,7 +62,6 @@ public class TestAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
      * Set the destination directory for class files (same behaviour of -d option)
      * 
      */
-    //@MojoParameter(required = false, expression="${project.build.testOutputDirectory}", description = "Set the destination directory for class files (same behaviour of -d option)")
     @Parameter( defaultValue="${project.build.testOutputDirectory}")
     private File outputClassDirectory;
 
