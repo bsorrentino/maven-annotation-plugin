@@ -1,4 +1,4 @@
-## A maven plugin to process compile time annotation for jdk6 and above.
+## A maven plugin to process compile time annotation for jdk8 and above.
 
 <a href="http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22maven-processor-plugin%22"><img src="https://img.shields.io/maven-central/v/org.bsc.maven/maven-processor-plugin.svg">
 </a>&nbsp;<img src="https://img.shields.io/github/forks/bsorrentino/maven-annotation-plugin.svg">&nbsp;
@@ -8,7 +8,7 @@
 
 This plugin helps to use from maven the new annotation processing integrated in java compiler provided from JDK8
 
-This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.codehaus.org/apt-maven-plugin/
+This plugin was born as the 'alter ego' of maven apt plugin http://mojo.codehaus.org/apt-maven-plugin/
 
 ## Documentation
 
@@ -30,6 +30,8 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
 
  Date  | Version  | Info
 --- | --- | ---
+**Jul 30, 2020** | [Release 4.1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.1) | Release based on JDK9 and above
+**Jul 30, 2020** | [Release 4.1-jdk8](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.1-jdk8) | Maintenance release compatible with JDK8
 **Jul 21, 2020** | [Release 4.0-jdk8](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-jdk8) | Maintenance release compatible with JDK8
 **Jul 18, 2020** | [Release 4.0](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0) | Release based on JDK9 and above
 **Apr 17, 2020** | [Release 4.0-rc1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-rc1) | 
