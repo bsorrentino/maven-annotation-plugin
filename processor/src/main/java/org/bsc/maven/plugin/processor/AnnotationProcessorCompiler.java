@@ -233,7 +233,7 @@ class PlexusJavaCompilerWithOutput {
 }
 /**
  *
- * @author softphone
+ * @author bsorrentino
  */
 public class AnnotationProcessorCompiler implements JavaCompiler {
     private static final String COMPILER_TARGET = "maven.compiler.target";
@@ -418,7 +418,7 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
             public void addModules(Iterable<String> moduleNames) {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
-            
+
             @Override
             public Boolean call() {
                 try {
@@ -480,12 +480,12 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
 
     @Override
     public Set<SourceVersion> getSourceVersions() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return systemJavaCompiler.getSourceVersions();
     }
 
     @Override
     public int isSupportedOption(String option) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return systemJavaCompiler.isSupportedOption(option);
     }
 
 }

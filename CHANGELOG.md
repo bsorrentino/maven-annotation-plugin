@@ -3,6 +3,103 @@
 <!-- Changelog for bsorrentino maven-annotation-plugin. -->
 
 ## Next release
+### Generic changes
+
+**update readme**
+
+
+[18df0d926c9a3f1](https://github.com/bsorrentino/maven-annotation-plugin/commit/18df0d926c9a3f1) bartolomeo sorrentino *2020-07-23 08:21:15*
+
+**update for JAVA9 compliance**
+
+
+[0fe1087cd76a421](https://github.com/bsorrentino/maven-annotation-plugin/commit/0fe1087cd76a421) bartolomeo sorrentino *2020-07-22 09:19:50*
+
+**add test module**
+
+
+[3db821f8c8e7225](https://github.com/bsorrentino/maven-annotation-plugin/commit/3db821f8c8e7225) bartolomeo sorrentino *2020-07-22 08:45:24*
+
+**move to next developer version**
+
+
+[a813a22cee3f82e](https://github.com/bsorrentino/maven-annotation-plugin/commit/a813a22cee3f82e) bartolomeo sorrentino *2020-07-20 08:01:04*
+
+**update readme**
+
+
+[4c80b26d89676ba](https://github.com/bsorrentino/maven-annotation-plugin/commit/4c80b26d89676ba) bartolomeo sorrentino *2020-07-20 07:57:39*
+
+
+###  [#82](https://github.com/bsorrentino/maven-annotation-plugin/issues/82) New v4.0 does not support Java 8    *bug*  *under investigation*  
+
+**issue #82 - fix 'UnsupportedOperationException' on isSupportedOption invocation**
+
+
+[e0adf9a03b61347](https://github.com/bsorrentino/maven-annotation-plugin/commit/e0adf9a03b61347) bartolomeo sorrentino *2020-07-28 13:09:24*
+
+**issue #82 - JDK8 compatibility**
+
+
+[8117a6bb12cb71a](https://github.com/bsorrentino/maven-annotation-plugin/commit/8117a6bb12cb71a) bartolomeo sorrentino *2020-07-22 08:43:30*
+
+
+## v4.0
+### Generic changes
+
+**update version**
+
+
+[229f2f4298ce034](https://github.com/bsorrentino/maven-annotation-plugin/commit/229f2f4298ce034) bsorrentino *2020-07-18 21:18:25*
+
+**set release version**
+
+ * update docs
+ * update changelog
+
+[dd12853b3452707](https://github.com/bsorrentino/maven-annotation-plugin/commit/dd12853b3452707) bsorrentino *2020-07-18 21:10:38*
+
+**move to developer version**
+
+
+[9ad2634520c0855](https://github.com/bsorrentino/maven-annotation-plugin/commit/9ad2634520c0855) bartolomeo sorrentino *2020-07-17 16:47:17*
+
+**Create FUNDING.yml**
+
+
+[d0566025a1d36c9](https://github.com/bsorrentino/maven-annotation-plugin/commit/d0566025a1d36c9) bsorrentino *2020-05-27 09:17:44*
+
+**remove default source and target compiler option**
+
+
+[5ef8f3b48474e13](https://github.com/bsorrentino/maven-annotation-plugin/commit/5ef8f3b48474e13) bartolomeo sorrentino *2020-04-16 23:55:38*
+
+**add maven enforcer**
+
+
+[8efac77492e7274](https://github.com/bsorrentino/maven-annotation-plugin/commit/8efac77492e7274) bartolomeo sorrentino *2020-04-16 22:24:57*
+
+**move to next developer version**
+
+
+[785c31b31785d2f](https://github.com/bsorrentino/maven-annotation-plugin/commit/785c31b31785d2f) bsorrentino *2020-03-02 19:59:10*
+
+
+###  [#80](https://github.com/bsorrentino/maven-annotation-plugin/issues/80) How to exclude module-info.java file?  
+
+**issue #80**
+
+ * add support for -source and -target compiler options that are filled by maven.compiler.* properties
+
+[18212a3518d162e](https://github.com/bsorrentino/maven-annotation-plugin/commit/18212a3518d162e) bartolomeo sorrentino *2020-04-17 15:32:19*
+
+**issue #80**
+
+ * add support of javac option --module-path
+
+[8d6d9c34e0c5722](https://github.com/bsorrentino/maven-annotation-plugin/commit/8d6d9c34e0c5722) bartolomeo sorrentino *2020-04-16 23:37:10*
+
+
 ###  [#81](https://github.com/bsorrentino/maven-annotation-plugin/issues/81) Compilation errors ignored during processing    *under investigation*  
 
 **issue #81 add compilation result**
@@ -29,16 +126,6 @@
 
 [4146d73e88ea389](https://github.com/bsorrentino/maven-annotation-plugin/commit/4146d73e88ea389) bartolomeo sorrentino *2020-04-17 15:37:40*
 
-**remove default source and target compiler option**
-
-
-[5ef8f3b48474e13](https://github.com/bsorrentino/maven-annotation-plugin/commit/5ef8f3b48474e13) bartolomeo sorrentino *2020-04-16 23:55:38*
-
-**add maven enforcer**
-
-
-[8efac77492e7274](https://github.com/bsorrentino/maven-annotation-plugin/commit/8efac77492e7274) bartolomeo sorrentino *2020-04-16 22:24:57*
-
 **update readme**
 
 
@@ -63,26 +150,6 @@
 
 
 [bcfd9b3ecc46e6a](https://github.com/bsorrentino/maven-annotation-plugin/commit/bcfd9b3ecc46e6a) bsorrentino *2020-03-02 20:03:36*
-
-**move to next developer version**
-
-
-[785c31b31785d2f](https://github.com/bsorrentino/maven-annotation-plugin/commit/785c31b31785d2f) bsorrentino *2020-03-02 19:59:10*
-
-
-###  [#80](https://github.com/bsorrentino/maven-annotation-plugin/issues/80) How to exclude module-info.java file?  
-
-**issue #80**
-
- * add support for -source and -target compiler options that are filled by maven.compiler.* properties
-
-[18212a3518d162e](https://github.com/bsorrentino/maven-annotation-plugin/commit/18212a3518d162e) bartolomeo sorrentino *2020-04-17 15:32:19*
-
-**issue #80**
-
- * add support of javac option --module-path
-
-[8d6d9c34e0c5722](https://github.com/bsorrentino/maven-annotation-plugin/commit/8d6d9c34e0c5722) bartolomeo sorrentino *2020-04-16 23:37:10*
 
 
 ## v4.0-beta1
