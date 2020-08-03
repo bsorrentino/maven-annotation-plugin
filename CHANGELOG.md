@@ -8,6 +8,48 @@
 **update readme**
 
 
+[86b4a9ba0a77deb](https://github.com/bsorrentino/maven-annotation-plugin/commit/86b4a9ba0a77deb) bsorrentino *2020-08-03 14:18:00*
+
+**move to next release version**
+
+
+[450b98cc62f42d9](https://github.com/bsorrentino/maven-annotation-plugin/commit/450b98cc62f42d9) bsorrentino *2020-08-03 14:13:45*
+
+**clean code**
+
+
+[ac57d4884350a9c](https://github.com/bsorrentino/maven-annotation-plugin/commit/ac57d4884350a9c) bsorrentino *2020-07-31 09:35:06*
+
+**move to next developer version**
+
+
+[08235617ae9b1d2](https://github.com/bsorrentino/maven-annotation-plugin/commit/08235617ae9b1d2) bsorrentino *2020-07-31 08:28:15*
+
+**update readme**
+
+
+[13aa52ade58dcae](https://github.com/bsorrentino/maven-annotation-plugin/commit/13aa52ade58dcae) bsorrentino *2020-07-31 08:00:05*
+
+
+###  [#83](https://github.com/bsorrentino/maven-annotation-plugin/issues/83) &#39;process-test&#39; does not add TestCompileSourceRoots to javac &#39;-sourcepath&#39;    *bug*  *wait for feedback*  *work in progress*  
+
+**fix: process-test should add CompileSourceRoots and TestCompileSourceRoots to javac '-sourcepath' option. fixes #83**
+
+
+[2f1380abc231c26](https://github.com/bsorrentino/maven-annotation-plugin/commit/2f1380abc231c26) Markus *2020-07-30 15:59:55*
+
+
+## v4.1
+### Generic changes
+
+**move to next release version**
+
+
+[7939e7348408ffb](https://github.com/bsorrentino/maven-annotation-plugin/commit/7939e7348408ffb) bsorrentino *2020-07-31 07:40:09*
+
+**update readme**
+
+
 [18df0d926c9a3f1](https://github.com/bsorrentino/maven-annotation-plugin/commit/18df0d926c9a3f1) bartolomeo sorrentino *2020-07-23 08:21:15*
 
 **update for JAVA9 compliance**

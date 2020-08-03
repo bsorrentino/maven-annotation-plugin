@@ -104,7 +104,6 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     /**
      * 
      */
-    //@MojoParameter(expression="${plugin.artifacts}", readonly = true )
     @Parameter(property="plugin.artifacts", readonly=true)
     private java.util.List<Artifact> pluginArtifacts;
 
@@ -112,7 +111,6 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
      * Specify the directory where to place generated source files (same behaviour of -s option)
      * 
      */
-    //@MojoParameter(required = false, description = "Specify the directory where to place generated source files (same behaviour of -s option)")
     @Parameter
     private File outputDirectory;
 
@@ -120,7 +118,6 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
      * Annotation Processor FQN (Full Qualified Name) - when processors are not specified, the default discovery mechanism will be used
      * 
      */
-    //@MojoParameter(required = false, description = "Annotation Processor FQN (Full Qualified Name) - when processors are not specified, the default discovery mechanism will be used")
     @Parameter
     private String[] processors;
 
@@ -128,7 +125,6 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
      * Additional compiler arguments
      * 
      */
-    //@MojoParameter(required = false, description = "Additional compiler arguments")
     @Parameter
     private String compilerArguments;
 
@@ -142,14 +138,12 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     /**
      * Controls whether or not the output directory is added to compilation
      */
-    //@MojoParameter(required = false, description = "Controls whether or not the output directory is added to compilation")
     @Parameter
     private Boolean addOutputDirectoryToCompilationSources;
 
     /**
      * Indicates whether the build will continue even if there are compilation errors; defaults to true.
      */
-    //@MojoParameter(required = true, defaultValue = "true", expression = "${annotation.failOnError}", description = "Indicates whether the build will continue even if there are compilation errors; defaults to true.")
     @Parameter( defaultValue="true", required=true, property="annotation.failOnError" )
     private Boolean failOnError = true;
 
@@ -157,7 +151,6 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
      * Indicates whether the compiler output should be visible, defaults to true.
      * 
      */
-    //@MojoParameter(required = true, defaultValue = "true", expression = "${annotation.outputDiagnostics}", description = "Indicates whether the compiler output should be visible, defaults to true.")
     @Parameter( defaultValue="true", required=true, property="annotation.outputDiagnostics" )
     private boolean outputDiagnostics = true;
 
@@ -165,21 +158,18 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
      * System properties set before processor invocation.
      * 
      */
-    //@MojoParameter(required = false, description = "System properties set before processor invocation.")
     @Parameter
     private java.util.Map<String,String> systemProperties;
     
     /**
      * includes pattern
      */
-    //@MojoParameter( description="includes pattern")
     @Parameter
     private String[] includes;
     
     /**
      * excludes pattern
      */
-    //@MojoParameter( description="excludes pattern")
     @Parameter
     private String[] excludes;
     
@@ -359,10 +349,12 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
     protected abstract java.util.Set<String> getClasspathElements( java.util.Set<String> result );
 
+    protected abstract java.util.List<String> getAllCompileSourceRoots();
+
     private String buildCompileSourcepath( Consumer<String> onSuccess) {
         
-        final java.util.List<String> roots = project.getCompileSourceRoots();
-        
+        final java.util.List<String> roots = getAllCompileSourceRoots();
+
         if( roots == null || roots.isEmpty() ) {
             return null;
         }

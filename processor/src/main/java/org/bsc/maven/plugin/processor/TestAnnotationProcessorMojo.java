@@ -19,6 +19,7 @@
 package org.bsc.maven.plugin.processor;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -41,7 +42,6 @@ public class TestAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
      * project classpath 
      * 
      */
-    //@MojoParameter(expression = "${project.testClasspathElements}", required = true, readonly = true)
     @Parameter( defaultValue="${project.testClasspathElements}", required=true, readonly=true)
     private List<String> classpathElements;
 
@@ -49,14 +49,12 @@ public class TestAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
     /**
      * 
      */
-    //@MojoParameter(expression = "${project.build.testSourceDirectory}", required = true)
     @Parameter( defaultValue="${project.build.testSourceDirectory}", required = true)
     private File sourceDirectory;
 
     /**
      * 
      */
-    //@MojoParameter(expression = "${project.build.directory}/generated-sources/apt-test", required = true)
     @Parameter( defaultValue="${project.build.directory}/generated-sources/apt-test", required = true)
     private File defaultOutputDirectory;
 
@@ -64,13 +62,20 @@ public class TestAnnotationProcessorMojo extends AbstractAnnotationProcessorMojo
      * Set the destination directory for class files (same behaviour of -d option)
      * 
      */
-    //@MojoParameter(required = false, expression="${project.build.testOutputDirectory}", description = "Set the destination directory for class files (same behaviour of -d option)")
     @Parameter( defaultValue="${project.build.testOutputDirectory}")
     private File outputClassDirectory;
 
     @Override
     protected void addCompileSourceRoot(MavenProject project, String dir) {
         project.addTestCompileSourceRoot(dir);
+    }
+
+    @Override
+    protected List<String> getAllCompileSourceRoots() {
+        final List<String> all = new ArrayList<>();
+        all.addAll(project.getCompileSourceRoots());
+        all.addAll(project.getTestCompileSourceRoots());
+        return all;
     }
 
     @Override

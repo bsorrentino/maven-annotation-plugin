@@ -8,7 +8,7 @@
 
 This plugin helps to use from maven the new annotation processing integrated in java compiler provided from JDK8
 
-This plugin was born as the 'alter ego' of maven apt plugin http://mojo.codehaus.org/apt-maven-plugin/
+This plugin was born as the 'alter ego' of maven apt plugin [apt-maven-plugin](https://search.maven.org/artifact/org.codehaus.mojo/apt-maven-plugin/1.0-alpha-5/maven-plugin)
 
 ## Documentation
 
@@ -30,6 +30,8 @@ This plugin was born as the 'alter ego' of maven apt plugin http://mojo.codehaus
 
  Date  | Version  | Info
 --- | --- | ---
+**Aug 03, 2020** | [Release 4.2](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.2) | merge PR #84. Thanks to [DemonicTutor](https://github.com/DemonicTutor)
+**Aug 03, 2020** | [Release 4.2-jdk8](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.2-jdk8) | merge PR #84. Thanks to [DemonicTutor](https://github.com/DemonicTutor)
 **Jul 30, 2020** | [Release 4.1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.1) | Release based on JDK9 and above
 **Jul 30, 2020** | [Release 4.1-jdk8](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.1-jdk8) | Maintenance release compatible with JDK8
 **Jul 21, 2020** | [Release 4.0-jdk8](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-jdk8) | Maintenance release compatible with JDK8
