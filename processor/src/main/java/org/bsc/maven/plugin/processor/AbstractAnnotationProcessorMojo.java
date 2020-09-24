@@ -54,7 +54,14 @@ import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
@@ -268,6 +275,15 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
      */
     @Parameter(defaultValue = "false", property = "fork")
     protected boolean fork;
+
+    /**
+     * Set this to true to skip annotation processing when there are no changes in the source files
+     * compared to the generated files.
+     *
+     * @since 4.3
+     */
+    @Parameter(defaultValue = "false", property = "skipAnnotationProcessingWithoutSourceChanges")
+    protected boolean skipWithoutSourceChanges;
 
     /**
      * Maven Session
@@ -755,6 +771,32 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                 return;
             }
 
+            long maxSourceDate = allSources.stream().map(JavaFileObject::getLastModified).max(Long::compare).get();
+
+            // use atomic long for effectively final wrapper around long variable
+            AtomicLong maxOutputDate = new AtomicLong(Long.MIN_VALUE);
+
+            Files.walkFileTree(outputDirectory.toPath(), new SimpleFileVisitor<>() {
+                @Override public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                        throws IOException
+                {
+                    if(Files.isRegularFile(file)) {
+                        maxOutputDate.updateAndGet(t -> Math.max(t, file.toFile().lastModified()));
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+
+            if(getLog().isDebugEnabled())
+            {
+                getLog().debug("max source file date: " + maxSourceDate + ", max output date: " + maxOutputDate
+                        .get());
+            }
+
+            if(skipWithoutSourceChanges && maxSourceDate <= maxOutputDate.get()) {
+                getLog().info( "no source file(s) change(s) detected! Processor task will be skipped");
+                return;
+            }
             final List<String> options = prepareOptions( compiler );
 
             final CompilationTask task = compiler.getTask(
