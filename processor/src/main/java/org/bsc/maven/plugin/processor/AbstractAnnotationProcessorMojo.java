@@ -61,7 +61,6 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
@@ -282,8 +281,8 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
      *
      * @since 4.3
      */
-    @Parameter(defaultValue = "false", property = "skipAnnotationProcessingWithoutSourceChanges")
-    protected boolean skipWithoutSourceChanges;
+    @Parameter(defaultValue = "false", property = "skipSourcesUnchangedAnnotationProcessing")
+    protected boolean skipSourcesUnchanged;
 
     /**
      * Maven Session
@@ -573,6 +572,33 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
     }
 
+    private boolean isSourcesUnchanged( List<JavaFileObject> allSources ) throws IOException {
+        long maxSourceDate = allSources.stream().map(JavaFileObject::getLastModified).max(Long::compare).get();
+
+        // use atomic long for effectively final wrapper around long variable
+        final AtomicLong maxOutputDate = new AtomicLong(Long.MIN_VALUE);
+
+        Files.walkFileTree(outputDirectory.toPath(), new SimpleFileVisitor<>() {
+            @Override public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                    throws IOException
+            {
+                if(Files.isRegularFile(file)) {
+                    maxOutputDate.updateAndGet(t -> Math.max(t, file.toFile().lastModified()));
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        });
+
+        if(getLog().isDebugEnabled())
+        {
+            getLog().debug("max source file date: " + maxSourceDate + ", max output date: " + maxOutputDate
+                    .get());
+        }
+
+        return maxSourceDate <= maxOutputDate.get();
+
+    }
+
     private void executeWithExceptionsHandled() throws Exception
     {
         if (outputDirectory == null)
@@ -771,29 +797,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                 return;
             }
 
-            long maxSourceDate = allSources.stream().map(JavaFileObject::getLastModified).max(Long::compare).get();
-
-            // use atomic long for effectively final wrapper around long variable
-            AtomicLong maxOutputDate = new AtomicLong(Long.MIN_VALUE);
-
-            Files.walkFileTree(outputDirectory.toPath(), new SimpleFileVisitor<>() {
-                @Override public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-                        throws IOException
-                {
-                    if(Files.isRegularFile(file)) {
-                        maxOutputDate.updateAndGet(t -> Math.max(t, file.toFile().lastModified()));
-                    }
-                    return FileVisitResult.CONTINUE;
-                }
-            });
-
-            if(getLog().isDebugEnabled())
-            {
-                getLog().debug("max source file date: " + maxSourceDate + ", max output date: " + maxOutputDate
-                        .get());
-            }
-
-            if(skipWithoutSourceChanges && maxSourceDate <= maxOutputDate.get()) {
+            if(skipSourcesUnchanged && isSourcesUnchanged(allSources)) {
                 getLog().info( "no source file(s) change(s) detected! Processor task will be skipped");
                 return;
             }
