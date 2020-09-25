@@ -2,8 +2,67 @@
 
 <!-- Changelog for bsorrentino maven-annotation-plugin. -->
 
-## Next release
+## v4.3
 ### Generic changes
+
+**update readme**
+
+
+[382dfb7fe61851a](https://github.com/bsorrentino/maven-annotation-plugin/commit/382dfb7fe61851a) bsorrentino *2020-09-25 15:31:42*
+
+**set release version**
+
+
+[db87a0476c03596](https://github.com/bsorrentino/maven-annotation-plugin/commit/db87a0476c03596) bsorrentino *2020-09-25 15:28:27*
+
+**Start 4.3-SNAPSHOT development**
+
+
+[be4e8404052f7e6](https://github.com/bsorrentino/maven-annotation-plugin/commit/be4e8404052f7e6) Martijn Dashorst *2020-09-23 09:37:39*
+
+**Implement lastModified check for sources**
+
+ * The annotation processor should be able to skip the annotation
+ * processing if the sources haven&#39;t changed since the last processing.
+ * This will speed up project builds considerably since for example the
+ * JPA metamodel generator will not run if the entities haven&#39;t been
+ * modified, which will save the compiler of having to recompile your
+ * whole module.
+ * Using the option `skipWithoutSourceChanges` you can enable this
+ * behavior. By default it is turned off to maintain the current behavior.
+ * This change doesn&#39;t track individual files, as there need not be a 1-1
+ * mapping between the origin of the annotation processor and the
+ * generated sources. The plugin rather determines from all source
+ * locations what the most recent last modified time is, and does the same
+ * for all the files in the output folder.
+ * This cuts down rebuild times on my current project by a half or so
+ * (going from over 2 minutes to just 1 minute).
+
+[30861dbad2fef67](https://github.com/bsorrentino/maven-annotation-plugin/commit/30861dbad2fef67) Martijn Dashorst *2020-09-23 09:37:39*
+
+**uodate site-maven-plugin version**
+
+
+[c6dbeb9bb1e5709](https://github.com/bsorrentino/maven-annotation-plugin/commit/c6dbeb9bb1e5709) bsorrentino *2020-08-05 16:15:28*
+
+
+###  [#85](https://github.com/bsorrentino/maven-annotation-plugin/pull/85) Utilize lastModified times of source and output to skip annotation processing    *work in progress*  
+
+**merged PR #85**
+
+ * renamed property from &#39;skipWithoutSourceChanges&#39; to &#39;skipSourcesUnchanged&#39;
+ * put PR code in a new method &#39;isSourcesUnchanged( List&lt;&gt; allSources )&#39;
+
+[2bf7bedb068e64d](https://github.com/bsorrentino/maven-annotation-plugin/commit/2bf7bedb068e64d) bsorrentino *2020-09-24 10:03:51*
+
+
+## v4.2
+### Generic changes
+
+**update changelog**
+
+
+[e0e7553ab7126cd](https://github.com/bsorrentino/maven-annotation-plugin/commit/e0e7553ab7126cd) bsorrentino *2020-08-03 14:18:25*
 
 **update readme**
 
