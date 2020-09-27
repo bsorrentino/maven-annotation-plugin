@@ -64,6 +64,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -573,7 +574,13 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     }
 
     private boolean isSourcesUnchanged( List<JavaFileObject> allSources ) throws IOException {
-        long maxSourceDate = allSources.stream().map(JavaFileObject::getLastModified).max(Long::compare).get();
+        if (!areSourceFilesSameAsPreviousRun(allSources))
+            return false;
+
+        long maxSourceDate = allSources.stream()
+                .map(JavaFileObject::getLastModified)
+                .max(Long::compare)
+                .orElse(Long.MIN_VALUE);
 
         // use atomic long for effectively final wrapper around long variable
         final AtomicLong maxOutputDate = new AtomicLong(Long.MIN_VALUE);
@@ -596,7 +603,41 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         }
 
         return maxSourceDate <= maxOutputDate.get();
+    }
 
+    /**
+     * Checks the list of {@code allSources} against the stored list of source files in a previous run.
+     *
+     * @param allSources
+     * @return {@code true} when the filenames of the previous run matches exactly with the current run.
+     * @throws IOException
+     */
+    private boolean areSourceFilesSameAsPreviousRun(List<JavaFileObject> allSources) throws IOException {
+        Path sourceFileList = outputDirectory.toPath().resolve(".maven-processor-source-files.txt");
+        try {
+            if (!Files.exists(sourceFileList)) {
+                getLog().debug("File with previous sources " + sourceFileList + " not found, treating as first run");
+                return false;
+            }
+
+            Set<String> previousSourceFiles = new HashSet<>(Files.readAllLines(sourceFileList));
+            Set<String> currentSourceFiles = allSources.stream().map(JavaFileObject::getName).collect(Collectors.toSet());
+            if (getLog().isDebugEnabled()) {
+                Set<String> removedSourceFiles = previousSourceFiles.stream()
+                        .filter(f -> !currentSourceFiles.contains(f))
+                        .collect(Collectors.toSet());
+                getLog().debug("removed source files: " + removedSourceFiles);
+
+                Set<String> newSourceFiles = currentSourceFiles.stream()
+                        .filter(f -> !previousSourceFiles.contains(f))
+                        .collect(Collectors.toSet());
+                getLog().debug("new source files: " + newSourceFiles);
+            }
+            return previousSourceFiles.equals(currentSourceFiles);
+        } finally {
+            outputDirectory.mkdirs();
+            Files.write(sourceFileList, allSources.stream().map(JavaFileObject::getName).collect(Collectors.toSet()));
+        }
     }
 
     private void executeWithExceptionsHandled() throws Exception
