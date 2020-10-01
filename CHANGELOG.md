@@ -2,6 +2,98 @@
 
 <!-- Changelog for bsorrentino maven-annotation-plugin. -->
 
+## v4.4
+### Generic changes
+
+**update readme**
+
+
+[fa1f52af0d550c9](https://github.com/bsorrentino/maven-annotation-plugin/commit/fa1f52af0d550c9) bartolomeo sorrentino *2020-10-01 14:47:42*
+
+**set release version**
+
+
+[1714e8977800c50](https://github.com/bsorrentino/maven-annotation-plugin/commit/1714e8977800c50) bartolomeo sorrentino *2020-10-01 14:47:30*
+
+**refine integration test**
+
+
+[692074de91c1440](https://github.com/bsorrentino/maven-annotation-plugin/commit/692074de91c1440) bartolomeo sorrentino *2020-10-01 14:30:14*
+
+**update debug message**
+
+
+[9646e901989224d](https://github.com/bsorrentino/maven-annotation-plugin/commit/9646e901989224d) bartolomeo sorrentino *2020-10-01 14:29:27*
+
+**Start work on 4.4-SNAPSHOT**
+
+
+[cb7191dfff79390](https://github.com/bsorrentino/maven-annotation-plugin/commit/cb7191dfff79390) Martijn Dashorst *2020-09-27 12:51:35*
+
+**update changelog**
+
+
+[b5bee16c5832f6f](https://github.com/bsorrentino/maven-annotation-plugin/commit/b5bee16c5832f6f) bsorrentino *2020-09-25 15:59:25*
+
+
+###  [#86](https://github.com/bsorrentino/maven-annotation-plugin/issues/86) File change detection doesn&#39;t detect removals  
+
+**Detects file additions/deletions for skipping**
+
+ * When you remove a file from the source tree, the modification checker
+ * doesn&#39;t take into account the removed file as an update. Because the
+ * file no longer exists, it doesn&#39;t have a modification date, and it will
+ * not count in determining whether the last generation was older than the
+ * modification in the sources.
+ * This commit detects source file modifications of the nature of
+ * additions and deletions by using a tracking file in the output folder
+ * (`.maven-processor-source-files.txt`).
+ * This file contains a list of all the files in the source folders, which
+ * is checked against the current list of source files. When the file
+ * doesn&#39;t exist or if the sets of files don&#39;t match, it is treated as a
+ * change. When they match exactly, the modification time check is still
+ * run.
+ * A sample run without additions/removals in the source files:
+ * ```
+ * [DEBUG]   (f) skipSourcesUnchanged = true
+ * [DEBUG]   (f) sourceDirectory = /Users/dashorst/IdeaProjects/iridium/common/entities/src/main/java
+ * [DEBUG] -- end configuration --
+ * [DEBUG] Source directory: /Users/dashorst/IdeaProjects/iridium/common/entities/target/generated-sources/apt added
+ * [DEBUG] processing source directory [/Users/dashorst/IdeaProjects/iridium/common/entities/src/main/java]
+ * [DEBUG] removed source files: []
+ * [DEBUG] new source files: []
+ * [DEBUG] max source file date: 1601210991895, max output date: 1601211873845
+ * [INFO] no source file(s) change(s) detected! Processor task will be skipped
+ * ```
+ * When a file was removed:
+ * ```
+ * [DEBUG]   (f) skipSourcesUnchanged = true
+ * [DEBUG]   (f) sourceDirectory = /Users/dashorst/IdeaProjects/iridium/common/entities/src/main/java
+ * [DEBUG] -- end configuration --
+ * [DEBUG] Source directory: /Users/dashorst/IdeaProjects/iridium/common/entities/target/generated-sources/apt added
+ * [DEBUG] processing source directory [/Users/dashorst/IdeaProjects/iridium/common/entities/src/main/java]
+ * [DEBUG] removed source files: [/Users/dashorst/IdeaProjects/iridium/common/entities/src/main/java/nl/topicus/platinum/entities/Afdeling.java]
+ * [DEBUG] new source files: []
+ * [WARNING] No processors specified. Using default discovery mechanism.
+ * [DEBUG] javac option: -cp
+ * ```
+ * When the file is re-added:
+ * ```
+ * [DEBUG]   (f) skipSourcesUnchanged = true
+ * [DEBUG]   (f) sourceDirectory = /Users/dashorst/IdeaProjects/iridium/common/entities/src/main/java
+ * [DEBUG] -- end configuration --
+ * [DEBUG] Source directory: /Users/dashorst/IdeaProjects/iridium/common/entities/target/generated-sources/apt added
+ * [DEBUG] processing source directory [/Users/dashorst/IdeaProjects/iridium/common/entities/src/main/java]
+ * [DEBUG] removed source files: []
+ * [DEBUG] new source files: [/Users/dashorst/IdeaProjects/iridium/common/entities/src/main/java/nl/topicus/platinum/entities/Afdeling.java]
+ * [WARNING] No processors specified. Using default discovery mechanism.
+ * [DEBUG] javac option: -cp
+ * ```
+ * Fixes #86
+
+[1f6c708506ea959](https://github.com/bsorrentino/maven-annotation-plugin/commit/1f6c708506ea959) Martijn Dashorst *2020-09-27 13:10:57*
+
+
 ## v4.3
 ### Generic changes
 
