@@ -64,6 +64,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -80,7 +81,9 @@ import org.sonatype.aether.resolution.ArtifactResult;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
 */
 // 3.1.0
+import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.joining;
 
 
 /**
@@ -419,7 +422,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
         return getClasspathElements(new java.util.LinkedHashSet<>())
                 .stream()
-                .collect(Collectors.joining( File.pathSeparator) );
+                .collect(joining( File.pathSeparator) );
     }
 
     /**
@@ -564,7 +567,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
         if( getLog().isDebugEnabled() ) {
             for (String option : options) {
-                getLog().debug(String.format("javac option: %s", option));
+                getLog().debug(format("javac option: %s", option));
             }
         }
 
@@ -573,7 +576,13 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     }
 
     private boolean isSourcesUnchanged( List<JavaFileObject> allSources ) throws IOException {
-        long maxSourceDate = allSources.stream().map(JavaFileObject::getLastModified).max(Long::compare).get();
+        if (!areSourceFilesSameAsPreviousRun(allSources))
+            return false;
+
+        long maxSourceDate = allSources.stream()
+                .map(JavaFileObject::getLastModified)
+                .max(Long::compare)
+                .orElse(Long.MIN_VALUE);
 
         // use atomic long for effectively final wrapper around long variable
         final AtomicLong maxOutputDate = new AtomicLong(Long.MIN_VALUE);
@@ -596,7 +605,41 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         }
 
         return maxSourceDate <= maxOutputDate.get();
+    }
 
+    /**
+     * Checks the list of {@code allSources} against the stored list of source files in a previous run.
+     *
+     * @param allSources
+     * @return {@code true} when the filenames of the previous run matches exactly with the current run.
+     * @throws IOException
+     */
+    private boolean areSourceFilesSameAsPreviousRun(List<JavaFileObject> allSources) throws IOException {
+        Path sourceFileList = outputDirectory.toPath().resolve(".maven-processor-source-files.txt");
+        try {
+            if (!Files.exists(sourceFileList)) {
+                getLog().debug("File with previous sources " + sourceFileList + " not found, treating as first run");
+                return false;
+            }
+
+            Set<String> previousSourceFiles = new HashSet<>(Files.readAllLines(sourceFileList));
+            Set<String> currentSourceFiles = allSources.stream().map(JavaFileObject::getName).collect(Collectors.toSet());
+            if (getLog().isDebugEnabled()) {
+                final String removedSourceFiles = previousSourceFiles.stream()
+                        .filter(f -> !currentSourceFiles.contains(f))
+                        .collect(joining("\n"));
+                getLog().debug(format("removed source files:\n%s", removedSourceFiles));
+
+                final String newSourceFiles = currentSourceFiles.stream()
+                        .filter(f -> !previousSourceFiles.contains(f))
+                        .collect(joining("\n"));
+                getLog().debug(format("new source files:\n%s", newSourceFiles));
+            }
+            return previousSourceFiles.equals(currentSourceFiles);
+        } finally {
+            outputDirectory.mkdirs();
+            Files.write(sourceFileList, allSources.stream().map(JavaFileObject::getName).collect(Collectors.toSet()));
+        }
     }
 
     private void executeWithExceptionsHandled() throws Exception
@@ -644,14 +687,14 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                 continue;            
             }
             
-            getLog().debug( String.format( "processing source directory [%s]", sourceDir.getPath()) );
+            getLog().debug( format( "processing source directory [%s]", sourceDir.getPath()) );
             
             if( !sourceDir.exists() ) {
-                getLog().warn( String.format("source directory [%s] doesn't exist! Processor task will be skipped!", sourceDir.getPath()));
+                getLog().warn( format("source directory [%s] doesn't exist! Processor task will be skipped!", sourceDir.getPath()));
                 continue;                        
             }
             if( !sourceDir.isDirectory() ) {
-                getLog().warn( String.format("source directory [%s] is invalid! Processor task will be skipped!", sourceDir.getPath()));
+                getLog().warn( format("source directory [%s] is invalid! Processor task will be skipped!", sourceDir.getPath()));
                 continue;                        
             }
 
@@ -669,17 +712,17 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
             if (null != kind)
                 switch (kind) {
                 case ERROR:
-                    getLog().error(String.format("diagnostic: %s", diagnostic));
+                    getLog().error(format("diagnostic: %s", diagnostic));
                     break;
                 case MANDATORY_WARNING:
                 case WARNING:
-                    getLog().warn(String.format("diagnostic: %s", diagnostic));
+                    getLog().warn(format("diagnostic: %s", diagnostic));
                     break;
                 case NOTE:
-                    getLog().info(String.format("diagnostic: %s", diagnostic));
+                    getLog().info(format("diagnostic: %s", diagnostic));
                     break;
                 case OTHER:
-                    getLog().info(String.format("diagnostic: %s", diagnostic));
+                    getLog().info(format("diagnostic: %s", diagnostic));
                     break;
                 default:
                     break;
@@ -691,7 +734,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
             java.util.Set< Map.Entry<String,String>> pSet = systemProperties.entrySet();
             
             for ( Map.Entry<String,String> e : pSet ) {
-                getLog().debug( String.format("set system property : [%s] = [%s]",  e.getKey(), e.getValue() ));
+                getLog().debug( format("set system property : [%s] = [%s]",  e.getKey(), e.getValue() ));
                 System.setProperty(e.getKey(), e.getValue());
             }
 
@@ -721,10 +764,10 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                     }
                 }
 
-                getLog().debug(String.format("** Discovered %d java sources in %s", sourceCount, f.getAbsolutePath()));
+                getLog().debug(format("** Discovered %d java sources in %s", sourceCount, f.getAbsolutePath()));
 
             } catch (Exception ex) {
-                getLog().warn(String.format("Problem reading source archive [%s]", artifact.getFile().getPath()));
+                getLog().warn(format("Problem reading source archive [%s]", artifact.getFile().getPath()));
                 getLog().debug(ex);
             }
         });
@@ -768,11 +811,11 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                    charset = Charset.forName(encoding);
                 }
                 catch( IllegalCharsetNameException ex1 ) {
-                    getLog().warn( String.format("the given charset name [%s] is illegal!. default is used", encoding ));
+                    getLog().warn( format("the given charset name [%s] is illegal!. default is used", encoding ));
                     charset = null;
                 }
                 catch( UnsupportedCharsetException ex2 ) {
-                    getLog().warn( String.format("the given charset name [%s] is unsupported!. default is used", encoding ));
+                    getLog().warn( format("the given charset name [%s] is unsupported!. default is used", encoding ));
                     charset = null;
                 }
             }
@@ -857,7 +900,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
             for (String arg : compilerArguments.split(" ")) {
                 if (!StringUtils.isEmpty(arg)) {
                     arg = arg.trim();
-                    getLog().debug(String.format("Adding compiler arg: %s", arg));
+                    getLog().debug(format("Adding compiler arg: %s", arg));
                     options.add(arg);
                 }
             }
@@ -866,9 +909,9 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
             for( java.util.Map.Entry<String,Object> e : optionMap.entrySet() ) {
      
                 if( !StringUtils.isEmpty(e.getKey()) && e.getValue()!=null ) {
-                    String opt = String.format("-A%s=%s", e.getKey().trim(), e.getValue().toString().trim());
+                    String opt = format("-A%s=%s", e.getKey().trim(), e.getValue().toString().trim());
                     options.add( opt );
-                    getLog().debug(String.format("Adding compiler arg: %s", opt));
+                    getLog().debug(format("Adding compiler arg: %s", opt));
                 }
             }
                        
@@ -879,7 +922,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     {
         final Boolean add = addOutputDirectoryToCompilationSources;
         if (add == null || add.booleanValue()) {
-            getLog().debug(String.format("Source directory: %s added", outputDirectory));
+            getLog().debug(format("Source directory: %s added", outputDirectory));
             addCompileSourceRoot(project, outputDirectory.getAbsolutePath());
         }
     }
@@ -950,7 +993,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         request.setArtifact( artifact );
         request.setRepositories(remoteRepos);
 
-        getLog().debug( String.format("Resolving artifact %s from %s", artifact, remoteRepos ));
+        getLog().debug( format("Resolving artifact %s from %s", artifact, remoteRepos ));
        
         final ArtifactResult result = repoSystem.resolveArtifact( repoSession, request );
           
@@ -976,7 +1019,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                     }
                     
                 } catch (ArtifactResolutionException ex) {              
-                    getLog().warn( String.format(" sources for artifact [%s] not found!", dep.toString()));
+                    getLog().warn( format(" sources for artifact [%s] not found!", dep.toString()));
                     getLog().debug(ex);
                     
                 }

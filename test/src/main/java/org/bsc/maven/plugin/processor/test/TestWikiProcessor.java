@@ -31,7 +31,7 @@ import java.util.Set;
 @SupportedAnnotationTypes( "*" )
 //@SupportedOptions( {"subfolder", "filepath", "templateUri"})
 //@SupportedAnnotationTypes( {"javax.ws.rs.GET", "javax.ws.rs.PUT", "javax.ws.rs.POST", "javax.ws.rs.DELETE"})
-public class TESTWikiProcessor extends BaseAbstractProcessor {
+public class TestWikiProcessor extends BaseAbstractProcessor {
 
      /**
      * 
