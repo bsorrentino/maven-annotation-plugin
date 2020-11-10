@@ -11,7 +11,7 @@
     <parent>
         <groupId>org.bsc.maven</groupId>
         <artifactId>maven-processor-plugin-parent</artifactId>
-        <version>4.2-jdk8</version>
+        <version>4.4-jdk8</version>
     </parent>
 
   <dependencies>
@@ -76,7 +76,7 @@ PROCESSOR PLUGIN
 
                     <failOnError>false</failOnError>
                     <processors>
-                        <processor>org.bsc.maven.plugin.processor.test.TESTWikiProcessor</processor>
+                        <processor>org.bsc.maven.plugin.processor.test.TestWikiProcessor</processor>
                     </processors>
 
                     <options>
@@ -99,17 +99,12 @@ PROCESSOR PLUGIN
 
                     <additionalSourceDirectories>
                         <item>${basedir}/src/main/java</item>
-                        <!--
-                        <item>${user.home}/src</item>
-                        -->
                     </additionalSourceDirectories>
 
                     <failOnError>false</failOnError>
+                    <skipSourcesUnchanged>true</skipSourcesUnchanged>
                     <processors>
-                        <processor>org.bsc.maven.plugin.processor.test.TESTWikiProcessor</processor>
-                        <!--
-                        <processor>org.bsc.jaxrs.JAXRSWikiProcessor</processor>
-                        -->
+                        <processor>org.bsc.maven.plugin.processor.test.TestWikiProcessor</processor>
                     </processors>
 
                     <options>

@@ -2,7 +2,11 @@
 
 <!-- Changelog for bsorrentino maven-annotation-plugin. -->
 
+<<<<<<< HEAD
 ## 4.1-jdk8
+=======
+## v4.4
+>>>>>>> master
 ### Generic changes
 
 **move to next release version**
@@ -16,10 +20,207 @@
 [5039031bff9b910](https://github.com/bsorrentino/maven-annotation-plugin/commit/5039031bff9b910) bartolomeo sorrentino *2020-07-30 15:19:42*
 
 
+<<<<<<< HEAD
 ###  [#82](https://github.com/bsorrentino/maven-annotation-plugin/issues/82) New v4.0 does not support Java 8    *bug*  *under investigation*  
 
 **issue #82 - fix 'UnsupportedOperationException' on isSupportedOption invocation**
 
+=======
+[fa1f52af0d550c9](https://github.com/bsorrentino/maven-annotation-plugin/commit/fa1f52af0d550c9) bartolomeo sorrentino *2020-10-01 14:47:42*
+
+**set release version**
+
+
+[1714e8977800c50](https://github.com/bsorrentino/maven-annotation-plugin/commit/1714e8977800c50) bartolomeo sorrentino *2020-10-01 14:47:30*
+
+**refine integration test**
+
+
+[692074de91c1440](https://github.com/bsorrentino/maven-annotation-plugin/commit/692074de91c1440) bartolomeo sorrentino *2020-10-01 14:30:14*
+
+**update debug message**
+
+
+[9646e901989224d](https://github.com/bsorrentino/maven-annotation-plugin/commit/9646e901989224d) bartolomeo sorrentino *2020-10-01 14:29:27*
+
+**Start work on 4.4-SNAPSHOT**
+
+
+[cb7191dfff79390](https://github.com/bsorrentino/maven-annotation-plugin/commit/cb7191dfff79390) Martijn Dashorst *2020-09-27 12:51:35*
+
+**update changelog**
+
+
+[b5bee16c5832f6f](https://github.com/bsorrentino/maven-annotation-plugin/commit/b5bee16c5832f6f) bsorrentino *2020-09-25 15:59:25*
+
+
+###  [#86](https://github.com/bsorrentino/maven-annotation-plugin/issues/86) File change detection doesn&#39;t detect removals  
+
+**Detects file additions/deletions for skipping**
+
+ * When you remove a file from the source tree, the modification checker
+ * doesn&#39;t take into account the removed file as an update. Because the
+ * file no longer exists, it doesn&#39;t have a modification date, and it will
+ * not count in determining whether the last generation was older than the
+ * modification in the sources.
+ * This commit detects source file modifications of the nature of
+ * additions and deletions by using a tracking file in the output folder
+ * (`.maven-processor-source-files.txt`).
+ * This file contains a list of all the files in the source folders, which
+ * is checked against the current list of source files. When the file
+ * doesn&#39;t exist or if the sets of files don&#39;t match, it is treated as a
+ * change. When they match exactly, the modification time check is still
+ * run.
+ * A sample run without additions/removals in the source files:
+ * ```
+ * [DEBUG]   (f) skipSourcesUnchanged = true
+ * [DEBUG]   (f) sourceDirectory = /Users/dashorst/IdeaProjects/iridium/common/entities/src/main/java
+ * [DEBUG] -- end configuration --
+ * [DEBUG] Source directory: /Users/dashorst/IdeaProjects/iridium/common/entities/target/generated-sources/apt added
+ * [DEBUG] processing source directory [/Users/dashorst/IdeaProjects/iridium/common/entities/src/main/java]
+ * [DEBUG] removed source files: []
+ * [DEBUG] new source files: []
+ * [DEBUG] max source file date: 1601210991895, max output date: 1601211873845
+ * [INFO] no source file(s) change(s) detected! Processor task will be skipped
+ * ```
+ * When a file was removed:
+ * ```
+ * [DEBUG]   (f) skipSourcesUnchanged = true
+ * [DEBUG]   (f) sourceDirectory = /Users/dashorst/IdeaProjects/iridium/common/entities/src/main/java
+ * [DEBUG] -- end configuration --
+ * [DEBUG] Source directory: /Users/dashorst/IdeaProjects/iridium/common/entities/target/generated-sources/apt added
+ * [DEBUG] processing source directory [/Users/dashorst/IdeaProjects/iridium/common/entities/src/main/java]
+ * [DEBUG] removed source files: [/Users/dashorst/IdeaProjects/iridium/common/entities/src/main/java/nl/topicus/platinum/entities/Afdeling.java]
+ * [DEBUG] new source files: []
+ * [WARNING] No processors specified. Using default discovery mechanism.
+ * [DEBUG] javac option: -cp
+ * ```
+ * When the file is re-added:
+ * ```
+ * [DEBUG]   (f) skipSourcesUnchanged = true
+ * [DEBUG]   (f) sourceDirectory = /Users/dashorst/IdeaProjects/iridium/common/entities/src/main/java
+ * [DEBUG] -- end configuration --
+ * [DEBUG] Source directory: /Users/dashorst/IdeaProjects/iridium/common/entities/target/generated-sources/apt added
+ * [DEBUG] processing source directory [/Users/dashorst/IdeaProjects/iridium/common/entities/src/main/java]
+ * [DEBUG] removed source files: []
+ * [DEBUG] new source files: [/Users/dashorst/IdeaProjects/iridium/common/entities/src/main/java/nl/topicus/platinum/entities/Afdeling.java]
+ * [WARNING] No processors specified. Using default discovery mechanism.
+ * [DEBUG] javac option: -cp
+ * ```
+ * Fixes #86
+
+[1f6c708506ea959](https://github.com/bsorrentino/maven-annotation-plugin/commit/1f6c708506ea959) Martijn Dashorst *2020-09-27 13:10:57*
+
+
+## v4.3
+### Generic changes
+
+**update readme**
+
+
+[382dfb7fe61851a](https://github.com/bsorrentino/maven-annotation-plugin/commit/382dfb7fe61851a) bsorrentino *2020-09-25 15:31:42*
+
+**set release version**
+
+
+[db87a0476c03596](https://github.com/bsorrentino/maven-annotation-plugin/commit/db87a0476c03596) bsorrentino *2020-09-25 15:28:27*
+
+**Start 4.3-SNAPSHOT development**
+
+
+[be4e8404052f7e6](https://github.com/bsorrentino/maven-annotation-plugin/commit/be4e8404052f7e6) Martijn Dashorst *2020-09-23 09:37:39*
+
+**Implement lastModified check for sources**
+
+ * The annotation processor should be able to skip the annotation
+ * processing if the sources haven&#39;t changed since the last processing.
+ * This will speed up project builds considerably since for example the
+ * JPA metamodel generator will not run if the entities haven&#39;t been
+ * modified, which will save the compiler of having to recompile your
+ * whole module.
+ * Using the option `skipWithoutSourceChanges` you can enable this
+ * behavior. By default it is turned off to maintain the current behavior.
+ * This change doesn&#39;t track individual files, as there need not be a 1-1
+ * mapping between the origin of the annotation processor and the
+ * generated sources. The plugin rather determines from all source
+ * locations what the most recent last modified time is, and does the same
+ * for all the files in the output folder.
+ * This cuts down rebuild times on my current project by a half or so
+ * (going from over 2 minutes to just 1 minute).
+
+[30861dbad2fef67](https://github.com/bsorrentino/maven-annotation-plugin/commit/30861dbad2fef67) Martijn Dashorst *2020-09-23 09:37:39*
+
+**uodate site-maven-plugin version**
+
+
+[c6dbeb9bb1e5709](https://github.com/bsorrentino/maven-annotation-plugin/commit/c6dbeb9bb1e5709) bsorrentino *2020-08-05 16:15:28*
+
+
+###  [#85](https://github.com/bsorrentino/maven-annotation-plugin/pull/85) Utilize lastModified times of source and output to skip annotation processing    *work in progress*  
+
+**merged PR #85**
+
+ * renamed property from &#39;skipWithoutSourceChanges&#39; to &#39;skipSourcesUnchanged&#39;
+ * put PR code in a new method &#39;isSourcesUnchanged( List&lt;&gt; allSources )&#39;
+
+[2bf7bedb068e64d](https://github.com/bsorrentino/maven-annotation-plugin/commit/2bf7bedb068e64d) bsorrentino *2020-09-24 10:03:51*
+
+
+## v4.2
+### Generic changes
+
+**update changelog**
+
+
+[e0e7553ab7126cd](https://github.com/bsorrentino/maven-annotation-plugin/commit/e0e7553ab7126cd) bsorrentino *2020-08-03 14:18:25*
+
+**update readme**
+
+
+[86b4a9ba0a77deb](https://github.com/bsorrentino/maven-annotation-plugin/commit/86b4a9ba0a77deb) bsorrentino *2020-08-03 14:18:00*
+
+**move to next release version**
+
+
+[450b98cc62f42d9](https://github.com/bsorrentino/maven-annotation-plugin/commit/450b98cc62f42d9) bsorrentino *2020-08-03 14:13:45*
+
+**clean code**
+
+
+[ac57d4884350a9c](https://github.com/bsorrentino/maven-annotation-plugin/commit/ac57d4884350a9c) bsorrentino *2020-07-31 09:35:06*
+
+**move to next developer version**
+
+
+[08235617ae9b1d2](https://github.com/bsorrentino/maven-annotation-plugin/commit/08235617ae9b1d2) bsorrentino *2020-07-31 08:28:15*
+
+**update readme**
+
+
+[13aa52ade58dcae](https://github.com/bsorrentino/maven-annotation-plugin/commit/13aa52ade58dcae) bsorrentino *2020-07-31 08:00:05*
+
+
+###  [#83](https://github.com/bsorrentino/maven-annotation-plugin/issues/83) &#39;process-test&#39; does not add TestCompileSourceRoots to javac &#39;-sourcepath&#39;    *bug*  *wait for feedback*  *work in progress*  
+
+**fix: process-test should add CompileSourceRoots and TestCompileSourceRoots to javac '-sourcepath' option. fixes #83**
+
+
+[2f1380abc231c26](https://github.com/bsorrentino/maven-annotation-plugin/commit/2f1380abc231c26) Markus *2020-07-30 15:59:55*
+
+
+## v4.1
+### Generic changes
+
+**move to next release version**
+
+
+[7939e7348408ffb](https://github.com/bsorrentino/maven-annotation-plugin/commit/7939e7348408ffb) bsorrentino *2020-07-31 07:40:09*
+
+**update readme**
+
+
+[18df0d926c9a3f1](https://github.com/bsorrentino/maven-annotation-plugin/commit/18df0d926c9a3f1) bartolomeo sorrentino *2020-07-23 08:21:15*
+>>>>>>> master
 
 [3a072bfb140ae3c](https://github.com/bsorrentino/maven-annotation-plugin/commit/3a072bfb140ae3c) bartolomeo sorrentino *2020-07-28 13:31:23*
 
