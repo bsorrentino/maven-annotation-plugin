@@ -8,11 +8,7 @@
 
 This plugin helps to use from maven the new annotation processing integrated in java compiler provided from JDK6
 
-<<<<<<< HEAD
-This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.codehaus.org/apt-maven-plugin/
-=======
 This plugin was born as the 'alter ego' of maven apt plugin [apt-maven-plugin](https://search.maven.org/artifact/org.codehaus.mojo/apt-maven-plugin/1.0-alpha-5/maven-plugin)
->>>>>>> master
 
 ### Documentation
 
@@ -31,13 +27,6 @@ This plugin was born as the 'alter ego' of maven apt plugin [apt-maven-plugin](h
 
 ## Releases
 
-<<<<<<< HEAD
- Date  | Info   
---- | ---
-**Jul 18, 2020** | [Release 4.0](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0)
-**Apr 17, 2020** | [Release 4.0-rc1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-rc1)
-**Mar 02, 2020** | [Release 4.0-beta1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-beta1)
-=======
  Date  | Version  | Info
 --- | --- | ---
 **Oct 01, 2020** | [Release 4.4](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.4) | merge PR #87. Thanks to [Martijn Dashorst](https://github.com/dashorst)
@@ -50,7 +39,6 @@ This plugin was born as the 'alter ego' of maven apt plugin [apt-maven-plugin](h
 **Jul 18, 2020** | [Release 4.0](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0) | Release based on JDK9 and above
 **Apr 17, 2020** | [Release 4.0-rc1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-rc1) | 
 **Mar 02, 2020** | [Release 4.0-beta1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-beta1) | 
->>>>>>> master
 
 ## History
 
