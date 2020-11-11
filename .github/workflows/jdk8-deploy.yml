@@ -3,9 +3,9 @@
 
 name: Deploy JDK8 version
 
-on:
-  push:
-    branches: [ support/4.x-jdk8 ]
+on: workflow_dispatch
+#  push:
+#    branches: [ support/4.x-jdk8 ]
 
 jobs:
   build:
