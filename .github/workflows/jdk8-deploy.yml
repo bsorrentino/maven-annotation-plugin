@@ -22,4 +22,5 @@ jobs:
       env:
         GPG_KEY_BASE64: ${{ secrets.GPG_KEY_BASE64 }}
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-      run: gpg-setup.sh
+      #run: gpg-setup.sh
+      run: printf "$GPG_KEY_BASE64" | base64 --decode > gpg.asc
