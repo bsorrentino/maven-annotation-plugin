@@ -1,4 +1,4 @@
-/Users/bsorrentino/WORKSPACES/GITHUB.me/maven-annotation-plugin/test/src/main/java/org/bsc/maven/plugin/processor/test/ParameterDocumentation.java
-/Users/bsorrentino/WORKSPACES/GITHUB.me/maven-annotation-plugin/test/src/main/java/org/bsc/maven/plugin/processor/test/TestWikiProcessor.java
-/Users/bsorrentino/WORKSPACES/GITHUB.me/maven-annotation-plugin/test/src/main/java/org/bsc/maven/plugin/processor/test/ServiceDocumentation.java
-/Users/bsorrentino/WORKSPACES/GITHUB.me/maven-annotation-plugin/test/src/main/java/org/bsc/maven/plugin/processor/test/TestWikiProcessorClass.java
+/Users/softphone/WORKSPACES/GITHUB.me/MAVEN/maven-annotation-plugin/test/src/main/java/org/bsc/maven/plugin/processor/test/ParameterDocumentation.java
+/Users/softphone/WORKSPACES/GITHUB.me/MAVEN/maven-annotation-plugin/test/src/main/java/org/bsc/maven/plugin/processor/test/TestWikiProcessor.java
+/Users/softphone/WORKSPACES/GITHUB.me/MAVEN/maven-annotation-plugin/test/src/main/java/org/bsc/maven/plugin/processor/test/ServiceDocumentation.java
+/Users/softphone/WORKSPACES/GITHUB.me/MAVEN/maven-annotation-plugin/test/src/main/java/org/bsc/maven/plugin/processor/test/TestWikiProcessorClass.java
