@@ -23,3 +23,9 @@ jobs:
         GPG_KEY_BASE64: ${{ secrets.GPG_KEY_BASE64 }}
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
       run: ./gpg-setup.sh
+    - name: Deploy to OSS Sonatype
+      env:
+        SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+      # mvn -Prelease source:jar javadoc:jar deploy -Dgpg.passphrase=thephrase
+      run: mvn -B -Prelease source:jar javadoc:jar deploy --file pom.xml -s settings-template.xml -Dgpg.passphrase=${{ secrets.SONATYPE_PASSWORD }}
+
