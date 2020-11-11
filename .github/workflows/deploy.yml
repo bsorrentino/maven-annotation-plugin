@@ -27,5 +27,5 @@ jobs:
       env:
         SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
       # mvn -Prelease source:jar javadoc:jar deploy -Dgpg.passphrase=thephrase
-      run: mvn -B -Prelease source:jar javadoc:jar deploy --file pom.xml -s settings-template.xml -Dgpg.passphrase=${{ secrets.SONATYPE_PASSWORD }}
+      run: mvn -B -Prelease source:jar javadoc:jar deploy --file pom.xml -s settings-template.xml -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
 
