@@ -22,5 +22,5 @@ jobs:
 
       - name: Build with Maven
         env:
-          OSS_SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
         run: mvn -B deploy --file pom.xml -s settings-template.xml
