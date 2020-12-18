@@ -4,10 +4,12 @@
  */
 package org.bsc.maven.plugin.processor;
 
-import java.io.File;
-import org.junit.Assert;
 import org.junit.Test;
-import org.hamcrest.core.*;
+
+import java.nio.charset.Charset;
+
+import static org.junit.Assert.*;
+
 /**
  *
  * @author softphone
@@ -20,11 +22,11 @@ public class ProcessorTest {
         final java.io.File f = new java.io.File( "target/test-classes");
         final java.io.File f2 = new java.io.File( "target/classes");
         
-        Assert.assertThat( f.equals(f2), Is.is(false));
+        assertFalse( f.equals(f2));
 
         final java.io.File f3 = new java.io.File( "target/classes");
 
-        Assert.assertThat( f3.equals(f2), Is.is(true));
+        assertTrue( f3.equals(f2));
         
     }
     
@@ -46,12 +48,25 @@ public class ProcessorTest {
         fileSet.add( f2 );
         
         
-        Assert.assertThat( fileSet.size(), IsEqual.equalTo(1) );
+        assertEquals( 1, fileSet.size() );
 
         fileSet.add( f2 );
         fileSet.add(f3);
         
-        Assert.assertThat( fileSet.size(), IsEqual.equalTo(2) );
+        assertEquals( 2, fileSet.size() );
         
     }
+
+    @Test
+    public void testEncoding() {
+
+        Charset.availableCharsets().entrySet().forEach( e -> {
+            System.out.printf( "encoding { key:%s, name:%s, aliases:%s }\n", e.getKey(), e.getValue().name(), e.getValue().aliases());
+        });
+
+        final Charset utf8 = Charset.forName("utf8");
+        assertEquals( "UTF-8", utf8.name() );
+    }
+
+
 }

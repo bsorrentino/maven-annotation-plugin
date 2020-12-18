@@ -342,6 +342,9 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
             else if( "--release".equals(option) ) {
                 javacConf.setReleaseVersion(ii.next());
             }
+            else if("-encoding".equals(option)) {
+                javacConf.setSourceEncoding(ii.next());
+            }
             else /*if( option.startsWith("-A") ) */  { // view pull #70
                 // Just pass through any other arguments
                 javacConf.addCompilerCustomArgument(option, "");   
