@@ -341,6 +341,26 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
      */
     public abstract File getDefaultOutputDirectory();
 
+    /**
+     *
+     * @return
+     */
+    private Charset getCharsetFromEncoding() {
+
+        return ofNullable(encoding).map( enc -> {
+            try {
+                return Charset.forName(encoding);
+            }
+            catch( IllegalCharsetNameException ex1 ) {
+                getLog().warn( format("the given charset name [%s] is illegal!. default is used", encoding ));
+            }
+            catch( UnsupportedCharsetException ex2 ) {
+                getLog().warn( format("the given charset name [%s] is unsupported!. default is used", encoding ));
+            }
+            return Charset.defaultCharset();
+        }).orElseGet( () -> Charset.defaultCharset() );
+
+    }
 
     private String buildProcessor()
     {
@@ -563,6 +583,11 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                 options.add("-target");
                 options.add(target);
             });
+        });
+
+        ofNullable(encoding).ifPresent( enc -> {
+            options.add("-encoding");
+            options.add( getCharsetFromEncoding().name() );
         });
 
         if( getLog().isDebugEnabled() ) {
@@ -803,28 +828,10 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                 return;
             }
 
-
-            Charset charset = null; ;
- 
-            if( encoding != null ) {
-                try {               
-                   charset = Charset.forName(encoding);
-                }
-                catch( IllegalCharsetNameException ex1 ) {
-                    getLog().warn( format("the given charset name [%s] is illegal!. default is used", encoding ));
-                    charset = null;
-                }
-                catch( UnsupportedCharsetException ex2 ) {
-                    getLog().warn( format("the given charset name [%s] is unsupported!. default is used", encoding ));
-                    charset = null;
-                }
-            }
-            
-            final StandardJavaFileManager fileManager = 
-                    compiler.getStandardFileManager(null, null, 
-                                                    (charset==null) ? 
-                                                    Charset.defaultCharset() : 
-                                                    charset);
+            final StandardJavaFileManager fileManager =
+                    compiler.getStandardFileManager(null,
+                                                null,
+                                                    getCharsetFromEncoding());
     
             if( files!=null && !files.isEmpty() ) {
                        
