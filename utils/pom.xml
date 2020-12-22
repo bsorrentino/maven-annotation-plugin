@@ -31,7 +31,7 @@
     <parent>
         <groupId>org.bsc.maven</groupId>
         <artifactId>maven-processor-plugin-parent</artifactId>
-        <version>4.5</version>
+        <version>4.6-SNAPSHOT</version>
     </parent>
 
     <properties>
