@@ -2,6 +2,137 @@
 
 <!-- Changelog for bsorrentino maven-annotation-plugin. -->
 
+## v4.5
+### Generic changes
+
+**move to next release version**
+
+
+[40104ab73dbdfcc](https://github.com/bsorrentino/maven-annotation-plugin/commit/40104ab73dbdfcc) bsorrentino *2020-12-22 19:59:56*
+
+**update readme**
+
+
+[f2157b94079e3f6](https://github.com/bsorrentino/maven-annotation-plugin/commit/f2157b94079e3f6) bsorrentino *2020-12-22 19:59:39*
+
+**update github action**
+
+
+[c9bbd784644aefe](https://github.com/bsorrentino/maven-annotation-plugin/commit/c9bbd784644aefe) bsorrentino *2020-12-20 11:36:22*
+
+**update action**
+
+
+[a37e57eecd1c514](https://github.com/bsorrentino/maven-annotation-plugin/commit/a37e57eecd1c514) bsorrentino *2020-12-18 18:03:18*
+
+**add deploy snapshot action**
+
+
+[1a62f83c9c2e134](https://github.com/bsorrentino/maven-annotation-plugin/commit/1a62f83c9c2e134) bsorrentino *2020-12-18 18:01:12*
+
+**move to next development version**
+
+
+[34f80508b633983](https://github.com/bsorrentino/maven-annotation-plugin/commit/34f80508b633983) bsorrentino *2020-12-18 17:57:35*
+
+**update pipeline**
+
+
+[449538aead2b795](https://github.com/bsorrentino/maven-annotation-plugin/commit/449538aead2b795) bsorrentino *2020-11-11 14:56:21*
+
+**update pipeline name**
+
+
+[a912315c5132141](https://github.com/bsorrentino/maven-annotation-plugin/commit/a912315c5132141) bsorrentino *2020-11-11 14:12:31*
+
+**update pipeline name**
+
+
+[7c5498865dedc9f](https://github.com/bsorrentino/maven-annotation-plugin/commit/7c5498865dedc9f) bsorrentino *2020-11-11 14:12:15*
+
+**update pipeline for deploy**
+
+
+[dc5b046b2c1869e](https://github.com/bsorrentino/maven-annotation-plugin/commit/dc5b046b2c1869e) bsorrentino *2020-11-11 13:48:10*
+
+**update pipeline**
+
+
+[44f88b5346cde06](https://github.com/bsorrentino/maven-annotation-plugin/commit/44f88b5346cde06) bsorrentino *2020-11-11 13:36:44*
+
+**update pipeline**
+
+
+[208d4b2a3a09fbb](https://github.com/bsorrentino/maven-annotation-plugin/commit/208d4b2a3a09fbb) bsorrentino *2020-11-11 13:34:13*
+
+**update pipeline**
+
+
+[12434bcaea0fd10](https://github.com/bsorrentino/maven-annotation-plugin/commit/12434bcaea0fd10) bsorrentino *2020-11-11 13:32:06*
+
+**update pipeline**
+
+
+[5814158992f92b7](https://github.com/bsorrentino/maven-annotation-plugin/commit/5814158992f92b7) bsorrentino *2020-11-11 13:15:50*
+
+**update pipeline**
+
+
+[a4256123aa4dfa6](https://github.com/bsorrentino/maven-annotation-plugin/commit/a4256123aa4dfa6) bsorrentino *2020-11-11 12:34:56*
+
+**Update jdk8-deploy.yml**
+
+
+[06c24a711805c77](https://github.com/bsorrentino/maven-annotation-plugin/commit/06c24a711805c77) bsorrentino *2020-11-11 12:28:31*
+
+**Create jdk8-deploy.yml**
+
+ * add github action
+
+[ea63a545f2081dd](https://github.com/bsorrentino/maven-annotation-plugin/commit/ea63a545f2081dd) bsorrentino *2020-11-11 12:09:01*
+
+**Bump junit from 4.13 to 4.13.1**
+
+ * Bumps [junit](https://github.com/junit-team/junit4) from 4.13 to 4.13.1.
+ * - [Release notes](https://github.com/junit-team/junit4/releases)
+ * - [Changelog](https://github.com/junit-team/junit4/blob/main/doc/ReleaseNotes4.13.1.md)
+ * - [Commits](https://github.com/junit-team/junit4/compare/r4.13...r4.13.1)
+ * Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+
+[216fdcb2670c962](https://github.com/bsorrentino/maven-annotation-plugin/commit/216fdcb2670c962) dependabot[bot] *2020-10-12 17:46:11*
+
+**ignore .maven-processor-source-files.txt**
+
+
+[89cef33dc141dc8](https://github.com/bsorrentino/maven-annotation-plugin/commit/89cef33dc141dc8) bsorrentino *2020-10-06 08:32:08*
+
+**update git ignore**
+
+
+[b1cd19c765e839a](https://github.com/bsorrentino/maven-annotation-plugin/commit/b1cd19c765e839a) bsorrentino *2020-10-06 08:31:07*
+
+**update changelog**
+
+
+[6ac0e23c32dbc23](https://github.com/bsorrentino/maven-annotation-plugin/commit/6ac0e23c32dbc23) bartolomeo sorrentino *2020-10-01 14:50:58*
+
+
+###  [#88](https://github.com/bsorrentino/maven-annotation-plugin/pull/88) Bump junit from 4.13 to 4.13.1    *dependencies*  
+
+**merge PR #88**
+
+
+[09f5891b057c736](https://github.com/bsorrentino/maven-annotation-plugin/commit/09f5891b057c736) bsorrentino *2020-11-11 13:54:22*
+
+
+###  [#90](https://github.com/bsorrentino/maven-annotation-plugin/issues/90) Encoding not applied when the compiler is forked    *bug*  
+
+**issue #90 pass encoding parameter to java compiler**
+
+
+[8db490605285224](https://github.com/bsorrentino/maven-annotation-plugin/commit/8db490605285224) bsorrentino *2020-12-18 17:56:31*
+
+
 ## v4.4
 ### Generic changes
 
@@ -224,7 +355,7 @@
 [4c80b26d89676ba](https://github.com/bsorrentino/maven-annotation-plugin/commit/4c80b26d89676ba) bartolomeo sorrentino *2020-07-20 07:57:39*
 
 
-###  [#82](https://github.com/bsorrentino/maven-annotation-plugin/issues/82) New v4.0 does not support Java 8    *bug*  *under investigation*  
+###  [#82](https://github.com/bsorrentino/maven-annotation-plugin/issues/82) New v4.0 does not support Java 8    *enhancement*  *work in progress*  
 
 **issue #82 - fix 'UnsupportedOperationException' on isSupportedOption invocation**
 
