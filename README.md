@@ -29,7 +29,7 @@ This plugin was born as the 'alter ego' of maven apt plugin [apt-maven-plugin](h
 
  Date  | Version  | Info
 --- | --- | ---
-**Oct 01, 2020** | [Release 4.4](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.4) | merge PR #87. Thanks to [Martijn Dashorst](https://github.com/dashorst)
+**Ocqt 01, 2020** | [Release 4.4](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.4) | merge PR #87. Thanks to [Martijn Dashorst](https://github.com/dashorst)
 **Sep 25, 2020** | [Release 4.3](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.3) | merge PR #85. Thanks to [Martijn Dashorst](https://github.com/dashorst)
 **Aug 03, 2020** | [Release 4.2](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.2) | merge PR #84. Thanks to [DemonicTutor](https://github.com/DemonicTutor)
 **Aug 03, 2020** | [Release 4.2-jdk8](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.2-jdk8) | merge PR #84. Thanks to [DemonicTutor](https://github.com/DemonicTutor)
