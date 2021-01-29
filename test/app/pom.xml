@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.bsc.maven</groupId>
-    <artifactId>maven-processor-plugin-test</artifactId>
+    <artifactId>maven-processor-plugin-test-app</artifactId>
     <packaging>jar</packaging>
     <name>MAVEN PROCESSOR PLUGIN TEST</name>
     <description></description>
@@ -17,8 +17,8 @@
   <dependencies>
 
       <dependency>
-          <groupId>org.bsc.util</groupId>
-          <artifactId>processor-utils</artifactId>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>maven-processor-plugin-test-processors</artifactId>
           <version>${project.version}</version>
       </dependency>
 
@@ -48,70 +48,55 @@ PROCESSOR PLUGIN
         <groupId>org.bsc.maven</groupId>
         <artifactId>maven-processor-plugin</artifactId>
         <version>${project.version}</version>
-        <dependencies>
-            <!--
-            <dependency>
-                <groupId>org.bsc</groupId>
-                <artifactId>jaxrs-wiki-processor</artifactId>
-                <version>2.2</version>
-            </dependency>
-            -->
-        </dependencies>
         <executions>
-
-            <execution>
-
-                <id>process-test</id>
-                <goals>
-                    <goal>process-test</goal>
-                </goals>
-                <phase>process-test-classes</phase>
-                <configuration>
-                    <outputDirectory>${basedir}/src/site</outputDirectory>
-
-                    <additionalSourceDirectories>
-                        <item>${user.home}/src</item>
-                        <item>./src/main/java</item>
-                    </additionalSourceDirectories>
-
-                    <failOnError>false</failOnError>
-                    <processors>
-                        <processor>org.bsc.maven.plugin.processor.test.TestWikiProcessor</processor>
-                    </processors>
-
-                    <options>
-                        <test>true</test>
-                    </options>
-                </configuration>
-
-
-            </execution>
-
             <execution>
 
                 <id>process</id>
                 <goals>
                     <goal>process</goal>
                 </goals>
-                <phase>process-classes</phase>
+                <phase>process-sources</phase>
                 <configuration>
-                    <outputDirectory>${basedir}/src/site</outputDirectory>
-
+                    <!--
                     <additionalSourceDirectories>
                         <item>${basedir}/src/main/java</item>
                     </additionalSourceDirectories>
-
+                    -->
+                    <addOutputDirectoryToCompilationSources>true</addOutputDirectoryToCompilationSources>
                     <failOnError>false</failOnError>
-                    <skipSourcesUnchanged>true</skipSourcesUnchanged>
+                    <skipSourcesUnchanged>false</skipSourcesUnchanged>
                     <processors>
-                        <processor>org.bsc.maven.plugin.processor.test.TestWikiProcessor</processor>
+                        <processor>org.bsc.maven.plugin.processor.test.TestGenerateSourceProcessor</processor>
                     </processors>
-
+                    <!--
                     <options>
                         <test>false</test>
                     </options>
+                    -->
                 </configuration>
 
+                <!--
+                <execution>
+                    <id>process-test</id>
+                    <goals>
+                        <goal>process-test</goal>
+                    </goals>
+                    <phase>process-test-classes</phase>
+                    <configuration>
+                        <additionalSourceDirectories>
+                            <item>${user.home}/src</item>
+                            <item>src/main/java</item>
+                        </additionalSourceDirectories>
+                        <failOnError>false</failOnError>
+                        <processors>
+                            <processor>org.bsc.maven.plugin.processor.test.TestGenerateSourceProcessor</processor>
+                        </processors>
+                        <options>
+                            <test>true</test>
+                        </options>
+                    </configuration>
+                </execution>
+                -->
 
             </execution>
         </executions>
