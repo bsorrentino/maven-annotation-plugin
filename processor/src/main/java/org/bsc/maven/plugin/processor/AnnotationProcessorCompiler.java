@@ -36,17 +36,17 @@ import org.codehaus.plexus.util.cli.Commandline;
 class PlexusJavaCompilerWithOutput {
 
     static final PlexusJavaCompilerWithOutput INSTANCE = new PlexusJavaCompilerWithOutput();
-    
-    private PlexusJavaCompilerWithOutput() {     
+
+    private PlexusJavaCompilerWithOutput() {
     }
-    
+
     private String getJavacExecutable(CompilerConfiguration config )
         throws java.io.IOException
     {
         if( !StringUtils.isEmpty(config.getExecutable())) {
             return config.getExecutable();
         }
-        
+
         final String javacCommand = "javac" + ( Os.isFamily( Os.FAMILY_WINDOWS ) ? ".exe" : "" );
 
         String javaHome = System.getProperty( "java.home" );
@@ -91,12 +91,12 @@ class PlexusJavaCompilerWithOutput {
         }
 
         return javacExe.getAbsolutePath();
-    }    
+    }
     /**
-     * 
+     *
      * @param args
      * @return
-     * @throws java.io.IOException 
+     * @throws java.io.IOException
      */
     private java.io.File createFileWithArguments( String[] args, String outputDirectory )
         throws java.io.IOException
@@ -134,7 +134,7 @@ class PlexusJavaCompilerWithOutput {
             }
         }
     }
-    
+
     private CompilerResult compileOutOfProcess( CompilerConfiguration config, String executable, String[] args )
         throws CompilerException
     {
@@ -146,11 +146,11 @@ class PlexusJavaCompilerWithOutput {
 
         try
         {
-            
+
             final java.io.File argumentsFile = createFileWithArguments( args, config.getOutputLocation() );
             cli.addArguments(
                 new String[]{ "@" + argumentsFile.getCanonicalPath().replace( java.io.File.separatorChar, '/' ) } );
-               
+
             if ( !StringUtils.isEmpty( config.getMaxmem() ) )
             {
                 cli.addArguments( new String[]{ "-J-Xmx" + config.getMaxmem() } );
@@ -184,7 +184,7 @@ class PlexusJavaCompilerWithOutput {
         {
             // ==> DEBUG
             //out.consumeLine( cli.toString() );
-            
+
             returnCode = CommandLineUtils.executeCommandLine( cli, out, out );
         }
         catch ( Exception e )
@@ -200,35 +200,35 @@ class PlexusJavaCompilerWithOutput {
             }
         };
     }
-    
+
     private String[] getSourceFiles( CompilerConfiguration config ) throws java.io.IOException {
-        
-        final java.util.Set<String> sourceFiles = 
+
+        final java.util.Set<String> sourceFiles =
                     new java.util.HashSet<String>();
         for( java.io.File src : config.getSourceFiles() ) {
             sourceFiles.add( src.getCanonicalPath() );
         }
-        
+
         return sourceFiles.toArray( new String[sourceFiles.size()] );
     }
     /**
-     * 
+     *
      * @param config
-     * @return 
+     * @return
      */
     protected CompilerResult performCompile( CompilerConfiguration config ) throws CompilerException, java.io.IOException {
-        
-        final java.util.Set<String> sourceFiles = 
+
+        final java.util.Set<String> sourceFiles =
                     new java.util.HashSet<String>();
         for( java.io.File src : config.getSourceFiles() ) {
             sourceFiles.add( src.getCanonicalPath() );
         }
-        
-        final String[] compilerArguments = 
+
+        final String[] compilerArguments =
                 org.codehaus.plexus.compiler.javac.JavacCompiler.buildCompilerArguments(config, getSourceFiles(config) );
 
         return compileOutOfProcess( config, getJavacExecutable(config), compilerArguments );
-        
+
     }
 }
 /**
@@ -246,81 +246,81 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
     private static final String DEFAULT_TARGET_VERSION = DEFAULT_SOURCE_VERSION ;
 
     final JavaCompiler systemJavaCompiler = ToolProvider.getSystemJavaCompiler();
-    
+
     final MavenProject      project;
     final MavenSession      session;
     final CompilerManager   plexusCompiler;
     final Toolchain         toolchain;
-    
-    public static JavaCompiler createOutProcess(    Toolchain toolchain, 
-                                                    CompilerManager plexusCompiler, 
-                                                    MavenProject project, 
-                                                    MavenSession session ) 
+
+    public static JavaCompiler createOutProcess(    Toolchain toolchain,
+                                                    CompilerManager plexusCompiler,
+                                                    MavenProject project,
+                                                    MavenSession session )
     {
-     
+
         return new AnnotationProcessorCompiler( toolchain, plexusCompiler, project, session);
     }
 
     public static JavaCompiler createInProcess() {
-     
+
         return ToolProvider.getSystemJavaCompiler();
     }
-    
-    static void printCommand(  final org.codehaus.plexus.compiler.Compiler javac, 
+
+    static void printCommand(  final org.codehaus.plexus.compiler.Compiler javac,
                                 final CompilerConfiguration javacConf,
-                                final java.io.PrintWriter out ) throws CompilerException 
+                                final java.io.PrintWriter out ) throws CompilerException
     {
         out.println();
         out.println();
         out.println( "javac \\");
-        for( String c : javac.createCommandLine(javacConf) ) 
+        for( String c : javac.createCommandLine(javacConf) )
             out.printf( "%s \\\n", c);
         out.println();
         out.println();
         out.println();
 
     }
-    	
 
-   private AnnotationProcessorCompiler( Toolchain toolchain, 
-                                         CompilerManager plexusCompiler, 
-                                         MavenProject project, 
-                                         MavenSession session ) 
+
+   private AnnotationProcessorCompiler( Toolchain toolchain,
+                                         CompilerManager plexusCompiler,
+                                         MavenProject project,
+                                         MavenSession session )
     {
-    
+
         this.project = project;
         this.session = session;
         this.plexusCompiler = plexusCompiler;
         this.toolchain = toolchain;
-                
+
     }
-    
-    
+
+
     private boolean execute(   final Iterable<String> options,
                             final Iterable<? extends JavaFileObject> compilationUnits,
-                            final Writer w ) throws Exception 
+                            final Writer w ) throws Exception
     {
-        final java.io.PrintWriter out =  ((w instanceof java.io.PrintWriter) ? 
+        final java.io.PrintWriter out =  ((w instanceof java.io.PrintWriter) ?
                     ((java.io.PrintWriter)w) : new java.io.PrintWriter(w));
-        
+
         final CompilerConfiguration javacConf = new CompilerConfiguration();
 
         final java.util.Iterator<String> ii = options.iterator();
-      
+
         while( ii.hasNext() ) {
             final String option = ii.next();
-            
+
             if( "-cp".equals(option)) {
                 javacConf.addClasspathEntry(ii.next());
             }
             else if( "-sourcepath".equals(option) ) {
                 String [] sourceLocations = ii.next().split(java.util.regex.Pattern.quote(java.io.File.pathSeparator));
                 for( String path : sourceLocations ) {
-                    
+
                     final java.io.File dir = new java.io.File( path );
                     if( dir.exists() )
                         javacConf.addSourceLocation(path);
-                
+
                 }
                 //javacConf.addCompilerCustomArgument(option, ii.next());
             }
@@ -328,9 +328,9 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
                 javacConf.setProc("only");
             }
             else if( "-processor".equals(option) ) {
-                
+
                 final String processors[] = ii.next().split(",");
-                
+
                 javacConf.setAnnotationProcessors( processors );
             }
             else if( "-d".equals(option) ) {
@@ -347,7 +347,7 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
             }
             else /*if( option.startsWith("-A") ) */  { // view pull #70
                 // Just pass through any other arguments
-                javacConf.addCompilerCustomArgument(option, "");   
+                javacConf.addCompilerCustomArgument(option, "");
             }
         }
         final java.util.Properties props = project.getProperties();
@@ -359,7 +359,7 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
         javacConf.setTargetVersion(targetVersion);
         javacConf.setWorkingDirectory(project.getBasedir());
 
-        final java.util.Set<java.io.File> sourceFiles = 
+        final java.util.Set<java.io.File> sourceFiles =
                 new java.util.HashSet<java.io.File>();
         for( JavaFileObject src : compilationUnits ) {
             sourceFiles.add( new java.io.File( src.toUri() ) );
@@ -369,41 +369,41 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
         javacConf.setDebug(false);
         javacConf.setFork(true);
         javacConf.setVerbose(false);
-            
+
         if( toolchain != null ) {
             final String executable = toolchain.findTool( "javac");
             //out.print( "==> TOOLCHAIN EXECUTABLE: "); out.println( executable );
             javacConf.setExecutable(executable);
         }
-        
+
         CompilerResult result;
-        
+
         // USING STANDARD PLEXUS
         /*
-        final org.codehaus.plexus.systemJavaCompiler.Compiler javac = plexusCompiler.getCompiler("javac");       
+        final org.codehaus.plexus.systemJavaCompiler.Compiler javac = plexusCompiler.getCompiler("javac");
         //printCommand(javac, javacConf, out );
         result = javac.performCompile( javacConf );
-        for( CompilerMessage m : result.getCompilerMessages()) 
+        for( CompilerMessage m : result.getCompilerMessages())
             out.println( m.getMessage() );
         */
-        
+
         // USING CUSTOM PLEXUS
-        
+
         result = PlexusJavaCompilerWithOutput.INSTANCE.performCompile(javacConf);
-        
+
         out.println( result.toString() ); out.flush();
 
         return result.isSuccess();
     }
-    
+
     @Override
     public CompilationTask getTask(
-            final Writer out, 
-            final JavaFileManager fileManager, 
-            final DiagnosticListener<? super JavaFileObject> diagnosticListener, 
-            final Iterable<String> options, 
-            final Iterable<String> classes, 
-            final Iterable<? extends JavaFileObject> compilationUnits) 
+            final Writer out,
+            final JavaFileManager fileManager,
+            final DiagnosticListener<? super JavaFileObject> diagnosticListener,
+            final Iterable<String> options,
+            final Iterable<String> classes,
+            final Iterable<? extends JavaFileObject> compilationUnits)
     {
 
         return new CompilationTask() {
@@ -432,11 +432,11 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
                         public String getMessage(Locale locale) {
                             return ex.getLocalizedMessage();
                         }
-                        
+
                         public String toString() {
                             return ex.getLocalizedMessage();
                         }
-                        
+
                         @Override
                         public JavaFileObject getSource() { return null;}
 
@@ -461,7 +461,7 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
                     });
                     return false;
                 }
-                
+
             }
         };
     }

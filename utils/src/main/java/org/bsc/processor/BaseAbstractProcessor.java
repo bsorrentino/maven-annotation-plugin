@@ -20,6 +20,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
+import static java.util.Optional.empty;
+
 /**
  *
  * @author bsorrentino
@@ -114,6 +116,20 @@ public abstract class BaseAbstractProcessor extends AbstractProcessor {
     
     }
 
+    /**
+     *
+     * @param moduleAndPkg
+     * @param relativeName
+     * @return
+     * @throws IOException
+     */
+    protected FileObject getResourceFormClassPath(
+            String moduleAndPkg,
+            String relativeName ) throws IOException
+    {
+        return processingEnv.getFiler()
+                .getResource(StandardLocation.CLASS_PATH, moduleAndPkg, relativeName);
+    }
 
     /**
      * 
@@ -127,15 +143,12 @@ public abstract class BaseAbstractProcessor extends AbstractProcessor {
                 Path filePath ) throws IOException 
     {
 
-        final Filer filer = processingEnv.getFiler();
-        
-    	final Element e = null;
-    	FileObject res = filer.createResource(
-                            StandardLocation.SOURCE_OUTPUT, 
-                            subfolder.toString(), 
-                            filePath.toString(), 
-                            e);
-        return res;
+    	return processingEnv.getFiler()
+                .createResource( StandardLocation.SOURCE_OUTPUT,
+                                subfolder.toString(),
+                                filePath.toString(),
+                                null);
+
     }
     
 

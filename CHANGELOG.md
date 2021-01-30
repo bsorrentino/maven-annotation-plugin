@@ -2,8 +2,53 @@
 
 <!-- Changelog for bsorrentino maven-annotation-plugin. -->
 
-## v4.4-jdk8
+## v4.5
 ### Generic changes
+
+**move to next release version**
+
+
+[40104ab73dbdfcc](https://github.com/bsorrentino/maven-annotation-plugin/commit/40104ab73dbdfcc) bsorrentino *2020-12-22 19:59:56*
+
+**update readme**
+
+
+[f2157b94079e3f6](https://github.com/bsorrentino/maven-annotation-plugin/commit/f2157b94079e3f6) bsorrentino *2020-12-22 19:59:39*
+
+**update github action**
+
+
+[c9bbd784644aefe](https://github.com/bsorrentino/maven-annotation-plugin/commit/c9bbd784644aefe) bsorrentino *2020-12-20 11:36:22*
+
+**update action**
+
+
+[a37e57eecd1c514](https://github.com/bsorrentino/maven-annotation-plugin/commit/a37e57eecd1c514) bsorrentino *2020-12-18 18:03:18*
+
+**add deploy snapshot action**
+
+
+[1a62f83c9c2e134](https://github.com/bsorrentino/maven-annotation-plugin/commit/1a62f83c9c2e134) bsorrentino *2020-12-18 18:01:12*
+
+**move to next development version**
+
+
+[34f80508b633983](https://github.com/bsorrentino/maven-annotation-plugin/commit/34f80508b633983) bsorrentino *2020-12-18 17:57:35*
+
+**update pipeline**
+
+
+[449538aead2b795](https://github.com/bsorrentino/maven-annotation-plugin/commit/449538aead2b795) bsorrentino *2020-11-11 14:56:21*
+
+**update pipeline name**
+
+
+[a912315c5132141](https://github.com/bsorrentino/maven-annotation-plugin/commit/a912315c5132141) bsorrentino *2020-11-11 14:12:31*
+
+**update pipeline name**
+
+
+[7c5498865dedc9f](https://github.com/bsorrentino/maven-annotation-plugin/commit/7c5498865dedc9f) bsorrentino *2020-11-11 14:12:15*
 
 **update pipeline for deploy**
 
@@ -35,11 +80,6 @@
 
 [a4256123aa4dfa6](https://github.com/bsorrentino/maven-annotation-plugin/commit/a4256123aa4dfa6) bsorrentino *2020-11-11 12:34:56*
 
-**add maven settings template for deployment**
-
-
-[2acea52e933f163](https://github.com/bsorrentino/maven-annotation-plugin/commit/2acea52e933f163) bsorrentino *2020-11-11 12:29:13*
-
 **Update jdk8-deploy.yml**
 
 
@@ -51,10 +91,15 @@
 
 [ea63a545f2081dd](https://github.com/bsorrentino/maven-annotation-plugin/commit/ea63a545f2081dd) bsorrentino *2020-11-11 12:09:01*
 
-**update processor sources file list**
+**Bump junit from 4.13 to 4.13.1**
 
+ * Bumps [junit](https://github.com/junit-team/junit4) from 4.13 to 4.13.1.
+ * - [Release notes](https://github.com/junit-team/junit4/releases)
+ * - [Changelog](https://github.com/junit-team/junit4/blob/main/doc/ReleaseNotes4.13.1.md)
+ * - [Commits](https://github.com/junit-team/junit4/compare/r4.13...r4.13.1)
+ * Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
 
-[a2b1cfdc58d3237](https://github.com/bsorrentino/maven-annotation-plugin/commit/a2b1cfdc58d3237) bsorrentino *2020-11-11 08:33:20*
+[216fdcb2670c962](https://github.com/bsorrentino/maven-annotation-plugin/commit/216fdcb2670c962) dependabot[bot] *2020-10-12 17:46:11*
 
 **ignore .maven-processor-source-files.txt**
 
@@ -71,74 +116,6 @@
 
 [6ac0e23c32dbc23](https://github.com/bsorrentino/maven-annotation-plugin/commit/6ac0e23c32dbc23) bartolomeo sorrentino *2020-10-01 14:50:58*
 
-**Start 4.3-SNAPSHOT development**
-
-
-[be4e8404052f7e6](https://github.com/bsorrentino/maven-annotation-plugin/commit/be4e8404052f7e6) Martijn Dashorst *2020-09-23 09:37:39*
-
-**Implement lastModified check for sources**
-
- * The annotation processor should be able to skip the annotation
- * processing if the sources haven&#39;t changed since the last processing.
- * This will speed up project builds considerably since for example the
- * JPA metamodel generator will not run if the entities haven&#39;t been
- * modified, which will save the compiler of having to recompile your
- * whole module.
- * Using the option `skipWithoutSourceChanges` you can enable this
- * behavior. By default it is turned off to maintain the current behavior.
- * This change doesn&#39;t track individual files, as there need not be a 1-1
- * mapping between the origin of the annotation processor and the
- * generated sources. The plugin rather determines from all source
- * locations what the most recent last modified time is, and does the same
- * for all the files in the output folder.
- * This cuts down rebuild times on my current project by a half or so
- * (going from over 2 minutes to just 1 minute).
-
-[30861dbad2fef67](https://github.com/bsorrentino/maven-annotation-plugin/commit/30861dbad2fef67) Martijn Dashorst *2020-09-23 09:37:39*
-
-**uodate site-maven-plugin version**
-
-
-[c6dbeb9bb1e5709](https://github.com/bsorrentino/maven-annotation-plugin/commit/c6dbeb9bb1e5709) bsorrentino *2020-08-05 16:15:28*
-
-**clean code**
-
-
-[ac57d4884350a9c](https://github.com/bsorrentino/maven-annotation-plugin/commit/ac57d4884350a9c) bsorrentino *2020-07-31 09:35:06*
-
-**move to next developer version**
-
-
-[08235617ae9b1d2](https://github.com/bsorrentino/maven-annotation-plugin/commit/08235617ae9b1d2) bsorrentino *2020-07-31 08:28:15*
-
-**update readme**
-
-
-[13aa52ade58dcae](https://github.com/bsorrentino/maven-annotation-plugin/commit/13aa52ade58dcae) bsorrentino *2020-07-31 08:00:05*
-
-
-###  [#82](https://github.com/bsorrentino/maven-annotation-plugin/issues/82) New v4.0 does not support Java 8    *enhancement*  *work in progress*  
-
-**issue #82 - fix java8 inference issue**
-
-
-[cb2b73897df4b2f](https://github.com/bsorrentino/maven-annotation-plugin/commit/cb2b73897df4b2f) bartolomeo sorrentino *2020-11-10 22:55:56*
-
-**issue #82 - merge version 4.4**
-
-
-[36937d076b6c0ab](https://github.com/bsorrentino/maven-annotation-plugin/commit/36937d076b6c0ab) bartolomeo sorrentino *2020-11-10 22:54:56*
-
-
-###  [#85](https://github.com/bsorrentino/maven-annotation-plugin/pull/85) Utilize lastModified times of source and output to skip annotation processing    *work in progress*  
-
-**merged PR #85**
-
- * renamed property from &#39;skipWithoutSourceChanges&#39; to &#39;skipSourcesUnchanged&#39;
- * put PR code in a new method &#39;isSourcesUnchanged( List&lt;&gt; allSources )&#39;
-
-[2bf7bedb068e64d](https://github.com/bsorrentino/maven-annotation-plugin/commit/2bf7bedb068e64d) bsorrentino *2020-09-24 10:03:51*
-
 
 ###  [#88](https://github.com/bsorrentino/maven-annotation-plugin/pull/88) Bump junit from 4.13 to 4.13.1    *dependencies*  
 
@@ -146,6 +123,14 @@
 
 
 [09f5891b057c736](https://github.com/bsorrentino/maven-annotation-plugin/commit/09f5891b057c736) bsorrentino *2020-11-11 13:54:22*
+
+
+###  [#90](https://github.com/bsorrentino/maven-annotation-plugin/issues/90) Encoding not applied when the compiler is forked    *bug*  
+
+**issue #90 pass encoding parameter to java compiler**
+
+
+[8db490605285224](https://github.com/bsorrentino/maven-annotation-plugin/commit/8db490605285224) bsorrentino *2020-12-18 17:56:31*
 
 
 ## v4.4
@@ -369,6 +354,7 @@
 
 **add test module**
 
+###  [#82](https://github.com/bsorrentino/maven-annotation-plugin/issues/82) New v4.0 does not support Java 8    *enhancement*  *work in progress*  
 
 [3db821f8c8e7225](https://github.com/bsorrentino/maven-annotation-plugin/commit/3db821f8c8e7225) bartolomeo sorrentino *2020-07-22 08:45:24*
 
@@ -1285,5 +1271,3 @@
  * git-svn-id: https://projectname.googlecode.com/svn/trunk@2 c416075f-80b4-e980-4839-00ea3ed24e77
 
 [22a3c1b1a9be1a6](https://github.com/bsorrentino/maven-annotation-plugin/commit/22a3c1b1a9be1a6) valery.isaev@gmail.com *2011-03-13 00:01:25*
-
-
