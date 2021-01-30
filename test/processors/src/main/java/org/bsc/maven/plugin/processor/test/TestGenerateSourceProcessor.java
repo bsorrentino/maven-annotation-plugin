@@ -32,12 +32,18 @@ import static java.lang.String.format;
  * 
  * 
  */
-//@SupportedSourceVersion(SourceVersion.RELEASE_8)
-@SupportedSourceVersion(SourceVersion.RELEASE_9)
+@SupportedSourceVersion(SourceVersion.RELEASE_8)
 //@SupportedOptions( {"subfolder", "filepath", "templateUri"})
 @SupportedAnnotationTypes( { "org.bsc.maven.plugin.processor.test.GenerateClass" })
 public class TestGenerateSourceProcessor extends BaseAbstractProcessor {
 
+    void copy(java.io.InputStream source, java.io.OutputStream target) throws IOException {
+        byte[] buf = new byte[8192];
+        int length;
+        while ((length = source.read(buf)) > 0) {
+            target.write(buf, 0, length);
+        }
+    }
     void writeSourceCode( Element e ) {
 
         final java.net.URL url =  getClass().getClassLoader().getResource("GeneratedClass_java.txt");
@@ -46,7 +52,7 @@ public class TestGenerateSourceProcessor extends BaseAbstractProcessor {
             final FileObject source = super.createSourceOutputFile( Paths.get("test"), Paths.get("GeneratedClass.java") );
 
             try( java.io.OutputStream os = source.openOutputStream(); java.io.InputStream is = url.openStream() ) {
-                os.write(is.readAllBytes());
+                copy( is, os );
             }
 
         } catch (Exception ex) {
