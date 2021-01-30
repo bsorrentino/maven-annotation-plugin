@@ -40,8 +40,8 @@ This plugin was born as the 'alter ego' of maven apt plugin [apt-maven-plugin](h
 **Jul 30, 2020** | [Release 4.1-jdk8](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.1-jdk8) | Maintenance release compatible with JDK8
 **Jul 21, 2020** | [Release 4.0-jdk8](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-jdk8) | Maintenance release compatible with JDK8
 **Jul 18, 2020** | [Release 4.0](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0) | Release based on JDK9 and above
-**Apr 17, 2020** | [Release 4.0-rc1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-rc1) | 
-**Mar 02, 2020** | [Release 4.0-beta1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-beta1) | 
+**Apr 17, 2020** | [Release 4.0-rc1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-rc1) |
+**Mar 02, 2020** | [Release 4.0-beta1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.0-beta1) |
 
 ## History
 
