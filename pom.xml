@@ -3,7 +3,7 @@
   <groupId>org.bsc.maven</groupId>
   <artifactId>maven-processor-plugin-parent</artifactId>
   <packaging>pom</packaging>
-  <version>4.6-SNAPSHOT</version>
+  <version>5.0-SNAPSHOT</version>
   <name>MAVEN PROCESSOR PLUGIN PARENT</name>
   <description>A maven plugin to process annotation for jdk6 at compile time
 
@@ -35,6 +35,11 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
       <snapshot.repo.url>https://oss.sonatype.org/content/repositories/snapshots</snapshot.repo.url>
       <release.repo.id>sonatype-repo</release.repo.id>
       <release.repo.url>https://oss.sonatype.org/service/local/staging/deploy/maven2</release.repo.url>
+
+      <maven.version>3.5.4</maven.version>
+      <maven.plugin.version>3.6.0</maven.plugin.version>
+      <plexus.compiler.version>2.8.3</plexus.compiler.version>
+
   </properties>
 
   <scm>
@@ -81,9 +86,41 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
         <module>utils</module>
         <module>test/processors</module>
         <module>test/app</module>
+        <module>compiler</module>
     </modules>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-core</artifactId>
+                <version>${maven.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-plugin-api</artifactId>
+                <version>${maven.plugin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.plugin-tools</groupId>
+                <artifactId>maven-plugin-annotations</artifactId>
+                <version>${maven.plugin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-compiler-api</artifactId>
+                <version>${plexus.compiler.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-compiler-manager</artifactId>
+                <version>${plexus.compiler.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-compiler-javac</artifactId>
+                <version>${plexus.compiler.version}</version>
+                <scope>compile</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -124,6 +161,18 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.1.1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <version>${maven.plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.4</version>
             </plugin>
         </plugins>
 
@@ -249,6 +298,10 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
                 <maven.compiler.source>1.8</maven.compiler.source>
                 <maven.compiler.target>1.8</maven.compiler.target>
             </properties>
+
+            <modules>
+
+            </modules>
 
         </profile>
 
