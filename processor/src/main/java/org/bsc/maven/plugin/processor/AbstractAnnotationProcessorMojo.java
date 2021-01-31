@@ -612,7 +612,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         // use atomic long for effectively final wrapper around long variable
         final AtomicLong maxOutputDate = new AtomicLong(Long.MIN_VALUE);
 
-        Files.walkFileTree(outputDirectory.toPath(), new SimpleFileVisitor<>() {
+        Files.walkFileTree(outputDirectory.toPath(), new SimpleFileVisitor<java.nio.file.Path>() {
             @Override public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
                     throws IOException
             {
