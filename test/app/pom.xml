@@ -50,13 +50,13 @@ PROCESSOR PLUGIN
         <artifactId>maven-processor-plugin</artifactId>
         <version>${project.version}</version>
         <executions>
-            <execution>
 
-                <id>process</id>
+            <execution>
+                <id>test</id>
                 <goals>
                     <goal>process</goal>
                 </goals>
-                <phase>process-sources</phase>
+                <!--phase>process-sources</phase-->
                 <configuration>
                     <!--
                     <additionalSourceDirectories>
@@ -102,7 +102,7 @@ PROCESSOR PLUGIN
             </execution>
         </executions>
     </plugin>
-
+<!--
     <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
@@ -134,11 +134,53 @@ PROCESSOR PLUGIN
 
         </executions>
     </plugin>
+-->
 </plugins>
 
 </build>
 
 <profiles>
+
+    <profile>
+        <id>issue93</id>
+        <dependencies>
+
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>3.2.1</version>
+                <classifier>sources</classifier>
+            </dependency>
+        </dependencies>
+        <build>
+            <plugins>
+                <plugin>
+                <groupId>org.bsc.maven</groupId>
+                <artifactId>maven-processor-plugin</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <id>issue93</id>
+                        <goals><goal>process</goal></goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <appendSourceArtifacts>true</appendSourceArtifacts>
+                            <processSourceArtifacts>
+                                <processSourceArtifact>commons-collections:commons-collections</processSourceArtifact>
+                            </processSourceArtifacts>
+                            <failOnError>true</failOnError>
+                            <processors>
+                                <processor>org.bsc.maven.plugin.processor.test.TestGenerateSourceProcessor</processor>
+                            </processors>
+                        </configuration>
+                    </execution>
+                </executions>
+                </plugin>
+
+            </plugins>
+
+        </build>
+    </profile>
     <profile>
         <id>docker</id>
         <build>
@@ -194,6 +236,7 @@ PROCESSOR PLUGIN
 
         </build>
     </profile>
+
     <profile>
         <id>toolchain</id>
         <build>
