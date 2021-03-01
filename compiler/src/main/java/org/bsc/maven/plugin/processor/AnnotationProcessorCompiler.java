@@ -5,21 +5,6 @@
  */
 package org.bsc.maven.plugin.processor;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Writer;
-import java.nio.charset.Charset;
-import java.util.Locale;
-import java.util.Set;
-import javax.annotation.processing.Processor;
-import javax.lang.model.SourceVersion;
-import javax.tools.Diagnostic;
-import javax.tools.DiagnosticListener;
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileManager;
-import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.ToolProvider;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.toolchain.Toolchain;
@@ -32,6 +17,21 @@ import org.codehaus.plexus.util.Os;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.Commandline;
+
+import javax.annotation.processing.Processor;
+import javax.lang.model.SourceVersion;
+import javax.tools.*;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Writer;
+import java.nio.charset.Charset;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static java.util.Optional.ofNullable;
 
 class PlexusJavaCompilerWithOutput {
 
@@ -250,7 +250,7 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
     final MavenProject      project;
     final MavenSession      session;
     final CompilerManager   plexusCompiler;
-    final Toolchain         toolchain;
+    final Toolchain         _toolchain;
     
     public static JavaCompiler createOutProcess(    Toolchain toolchain, 
                                                     CompilerManager plexusCompiler, 
@@ -291,12 +291,15 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
         this.project = project;
         this.session = session;
         this.plexusCompiler = plexusCompiler;
-        this.toolchain = toolchain;
+        this._toolchain = toolchain;
                 
     }
-    
-    
-    private boolean execute(   final Iterable<String> options,
+
+    public Optional<Toolchain> getToolchain() {
+        return ofNullable(_toolchain);
+    }
+
+    private boolean execute(final Iterable<String> options,
                             final Iterable<? extends JavaFileObject> compilationUnits,
                             final Writer w ) throws Exception 
     {
@@ -360,21 +363,24 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
         javacConf.setWorkingDirectory(project.getBasedir());
 
         final java.util.Set<java.io.File> sourceFiles = 
-                new java.util.HashSet<java.io.File>();
-        for( JavaFileObject src : compilationUnits ) {
-            sourceFiles.add( new java.io.File( src.toUri() ) );
-        }
+            StreamSupport.stream( compilationUnits.spliterator(), false )
+                .map( unit -> unit.toUri() )
+                //.peek( System.out::println )
+                //.filter( uri -> "file".equalsIgnoreCase(uri.getScheme()))
+                .map( java.io.File::new )
+                .collect(Collectors.toSet())
+                ;
 
         javacConf.setSourceFiles(sourceFiles);
         javacConf.setDebug(false);
         javacConf.setFork(true);
         javacConf.setVerbose(false);
             
-        if( toolchain != null ) {
+        getToolchain().ifPresent( toolchain -> {
             final String executable = toolchain.findTool( "javac");
             //out.print( "==> TOOLCHAIN EXECUTABLE: "); out.println( executable );
             javacConf.setExecutable(executable);
-        }
+        });
         
         CompilerResult result;
         

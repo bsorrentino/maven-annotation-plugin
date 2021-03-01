@@ -668,32 +668,6 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         }
     }
 
-    private void extractSourcesFromArtifact( Artifact artifact, java.util.List<JavaFileObject> allSources ) {
-
-        final File f = artifact.getFile();
-
-        try {
-
-            final ZipFile zipFile = new ZipFile(f);
-            final Enumeration<? extends ZipEntry> entries = zipFile.entries();
-            int sourceCount = 0;
-
-            while (entries.hasMoreElements()) {
-                final ZipEntry entry = entries.nextElement();
-
-                if (entry.getName().endsWith(".java")) {
-                    ++sourceCount;
-                    allSources.add(ZipFileObject.create(zipFile, entry));
-                }
-            }
-            getLog().debug(format("** Discovered %d java sources in %s", sourceCount, f.getAbsolutePath()));
-
-        } catch (Exception ex) {
-            getLog().warn(format("Problem reading source archive [%s]", f.getPath()));
-            getLog().debug(ex);
-        }
-    }
-
     private void executeWithExceptionsHandled() throws Exception
     {
         if (outputDirectory == null)
@@ -790,13 +764,6 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
         }
 
-        //
-        // add to allSource the files coming out from source archives
-        // 
-        final java.util.List<JavaFileObject> allSources = new java.util.ArrayList<>();
-        
-        processSourceArtifacts( artifact ->
-                extractSourcesFromArtifact( artifact, allSources) );
 
         final java.util.Map<String,String> jdkToolchain = 
                     java.util.Collections.emptyMap();
@@ -804,11 +771,26 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         final Toolchain tc = getToolchain(jdkToolchain);
         
         // If toolchain is set force fork compilation
-        if( tc != null ) { fork = true; }
+        fork = ( tc != null );
         
         if( fork ) { getLog().debug( "PROCESSOR COMPILER FORKED!"); }
-        
+
+        //
+        // add to allSource the files coming out from source archives
+        //
+        final java.util.List<JavaFileObject> allSources = new java.util.ArrayList<>();
+
+        final UnzipService unzip = UnzipService.newInstance( getLog() );
+
+        if( fork ) {
+          processSourceArtifacts( artifact -> unzip.extractSourcesFromArtifactToTempDirectory( artifact, allSources ) );
+        }
+        else {
+          processSourceArtifacts( artifact -> unzip.extractSourcesFromArtifact(artifact, allSources) );
+        }
+
         //compileLock.lock();
+
         try {
 
             final JavaCompiler compiler = (fork) ?
