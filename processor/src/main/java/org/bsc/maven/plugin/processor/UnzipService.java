@@ -12,14 +12,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Enumeration;
-import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
-import static java.util.Optional.empty;
 
 /**
  *
@@ -120,26 +117,25 @@ public final class UnzipService {
     requireNonNull( artifact, "artifact argument is null!");
     requireNonNull( allSources, "allSources argument is null!");
 
-    final File f = artifact.getFile();
+    final int size = allSources.size();
+
+    final File fileZip = artifact.getFile();
 
     try {
-
-      final ZipFile zipFile = new ZipFile(f);
+      final ZipFile zipFile = new ZipFile(fileZip);
       final Enumeration<? extends ZipEntry> entries = zipFile.entries();
-      int sourceCount = 0;
 
       while (entries.hasMoreElements()) {
         final ZipEntry entry = entries.nextElement();
 
         if (isJavaEntry(entry)) {
-          ++sourceCount;
           allSources.add(ZipFileObject.create(zipFile, entry));
         }
       }
-      log.debug(format("** Discovered %d java sources in %s", sourceCount, f.getAbsolutePath()));
+      log.info(format("Discovered [%d] java sources in artifact [%s]", allSources.size()-size, artifact));
 
     } catch (Exception ex) {
-      log.warn(format("Problem reading source archive [%s]", f.getPath()));
+      log.warn(format("Problem reading source archive [%s]", fileZip.getPath()));
       log.debug(ex);
     }
   }
@@ -147,6 +143,8 @@ public final class UnzipService {
   public final void extractSourcesFromArtifactToTempDirectory(Artifact artifact, java.util.List<JavaFileObject> allSources ) {
     requireNonNull( artifact, "artifact argument is null!");
     requireNonNull( allSources, "allSources argument is null!");
+
+    final int size = allSources.size();
 
     final File fileZip = artifact.getFile();
 
@@ -159,13 +157,15 @@ public final class UnzipService {
       return;
     }
 
-    try( final ZipInputStream zis = new ZipInputStream(new FileInputStream(fileZip)) ) {
+    try( final ZipFile zipFile = new ZipFile(fileZip) ) {
 
       final byte[] buffer = new byte[4096];
 
-      ZipEntry zipEntry = zis.getNextEntry();
+      final Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
-      while (zipEntry != null) {
+      while (entries.hasMoreElements()) {
+
+        final ZipEntry zipEntry = entries.nextElement();
 
         final Path newFile = Paths.get(root.toString(), zipEntry.getName());
 
@@ -175,19 +175,18 @@ public final class UnzipService {
 
         } else if (isJavaEntry(zipEntry)) {
 
-          try (final FileOutputStream fos = new FileOutputStream(newFile.toFile())) {
+          try (final FileOutputStream fos = new FileOutputStream(newFile.toFile());
+               final InputStream zis = zipFile.getInputStream(zipEntry) )
+          {
             int len;
             while ((len = zis.read(buffer)) > 0) {
               fos.write(buffer, 0, len);
             }
             allSources.add( new ZipFileObjectExtracted(newFile.toUri(), JavaFileObject.Kind.SOURCE));
-
           }
 
         }
-        zipEntry = zis.getNextEntry();
       }
-      zis.closeEntry();
     }
     catch( Exception ex ) {
       log.warn(format("Problem reading source archive [%s]", fileZip));
@@ -195,6 +194,6 @@ public final class UnzipService {
 
     }
 
-    log.info( format( "artifact [%s] succesfully extracted to [%s]", artifact, root));
+    log.info( format( "[%d] sources succesfully extracted from artifact [%s] to:\n [%s]", allSources.size()-size, artifact, root));
   }
 }
