@@ -64,10 +64,14 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import static java.lang.String.format;
+import static java.util.Optional.empty;
+import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.joining;
 
 // 3.0.5
 /*
@@ -81,9 +85,6 @@ import org.sonatype.aether.resolution.ArtifactResult;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
 */
 // 3.1.0
-import static java.lang.String.format;
-import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.joining;
 
 
 /**
@@ -612,7 +613,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         // use atomic long for effectively final wrapper around long variable
         final AtomicLong maxOutputDate = new AtomicLong(Long.MIN_VALUE);
 
-        Files.walkFileTree(outputDirectory.toPath(), new SimpleFileVisitor<>() {
+        Files.walkFileTree(outputDirectory.toPath(), new SimpleFileVisitor<java.nio.file.Path>() {
             @Override public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
                     throws IOException
             {
@@ -687,12 +688,10 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         if( addCompileSourceRoots ) {
             final java.util.List<String> sourceRoots = project.getCompileSourceRoots();
             if( sourceRoots != null ) {
-                
                 for( String s : sourceRoots ) {         
                     sourceDirs.add( new File(s) );
                 }
             }
-
         }
 
         if( additionalSourceDirectories != null && !additionalSourceDirectories.isEmpty() ) {
@@ -765,37 +764,6 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
 
         }
 
-        //
-        // add to allSource the files coming out from source archives
-        // 
-        final List<JavaFileObject> allSources = new java.util.ArrayList<>();
-        
-        processSourceArtifacts( artifact -> {
-            try {
-
-                File f = artifact.getFile();
-
-                ZipFile zipFile = new ZipFile(f);
-                Enumeration<? extends ZipEntry> entries = zipFile.entries();
-                int sourceCount = 0;
-
-                while (entries.hasMoreElements()) {
-                    final ZipEntry entry = entries.nextElement();
-
-                    if (entry.getName().endsWith(".java")) {
-                        ++sourceCount;
-                        allSources.add(ZipFileObject.create(zipFile, entry));
-
-                    }
-                }
-
-                getLog().debug(format("** Discovered %d java sources in %s", sourceCount, f.getAbsolutePath()));
-
-            } catch (Exception ex) {
-                getLog().warn(format("Problem reading source archive [%s]", artifact.getFile().getPath()));
-                getLog().debug(ex);
-            }
-        });
 
         final java.util.Map<String,String> jdkToolchain = 
                     java.util.Collections.emptyMap();
@@ -803,15 +771,26 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         final Toolchain tc = getToolchain(jdkToolchain);
         
         // If toolchain is set force fork compilation
-        if( tc != null ) {
-            fork = true;
-        }
+        fork = ( tc != null );
         
+        if( fork ) { getLog().debug( "PROCESSOR COMPILER FORKED!"); }
+
+        //
+        // add to allSource the files coming out from source archives
+        //
+        final java.util.List<JavaFileObject> allSources = new java.util.ArrayList<>();
+
+        final UnzipService unzip = UnzipService.newInstance( getLog() );
+
         if( fork ) {
-            getLog().debug( "PROCESSOR COMPILER FORKED!");
+          processSourceArtifacts( artifact -> unzip.extractSourcesFromArtifactToTempDirectory( artifact, allSources ) );
         }
-        
+        else {
+          processSourceArtifacts( artifact -> unzip.extractSourcesFromArtifact(artifact, allSources) );
+        }
+
         //compileLock.lock();
+
         try {
 
             final JavaCompiler compiler = (fork) ?
@@ -836,7 +815,6 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
             if( files!=null && !files.isEmpty() ) {
                        
                 for( JavaFileObject f : fileManager.getJavaFileObjectsFromFiles(files) ) {
-                    
                     allSources.add(f);
                 };
 
@@ -851,7 +829,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
                 getLog().info( "no source file(s) change(s) detected! Processor task will be skipped");
                 return;
             }
-            final List<String> options = prepareOptions( compiler );
+            final java.util.List<String> options = prepareOptions( compiler );
 
             final CompilationTask task = compiler.getTask(
                     new PrintWriter(System.out),
@@ -953,37 +931,28 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         
         for( String a : processSourceArtifacts ) {
             
-            if( a == null || a.isEmpty() ) {
-                continue;
-            }
+            if( a == null || a.isEmpty() ) continue;
             
             final String [] token = a.split(":");
             
             final boolean matchGroupId = dep.getGroupId().equals(token[0]);
             
-            if( !matchGroupId ) {
-                continue;
-            }
+            if( !matchGroupId ) continue;
             
-            if( token.length == 1 ) {
-                return true;
-            }
+            if( token.length == 1 ) return true;
             
-            if( token[1].equals("*") ) {
-                return true;
-                
-            }
-            
+            if( token[1].equals("*") ) return true;
+
             return dep.getArtifactId().equals(token[1]);
             
         }
         return false;
     }
     
-    private Artifact resolveSourceArtifact( Artifact dep ) throws ArtifactResolutionException {
+    private Optional<Artifact> resolveSourceArtifact( Artifact dep ) throws ArtifactResolutionException {
     
         if( !matchArtifact(dep) ) {
-            return null;
+            return empty();
         }
         
         final ArtifactTypeRegistry typeReg = repoSession.getArtifactTypeRegistry();
@@ -1004,7 +973,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
        
         final ArtifactResult result = repoSystem.resolveArtifact( repoSession, request );
           
-        return RepositoryUtils.toArtifact(result.getArtifact());
+        return ofNullable(RepositoryUtils.toArtifact(result.getArtifact()));
     }
     
     private void processSourceArtifacts( Consumer<Artifact>  closure ) {
@@ -1020,11 +989,8 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
             }
             else {
                 try {
-                    final Artifact sourcesDep = resolveSourceArtifact(dep);
-                    if( sourcesDep != null ) {
-                        closure.accept(sourcesDep);
-                    }
-                    
+                    resolveSourceArtifact(dep).ifPresent(closure::accept);
+
                 } catch (ArtifactResolutionException ex) {              
                     getLog().warn( format(" sources for artifact [%s] not found!", dep.toString()));
                     getLog().debug(ex);

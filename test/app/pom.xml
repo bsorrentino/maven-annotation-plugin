@@ -1,0 +1,272 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.bsc.maven</groupId>
+    <artifactId>maven-processor-plugin-test-app</artifactId>
+    <packaging>jar</packaging>
+    <name>MAVEN PROCESSOR PLUGIN TEST</name>
+    <description></description>
+
+    <parent>
+        <groupId>org.bsc.maven</groupId>
+        <artifactId>maven-processor-plugin-parent</artifactId>
+        <version>5.0-rc1</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+  <dependencies>
+
+      <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>maven-processor-plugin-test-processors</artifactId>
+          <version>${project.version}</version>
+      </dependency>
+
+  </dependencies>
+
+<build>
+
+<pluginManagement>
+    <plugins>
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>1.7</version>
+        </plugin>
+    </plugins>
+
+</pluginManagement>
+<plugins>
+
+<!--
+===================================================================
+PROCESSOR PLUGIN
+===================================================================
+ -->
+
+    <plugin>
+        <groupId>org.bsc.maven</groupId>
+        <artifactId>maven-processor-plugin</artifactId>
+        <version>${project.version}</version>
+        <executions>
+
+            <execution>
+                <id>test</id>
+                <goals>
+                    <goal>process</goal>
+                </goals>
+                <!--phase>process-sources</phase-->
+                <configuration>
+                    <!--
+                    <additionalSourceDirectories>
+                        <item>${basedir}/src/main/java</item>
+                    </additionalSourceDirectories>
+                    -->
+                    <addOutputDirectoryToCompilationSources>true</addOutputDirectoryToCompilationSources>
+                    <failOnError>false</failOnError>
+                    <skipSourcesUnchanged>false</skipSourcesUnchanged>
+                    <processors>
+                        <processor>org.bsc.maven.plugin.processor.test.TestGenerateSourceProcessor</processor>
+                    </processors>
+                    <!--
+                    <options>
+                        <test>false</test>
+                    </options>
+                    -->
+                </configuration>
+
+                <!--
+                <execution>
+                    <id>process-test</id>
+                    <goals>
+                        <goal>process-test</goal>
+                    </goals>
+                    <phase>process-test-classes</phase>
+                    <configuration>
+                        <additionalSourceDirectories>
+                            <item>${user.home}/src</item>
+                            <item>src/main/java</item>
+                        </additionalSourceDirectories>
+                        <failOnError>false</failOnError>
+                        <processors>
+                            <processor>org.bsc.maven.plugin.processor.test.TestGenerateSourceProcessor</processor>
+                        </processors>
+                        <options>
+                            <test>true</test>
+                        </options>
+                    </configuration>
+                </execution>
+                -->
+
+            </execution>
+        </executions>
+    </plugin>
+<!--
+    <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+            <execution>
+                <id>add-source</id>
+                <phase>generate-sources</phase>
+                <goals>
+                    <goal>add-source</goal>
+                </goals>
+                <configuration>
+                    <sources>
+                        <source>${basedir}/src-generated/src</source>
+                    </sources>
+                </configuration>
+            </execution>
+            <execution>
+                <id>add-test-source</id>
+                <phase>generate-test-sources</phase>
+                <goals>
+                    <goal>add-test-source</goal>
+                </goals>
+                <configuration>
+                    <sources>
+                        <source>${basedir}/src-generated/test</source>
+                    </sources>
+                </configuration>
+            </execution>
+
+        </executions>
+    </plugin>
+-->
+</plugins>
+
+</build>
+
+<profiles>
+
+    <profile>
+        <id>issue93</id>
+        <dependencies>
+
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>3.2.1</version>
+                <classifier>sources</classifier>
+            </dependency>
+        </dependencies>
+        <build>
+            <plugins>
+                <plugin>
+                <groupId>org.bsc.maven</groupId>
+                <artifactId>maven-processor-plugin</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <id>issue93</id>
+                        <goals><goal>process</goal></goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <appendSourceArtifacts>true</appendSourceArtifacts>
+                            <processSourceArtifacts>
+                                <processSourceArtifact>commons-collections:commons-collections</processSourceArtifact>
+                            </processSourceArtifacts>
+                            <failOnError>true</failOnError>
+                            <processors>
+                                <processor>org.bsc.maven.plugin.processor.test.TestGenerateSourceProcessor</processor>
+                            </processors>
+                        </configuration>
+                    </execution>
+                </executions>
+                </plugin>
+
+            </plugins>
+
+        </build>
+    </profile>
+    <profile>
+        <id>docker</id>
+        <build>
+            <plugins>
+
+                <plugin>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <extensions>true</extensions> <!-- enables using 'docker' packaging above -->
+                    <configuration>
+                        <logDate>default</logDate>
+                        <verbose>true</verbose>
+                        <imagePullPolicy>IfNotPresent</imagePullPolicy>
+                        <!--
+                        mvn -Pdocker docker:volume-create
+                        -->
+                        <volumes>
+                            <volume>
+                                <name>mvn-repo</name>
+                                <driver>local</driver>
+                            </volume>
+                        </volumes>
+                        <images>
+                            <image>
+                                <name>maven-3.5.4-jdk9</name>
+                                <!--
+                                mvn -Pdocker docker:build
+                                -->
+                                <build>
+                                    <contextDir>.</contextDir>
+                                    <tags>
+                                        <tag>latest</tag>
+                                        <tag>${project.version}</tag>
+                                    </tags>
+                                </build>
+                                <!--
+                                mvn -Pdocker docker:build
+                                -->
+                                <run>
+                                    <volumes>
+                                        <bind>
+                                            <volume>mvn-repo:/usr/share/maven/ref/repository</volume>
+                                            <volume>${project.basedir}:/home</volume>
+                                        </bind>
+                                    </volumes>
+                                    <cmd>mvn -Ptoolchain clean package -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true</cmd>
+                                </run>
+                            </image>
+                        </images>
+                    </configuration>
+                </plugin>
+            </plugins>
+
+        </build>
+    </profile>
+
+    <profile>
+        <id>toolchain</id>
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-toolchains-plugin</artifactId>
+                    <version>3.0.0</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>toolchain</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <toolchains>
+                            <jdk>
+                                <version>[9,)</version>
+                                <vendor>open</vendor>
+                            </jdk>
+                        </toolchains>
+                    </configuration>
+                </plugin>
+
+            </plugins>
+
+        </build>
+    </profile>
+
+</profiles>
+
+</project>

@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>maven-processor-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <name>MAVEN PROCESSOR PLUGIN</name>
+  <name>MAVEN PROCESSOR PLUGIN (JDK8)</name>
   <description>A maven plugin to process annotation for jdk6 at compile time
 
 This plugin helps to use from maven the new annotation processing provided by JDK6 integrated in java compiler
@@ -13,7 +13,8 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
   <parent>
       <groupId>org.bsc.maven</groupId>
       <artifactId>maven-processor-plugin-parent</artifactId>
-      <version>5.0-rc1</version>
+      <version>5.0-jdk8-rc1</version>
+      <relativePath>../pom-jdk8.xml</relativePath>
   </parent>
 
   <properties>
@@ -47,7 +48,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
             <version>${project.version}</version>
         </dependency>
 
-    </dependencies>
+  </dependencies>
 
     <reporting>
         <plugins>
@@ -140,6 +141,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
   </build>
 
   <profiles>
+
       <profile>
           <id>report</id>
           <build>
