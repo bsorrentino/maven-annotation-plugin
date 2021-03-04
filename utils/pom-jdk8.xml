@@ -4,7 +4,7 @@
   <groupId>org.bsc.util</groupId>
   <artifactId>processor-utils</artifactId>
   <packaging>jar</packaging>
-  <name>JAVA PROCESSOR UTILS</name>
+  <name>JAVA PROCESSOR UTILS (JDK8)</name>
   <description>Utilities for java annotation processor implementation JSR-269</description>
   <url>https://github.com/bsorrentino/maven-annotation-plugin/tree/master/utils</url>
 
@@ -31,7 +31,7 @@
     <parent>
         <groupId>org.bsc.maven</groupId>
         <artifactId>maven-processor-plugin-parent</artifactId>
-        <version>5.0-jdk8-SNAPSHOT</version>
+        <version>5.0-jdk8-rc1</version>
         <relativePath>../pom-jdk8.xml</relativePath>
     </parent>
 

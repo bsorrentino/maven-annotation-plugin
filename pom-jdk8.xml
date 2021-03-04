@@ -3,8 +3,8 @@
   <groupId>org.bsc.maven</groupId>
   <artifactId>maven-processor-plugin-parent</artifactId>
   <packaging>pom</packaging>
-  <version>5.0-jdk8-SNAPSHOT</version>
-  <name>MAVEN PROCESSOR PLUGIN PARENT</name>
+  <version>5.0-jdk8-rc1</version>
+  <name>MAVEN PROCESSOR PLUGIN PARENT (JDK8)</name>
   <description>A maven plugin to process annotation for jdk6 at compile time
 
 This plugin helps to use from maven the new annotation processing provided by JDK6 integrated in java compiler
