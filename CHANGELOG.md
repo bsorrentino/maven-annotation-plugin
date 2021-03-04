@@ -2,6 +2,90 @@
 
 <!-- Changelog for bsorrentino maven-annotation-plugin. -->
 
+## Next release
+### Generic changes
+
+**clean code**
+
+
+[639b7e34b7cdefd](https://github.com/bsorrentino/maven-annotation-plugin/commit/639b7e34b7cdefd) bsorrentino *2021-03-01 17:29:26*
+
+**clean code**
+
+
+[3078349688039fb](https://github.com/bsorrentino/maven-annotation-plugin/commit/3078349688039fb) bsorrentino *2021-02-14 20:57:34*
+
+**update deploy actions**
+
+
+[ee1900ed9bdabbe](https://github.com/bsorrentino/maven-annotation-plugin/commit/ee1900ed9bdabbe) bsorrentino *2021-01-31 17:55:38*
+
+**update java target**
+
+
+[6788d55a10c5aa7](https://github.com/bsorrentino/maven-annotation-plugin/commit/6788d55a10c5aa7) bsorrentino *2021-01-31 17:18:22*
+
+**update actions**
+
+
+[51767f96147ece7](https://github.com/bsorrentino/maven-annotation-plugin/commit/51767f96147ece7) bsorrentino *2021-01-31 17:15:14*
+
+**added parent relativePath**
+
+
+[9fd838007c64cdd](https://github.com/bsorrentino/maven-annotation-plugin/commit/9fd838007c64cdd) bsorrentino *2021-01-30 16:52:23*
+
+**update to new development version**
+
+
+[e10817032e89f71](https://github.com/bsorrentino/maven-annotation-plugin/commit/e10817032e89f71) bsorrentino *2020-12-22 20:09:35*
+
+**update action name**
+
+
+[2c2259006a45426](https://github.com/bsorrentino/maven-annotation-plugin/commit/2c2259006a45426) bsorrentino *2020-12-22 20:08:22*
+
+**update changelog**
+
+
+[03305fc8a03ed7a](https://github.com/bsorrentino/maven-annotation-plugin/commit/03305fc8a03ed7a) bsorrentino *2020-12-22 20:03:58*
+
+
+###  [#91](https://github.com/bsorrentino/maven-annotation-plugin/issues/91) Add Support of JEP 238: Multi-Release JAR Files    *enhancement*  
+
+**issue #91 - created ad-hoc pom for jdk8 asset deployment**
+
+
+[5ca85b02a74abe3](https://github.com/bsorrentino/maven-annotation-plugin/commit/5ca85b02a74abe3) bsorrentino *2021-01-31 17:09:17*
+
+**issue #91 - created new DTS to separate JDK8 modules from JDK9+**
+
+
+[74837a5fc077eb3](https://github.com/bsorrentino/maven-annotation-plugin/commit/74837a5fc077eb3) bsorrentino *2021-01-31 16:40:16*
+
+
+###  [#92](https://github.com/bsorrentino/maven-annotation-plugin/issues/92) Compiling Generated .java Into .class Files     *question*  *under investigation*  
+
+**issue #92 - tests refinements**
+
+
+[ed08c34b657b566](https://github.com/bsorrentino/maven-annotation-plugin/commit/ed08c34b657b566) bsorrentino *2021-01-29 09:37:33*
+
+
+###  [#93](https://github.com/bsorrentino/maven-annotation-plugin/issues/93) Error [URI scheme is not "file"] if some processSourceArtifacts are specified    *under verification*  
+
+**issue #93**
+
+ * added UnzipService to extract Source Artifacts to the file system
+
+[c3651eb678b6383](https://github.com/bsorrentino/maven-annotation-plugin/commit/c3651eb678b6383) bsorrentino *2021-03-01 17:03:33*
+
+**issue #93 - test for issue verification**
+
+
+[dd57b08f851bec3](https://github.com/bsorrentino/maven-annotation-plugin/commit/dd57b08f851bec3) bsorrentino *2021-02-14 16:20:57*
+
+
 ## v4.5
 ### Generic changes
 
@@ -1272,5 +1356,3 @@
  * git-svn-id: https://projectname.googlecode.com/svn/trunk@2 c416075f-80b4-e980-4839-00ea3ed24e77
 
 [22a3c1b1a9be1a6](https://github.com/bsorrentino/maven-annotation-plugin/commit/22a3c1b1a9be1a6) valery.isaev@gmail.com *2011-03-13 00:01:25*
-
-
