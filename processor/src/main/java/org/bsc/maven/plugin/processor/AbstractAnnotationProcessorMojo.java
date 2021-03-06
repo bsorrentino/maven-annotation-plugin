@@ -54,10 +54,7 @@ import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
@@ -783,7 +780,8 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         final UnzipService unzip = UnzipService.newInstance( getLog() );
 
         if( fork ) {
-          processSourceArtifacts( artifact -> unzip.extractSourcesFromArtifactToTempDirectory( artifact, allSources ) );
+          processSourceArtifacts( artifact -> unzip.extractSourcesFromArtifactToTempDirectory( artifact, allSources,
+                  Paths.get( project.getBuild().getDirectory(), "extracted-sources" ) ));
         }
         else {
           processSourceArtifacts( artifact -> unzip.extractSourcesFromArtifact(artifact, allSources) );
