@@ -36,10 +36,14 @@ import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.artifact.ArtifactTypeRegistry;
 import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.collection.CollectRequest;
+import org.eclipse.aether.graph.Dependency;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
+import org.eclipse.aether.resolution.DependencyRequest;
+import org.eclipse.aether.resolution.DependencyResult;
 
 import javax.tools.Diagnostic.Kind;
 import javax.tools.DiagnosticListener;
@@ -123,6 +127,35 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
      */
     @Parameter
     private File outputDirectory;
+    
+    /**
+     * <p>
+     * Classpath elements to supply as annotation processor path. If specified, the compiler will detect annotation
+     * processors only in those classpath elements. If omitted, the default classpath is used to detect annotation
+     * processors. The detection itself depends on the configuration of {@code processors}.
+     * </p>
+     * <p>
+     * Each classpath element is specified using their Maven coordinates (groupId, artifactId, version, classifier,
+     * type). Transitive dependencies are added automatically. Example:
+     * </p>
+     *
+     * <pre>
+     * &lt;configuration&gt;
+     *   &lt;annotationProcessorPaths&gt;
+     *     &lt;path&gt;
+     *       &lt;groupId&gt;org.sample&lt;/groupId&gt;
+     *       &lt;artifactId&gt;sample-annotation-processor&lt;/artifactId&gt;
+     *       &lt;version&gt;1.2.3&lt;/version&gt;
+     *     &lt;/path&gt;
+     *     &lt;!-- ... more ... --&gt;
+     *   &lt;/annotationProcessorPaths&gt;
+     * &lt;/configuration&gt;
+     * </pre>
+     *
+     * @since 5.0
+     */
+    @Parameter
+    private List<DependencyCoordinate> annotationProcessorPaths;
 
     /**
      * Annotation Processor FQN (Full Qualified Name) - when processors are not specified, the default discovery mechanism will be used
@@ -449,7 +482,8 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
     /**
      * 
      */
-    public void execute() throws MojoExecutionException
+    @Override
+	public void execute() throws MojoExecutionException
     {
         if (skip)
         {
@@ -530,7 +564,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         return tc;
     }
 
-    private  List<String>  prepareOptions( JavaCompiler compiler ) {
+    private  List<String>  prepareOptions( JavaCompiler compiler ) throws MojoExecutionException {
 
         final List<String> options = new ArrayList<>(10);
 
@@ -552,6 +586,12 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         });
 
         options.add("-proc:only");
+        
+        Optional<String> processorPath = this.buildProcessorPath();
+        processorPath.ifPresent(value -> {
+            options.add("-processorpath");
+            options.add(value);
+        });
 
         addCompilerArguments(options);
 
@@ -1000,4 +1040,47 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo
         }
     }
 
+	private Optional<List<String>> resolveProcessorPathEntries() throws MojoExecutionException {
+		if (this.annotationProcessorPaths == null || this.annotationProcessorPaths.isEmpty()) {
+			return Optional.empty();
+		}
+
+		try {
+			Set<Dependency> requiredDependencies = new LinkedHashSet<>();
+
+			for (DependencyCoordinate coord : this.annotationProcessorPaths) {
+				//@formatter:off
+                 DefaultArtifact artifact = new DefaultArtifact(
+                           coord.getGroupId(), 
+                           coord.getArtifactId(),
+                           coord.getClassifier(), 
+                           coord.getType(), 
+                           coord.getVersion());
+                 //@formatter:on
+
+				requiredDependencies.add(new Dependency(artifact, Artifact.SCOPE_RUNTIME));
+			}
+			CollectRequest collectRequest = new CollectRequest(requiredDependencies.iterator().next(),
+					new ArrayList<>(requiredDependencies), this.remoteRepos);
+			DependencyRequest dependencyRequest = new DependencyRequest(collectRequest, null);
+
+			DependencyResult resolutionResult = this.repoSystem.resolveDependencies(this.repoSession,
+					dependencyRequest);
+			
+			List<String> artifactPaths = new ArrayList<>(resolutionResult.getArtifactResults().size());
+			for (ArtifactResult artifactResult : resolutionResult.getArtifactResults()) {
+				artifactPaths.add(artifactResult.getArtifact().getFile().getAbsolutePath());
+			}
+
+			return Optional.of(artifactPaths);
+		} catch (Exception e) {
+			throw new MojoExecutionException(
+					"Resolution of annotationProcessorPath dependencies failed: " + e.getLocalizedMessage(), e);
+		}
+	}
+	
+	private Optional<String> buildProcessorPath() throws MojoExecutionException {
+		Optional<List<String>> processorPathEntries = this.resolveProcessorPathEntries();
+		return processorPathEntries.map(value -> StringUtils.join(value.iterator(), File.pathSeparator));
+	}
 }
