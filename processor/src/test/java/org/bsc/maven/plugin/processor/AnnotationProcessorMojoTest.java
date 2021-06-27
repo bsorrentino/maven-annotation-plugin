@@ -46,5 +46,13 @@ public class AnnotationProcessorMojoTest {
     assertNotNull( myMojo.annotationProcessorPaths );
     assertEquals( 1, myMojo.annotationProcessorPaths.size() );
 
+    final DependencyCoordinate coord = myMojo.annotationProcessorPaths.get(0);
+
+    assertNotNull( coord );
+    assertEquals( "org.mapstruct", coord.getGroupId() );
+    assertEquals( "mapstruct-processor", coord.getArtifactId() );
+    assertEquals( "1.0", coord.getVersion() );
+
+
   }
 }
