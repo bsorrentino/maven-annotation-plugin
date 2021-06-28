@@ -241,19 +241,19 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo {
    * The entry point to Aether, i.e. the component doing all the work.
    */
   @Component
-  private RepositorySystem repoSystem;
+  protected RepositorySystem repoSystem;
 
   /**
    * The current repository/network configuration of Maven.
    */
   @Parameter(defaultValue = "${repositorySystemSession}", readonly = true)
-  private RepositorySystemSession repoSession;
+  protected RepositorySystemSession repoSession;
 
   /**
    * The project's remote repositories to use for the resolution of plugins and their dependencies.
    */
   @Parameter(defaultValue = "${project.remoteProjectRepositories}", readonly = true)
-  private List<RemoteRepository> remoteRepos;
+  protected List<RemoteRepository> remoteRepos;
 
   /**
    * List of artifacts on which perform sources scanning
@@ -1021,7 +1021,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo {
           new ArrayList<>(requiredDependencies), this.remoteRepos);
       DependencyRequest dependencyRequest = new DependencyRequest(collectRequest, null);
 
-      DependencyResult resolutionResult = this.repoSystem.resolveDependencies(this.repoSession,
+      DependencyResult resolutionResult = this.repoSystem.resolveDependencies( this.repoSession,
           dependencyRequest);
 
       List<String> artifactPaths = new ArrayList<>(resolutionResult.getArtifactResults().size());
@@ -1036,7 +1036,12 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo {
     }
   }
 
-  private Optional<String> buildProcessorPath() throws MojoExecutionException {
+  /**
+   *
+   * @return
+   * @throws MojoExecutionException
+   */
+  Optional<String> buildProcessorPath() throws MojoExecutionException {
     Optional<List<String>> processorPathEntries = this.resolveProcessorPathEntries();
     return processorPathEntries.map(value -> StringUtils.join(value.iterator(), File.pathSeparator));
   }
