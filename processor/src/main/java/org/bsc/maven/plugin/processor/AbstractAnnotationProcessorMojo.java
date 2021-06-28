@@ -145,7 +145,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo {
    * &lt;/configuration&gt;
    * </pre>
    *
-   * @since 5.0
+   * @since 5.0-rc2
    */
   @Parameter
   List<org.apache.maven.model.Dependency> annotationProcessorPaths;

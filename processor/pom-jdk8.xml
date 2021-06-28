@@ -13,7 +13,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
   <parent>
       <groupId>org.bsc.maven</groupId>
       <artifactId>maven-processor-plugin-parent</artifactId>
-      <version>5.0-jdk8-SNAPSHOT</version>
+      <version>5.0-rc2</version>
       <relativePath>../pom-jdk8.xml</relativePath>
   </parent>
 
@@ -47,6 +47,18 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
             <artifactId>maven-processor-compiler</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-compat</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.plugin-testing</groupId>
+            <artifactId>maven-plugin-testing-harness</artifactId>
+            <scope>test</scope>
+        </dependency>
 
   </dependencies>
 
@@ -70,6 +82,16 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
         </plugins>
     </reporting>
   <build>
+      <resources>
+          <resource>
+              <directory>src/main/resources</directory>
+          </resource>
+
+          <resource>
+              <directory>src/test/resources</directory>
+              <filtering>true</filtering>
+          </resource>
+      </resources>
 
       <plugins>
 
