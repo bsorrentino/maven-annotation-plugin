@@ -30,6 +30,7 @@ This plugin was born as the 'alter ego' of maven apt plugin [apt-maven-plugin](h
 
  Date  | Version  | Info
 --- | --- | ---
+**Jun 28, 2021** | [Release 5.0-rc2](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v5.0-rc2) | merge PR [#95](https://github.com/bsorrentino/maven-annotation-plugin/pull/95) - Thanks to [Ulysses Rangel RIbeiro](https://github.com/ulyssesrr)
 **Feb 04, 2021** | [Release 5.0-rc1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v5.0-rc1) | fix issue [#91](https://github.com/bsorrentino/maven-annotation-plugin/issues/91) [#92](https://github.com/bsorrentino/maven-annotation-plugin/issues/92) [#93](https://github.com/bsorrentino/maven-annotation-plugin/issues/93)
 **Feb 04, 2021** | [Release 5.0-jdk8-rc1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v5.0-jdk8-rc1) |
 **Dec 22, 2020** | [Release 4.5](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v4.5) | fix issue [#90](https://github.com/bsorrentino/maven-annotation-plugin/issues/90)
