@@ -2,8 +2,13 @@
 
 <!-- Changelog for bsorrentino maven-annotation-plugin. -->
 
-## Next release
+## v5.0-rc2
 ### Generic changes
+
+**update changelog**
+
+
+[a3823b0ce4a763e](https://github.com/bsorrentino/maven-annotation-plugin/commit/a3823b0ce4a763e) bsorrentino *2021-06-28 16:28:53*
 
 **update readme**
 
