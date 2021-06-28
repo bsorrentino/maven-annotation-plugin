@@ -5,6 +5,102 @@
 ## Next release
 ### Generic changes
 
+**update readme**
+
+
+[fb99c3adb9b1c07](https://github.com/bsorrentino/maven-annotation-plugin/commit/fb99c3adb9b1c07) bsorrentino *2021-06-28 16:25:14*
+
+**move to next version**
+
+
+[b27c7739b51e235](https://github.com/bsorrentino/maven-annotation-plugin/commit/b27c7739b51e235) bsorrentino *2021-06-28 16:25:14*
+
+**Adds support to -processorpath**
+
+ * Ported from maven-compiler-plugin
+
+[7caf6b75ad90f0b](https://github.com/bsorrentino/maven-annotation-plugin/commit/7caf6b75ad90f0b) Ulysses Rangel Ribeiro *2021-06-23 02:09:46*
+
+**test multiple processSourceArtifacts**
+
+
+[32f1daef7840113](https://github.com/bsorrentino/maven-annotation-plugin/commit/32f1daef7840113) bsorrentino *2021-03-06 11:07:43*
+
+**set target directory for processSourceArtifacts to target/extracted-sources**
+
+
+[46fd8bc6916a130](https://github.com/bsorrentino/maven-annotation-plugin/commit/46fd8bc6916a130) bsorrentino *2021-03-06 11:07:18*
+
+**fix security issue**
+
+
+[fca883f983ee8d2](https://github.com/bsorrentino/maven-annotation-plugin/commit/fca883f983ee8d2) bsorrentino *2021-03-06 10:28:29*
+
+**update doc**
+
+
+[6160288f73c7070](https://github.com/bsorrentino/maven-annotation-plugin/commit/6160288f73c7070) bsorrentino *2021-03-04 23:00:00*
+
+**update doc**
+
+
+[eb1b0e32ed5bbcb](https://github.com/bsorrentino/maven-annotation-plugin/commit/eb1b0e32ed5bbcb) bsorrentino *2021-03-04 22:58:12*
+
+**move to next development version**
+
+
+[2c298509b97ba9d](https://github.com/bsorrentino/maven-annotation-plugin/commit/2c298509b97ba9d) bsorrentino *2021-03-04 19:43:27*
+
+
+###  [#93](https://github.com/bsorrentino/maven-annotation-plugin/issues/93) Error [URI scheme is not &quot;file&quot;] if some processSourceArtifacts are specified    *under verification*  
+
+**update test for issue #93**
+
+
+[5f1a8b86e258d46](https://github.com/bsorrentino/maven-annotation-plugin/commit/5f1a8b86e258d46) bsorrentino *2021-03-06 19:11:15*
+
+
+###  [#95](https://github.com/bsorrentino/maven-annotation-plugin/pull/95) Adds support to -processorpath    *work in progress*  
+
+**PR #95 - update javadoc**
+
+
+[cb66d970a084eae](https://github.com/bsorrentino/maven-annotation-plugin/commit/cb66d970a084eae) bsorrentino *2021-06-28 16:26:26*
+
+**PR #95 - replace DependencyCoordinate with org.apache.maven.model.Dependency**
+
+
+[e7818daeed96576](https://github.com/bsorrentino/maven-annotation-plugin/commit/e7818daeed96576) bsorrentino *2021-06-28 16:25:06*
+
+**PR #95 - update unit test**
+
+
+[4b1261c644806d7](https://github.com/bsorrentino/maven-annotation-plugin/commit/4b1261c644806d7) bsorrentino *2021-06-28 16:24:42*
+
+**PR #95 - update unit test**
+
+
+[c870d4168584665](https://github.com/bsorrentino/maven-annotation-plugin/commit/c870d4168584665) Build Pipeline *2021-06-28 16:24:32*
+
+**PR #95 - add unit test**
+
+
+[3ab12884ca37d76](https://github.com/bsorrentino/maven-annotation-plugin/commit/3ab12884ca37d76) Build Pipeline *2021-06-28 16:24:23*
+
+**PR #95 - add unit test**
+
+
+[997cb599b8331aa](https://github.com/bsorrentino/maven-annotation-plugin/commit/997cb599b8331aa) Build Pipeline *2021-06-28 16:24:06*
+
+
+## v5.0-rc1
+### Generic changes
+
+**prepare for next release**
+
+
+[a5fd69a92902d79](https://github.com/bsorrentino/maven-annotation-plugin/commit/a5fd69a92902d79) bsorrentino *2021-03-04 19:38:54*
+
 **clean code**
 
 
@@ -72,7 +168,7 @@
 [ed08c34b657b566](https://github.com/bsorrentino/maven-annotation-plugin/commit/ed08c34b657b566) bsorrentino *2021-01-29 09:37:33*
 
 
-###  [#93](https://github.com/bsorrentino/maven-annotation-plugin/issues/93) Error [URI scheme is not "file"] if some processSourceArtifacts are specified    *under verification*  
+###  [#93](https://github.com/bsorrentino/maven-annotation-plugin/issues/93) Error [URI scheme is not &quot;file&quot;] if some processSourceArtifacts are specified    *under verification*  
 
 **issue #93**
 
@@ -1356,3 +1452,5 @@
  * git-svn-id: https://projectname.googlecode.com/svn/trunk@2 c416075f-80b4-e980-4839-00ea3ed24e77
 
 [22a3c1b1a9be1a6](https://github.com/bsorrentino/maven-annotation-plugin/commit/22a3c1b1a9be1a6) valery.isaev@gmail.com *2011-03-13 00:01:25*
+
+
