@@ -140,7 +140,13 @@ public final class UnzipService {
     }
   }
 
-  public final void extractSourcesFromArtifactToTempDirectory(Artifact artifact, java.util.List<JavaFileObject> allSources ) {
+  /**
+   *
+   * @param artifact
+   * @param allSources
+   * @param target target folder. if null a temporary folder is created
+   */
+  public final void extractSourcesFromArtifactToTempDirectory(Artifact artifact, java.util.List<JavaFileObject> allSources, Path target ) {
     requireNonNull( artifact, "artifact argument is null!");
     requireNonNull( allSources, "allSources argument is null!");
 
@@ -148,13 +154,21 @@ public final class UnzipService {
 
     final File fileZip = artifact.getFile();
 
-    final Path root;
-    try {
-      root = Files.createTempDirectory(fileZip.getName());
+    if( target == null ) {
+      try {
+        target = Files.createTempDirectory(fileZip.getName());
+      } catch (IOException ex) {
+        log.warn("Problem creating temporary directory", ex);
+        return;
+      }
     }
-    catch( IOException ex ) {
-      log.warn("Problem creating temporary directory", ex);
-      return;
+    else {
+      try {
+        target = Files.createDirectories( Paths.get( target.toString(), artifact.getArtifactId()) );
+      } catch (IOException ex) {
+        log.warn(format("Problem creating directory [%s]", target), ex);
+        return;
+      }
     }
 
     try( final ZipFile zipFile = new ZipFile(fileZip) ) {
@@ -167,7 +181,7 @@ public final class UnzipService {
 
         final ZipEntry zipEntry = entries.nextElement();
 
-        final Path newFile = Paths.get(root.toString(), zipEntry.getName());
+        final Path newFile = Paths.get(target.toString(), zipEntry.getName());
 
         if (zipEntry.isDirectory()) {
 
@@ -194,6 +208,6 @@ public final class UnzipService {
 
     }
 
-    log.info( format( "[%d] sources succesfully extracted from artifact [%s] to:\n [%s]", allSources.size()-size, artifact, root));
+    log.info( format( "[%d] sources succesfully extracted from artifact [%s] to:\n [%s]", allSources.size()-size, artifact, target));
   }
 }

@@ -3,7 +3,7 @@
   <groupId>org.bsc.maven</groupId>
   <artifactId>maven-processor-plugin-parent</artifactId>
   <packaging>pom</packaging>
-  <version>5.0-jdk8-rc1</version>
+  <version>5.0-rc2</version>
   <name>MAVEN PROCESSOR PLUGIN PARENT (JDK8)</name>
   <description>A maven plugin to process annotation for jdk6 at compile time
 
@@ -121,6 +121,20 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
                 <version>${plexus.compiler.version}</version>
                 <scope>compile</scope>
             </dependency>
+
+            <dependency>
+                <groupId>org.apache.maven.plugin-testing</groupId>
+                <artifactId>maven-plugin-testing-harness</artifactId>
+                <version>3.3.0</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-compat</artifactId>
+                <version>${maven.version}</version>
+                <scope>test</scope>
+            </dependency>
+            
         </dependencies>
     </dependencyManagement>
 
