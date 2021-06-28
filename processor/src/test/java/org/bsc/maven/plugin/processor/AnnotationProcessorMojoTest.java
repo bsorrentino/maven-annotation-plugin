@@ -2,6 +2,7 @@ package org.bsc.maven.plugin.processor;
 
 
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.testing.MojoRule;
@@ -209,16 +210,12 @@ public class AnnotationProcessorMojoTest {
     assertNotNull( myMojo.annotationProcessorPaths );
     assertEquals( 1, myMojo.annotationProcessorPaths.size() );
 
-    final DependencyCoordinate coord = myMojo.annotationProcessorPaths.get(0);
+    final Dependency coord = myMojo.annotationProcessorPaths.get(0);
 
     assertNotNull( coord );
     assertEquals( "org.mapstruct", coord.getGroupId() );
     assertEquals( "mapstruct-processor", coord.getArtifactId() );
     assertEquals( "1.4.2.Final", coord.getVersion() );
-
-    assertNotNull( "repoSystem not initialized", myMojo.repoSystem );
-    assertNotNull( "repoSession not initialized", myMojo.repoSession );
-    assertNotNull( "remoteRepos not initialized", myMojo.remoteRepos );
 
 
     final Optional<String> processorPath = myMojo.buildProcessorPath();

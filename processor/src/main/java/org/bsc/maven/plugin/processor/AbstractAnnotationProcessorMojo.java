@@ -148,7 +148,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo {
    * @since 5.0
    */
   @Parameter
-  List<DependencyCoordinate> annotationProcessorPaths;
+  List<org.apache.maven.model.Dependency> annotationProcessorPaths;
 
   /**
    * Annotation Processor FQN (Full Qualified Name) - when processors are not specified, the default discovery mechanism will be used
@@ -241,7 +241,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo {
    * The entry point to Aether, i.e. the component doing all the work.
    */
   @Component
-  protected RepositorySystem repoSystem;
+  private RepositorySystem repoSystem;
 
   /**
    * The current repository/network configuration of Maven.
@@ -253,7 +253,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo {
    * The project's remote repositories to use for the resolution of plugins and their dependencies.
    */
   @Parameter(defaultValue = "${project.remoteProjectRepositories}", readonly = true)
-  protected List<RemoteRepository> remoteRepos;
+  private List<RemoteRepository> remoteRepos;
 
   /**
    * List of artifacts on which perform sources scanning
@@ -545,8 +545,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo {
 
     options.add("-proc:only");
 
-    Optional<String> processorPath = this.buildProcessorPath();
-    processorPath.ifPresent(value -> {
+    this.buildProcessorPath().ifPresent(value -> {
       options.add("-processorpath");
       options.add(value);
     });
@@ -997,52 +996,58 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo {
     }
   }
 
-  private Optional<List<String>> resolveProcessorPathEntries() throws MojoExecutionException {
-    if (this.annotationProcessorPaths == null || this.annotationProcessorPaths.isEmpty()) {
-      return Optional.empty();
-    }
+  private Optional<List<String>> resolveProcessorPathEntries() {
+    if (this.annotationProcessorPaths != null && !this.annotationProcessorPaths.isEmpty() ) {
 
-    try {
-      Set<Dependency> requiredDependencies = new LinkedHashSet<>();
+      try {
 
-      for (DependencyCoordinate coord : this.annotationProcessorPaths) {
-        //@formatter:off
-        DefaultArtifact artifact = new DefaultArtifact(
-            coord.getGroupId(),
-            coord.getArtifactId(),
-            coord.getClassifier(),
-            coord.getType(),
-            coord.getVersion());
-        //@formatter:on
+        final List<Dependency> requiredDependencies =
+                this.annotationProcessorPaths.stream()
+                        .map(dependency -> new DefaultArtifact(
+                                dependency.getGroupId(),
+                                dependency.getArtifactId(),
+                                dependency.getClassifier(),
+                                dependency.getType(),
+                                dependency.getVersion()))
+                        .distinct()
+                        .map(artifact -> new Dependency(artifact, Artifact.SCOPE_RUNTIME))
+                        .collect(Collectors.toList());
 
-        requiredDependencies.add(new Dependency(artifact, Artifact.SCOPE_RUNTIME));
+        final Dependency root = requiredDependencies.get(0);
+
+        final CollectRequest collectRequest =
+                new CollectRequest(root, requiredDependencies, this.remoteRepos);
+
+        final DependencyRequest dependencyRequest =
+                new DependencyRequest(collectRequest, null);
+
+        final DependencyResult resolutionResult =
+                this.repoSystem.resolveDependencies(this.repoSession, dependencyRequest);
+
+        final List<String> artifactPaths =
+                resolutionResult.getArtifactResults().stream()
+                        .map(artifactResult -> artifactResult.getArtifact().getFile().getAbsolutePath())
+                        .collect(Collectors.toList());
+
+        return Optional.of(artifactPaths);
+
+      } catch (Exception e) {
+
+        final String msg = format("Resolution of annotationProcessorPath dependencies failed: %s", e.getLocalizedMessage());
+        getLog().error(msg, e);
       }
-      CollectRequest collectRequest = new CollectRequest(requiredDependencies.iterator().next(),
-          new ArrayList<>(requiredDependencies), this.remoteRepos);
-      DependencyRequest dependencyRequest = new DependencyRequest(collectRequest, null);
-
-      DependencyResult resolutionResult = this.repoSystem.resolveDependencies( this.repoSession,
-          dependencyRequest);
-
-      List<String> artifactPaths = new ArrayList<>(resolutionResult.getArtifactResults().size());
-      for (ArtifactResult artifactResult : resolutionResult.getArtifactResults()) {
-        artifactPaths.add(artifactResult.getArtifact().getFile().getAbsolutePath());
-      }
-
-      return Optional.of(artifactPaths);
-    } catch (Exception e) {
-      throw new MojoExecutionException(
-          "Resolution of annotationProcessorPath dependencies failed: " + e.getLocalizedMessage(), e);
     }
+    return empty();
+
   }
 
   /**
    *
    * @return
-   * @throws MojoExecutionException
    */
-  Optional<String> buildProcessorPath() throws MojoExecutionException {
-    Optional<List<String>> processorPathEntries = this.resolveProcessorPathEntries();
-    return processorPathEntries.map(value -> StringUtils.join(value.iterator(), File.pathSeparator));
+  protected Optional<String> buildProcessorPath()  {
+    return this.resolveProcessorPathEntries()
+            .flatMap( artifactPaths ->
+                    Optional.of(artifactPaths.stream().collect(Collectors.joining(File.separator))) );
   }
 }
