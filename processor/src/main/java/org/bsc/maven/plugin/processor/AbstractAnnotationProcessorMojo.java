@@ -1048,6 +1048,6 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo {
   protected Optional<String> buildProcessorPath()  {
     return this.resolveProcessorPathEntries()
             .flatMap( artifactPaths ->
-                    Optional.of(artifactPaths.stream().collect(Collectors.joining(File.separator))) );
+                    Optional.of(artifactPaths.stream().collect(Collectors.joining(File.pathSeparator))) );
   }
 }
