@@ -2,6 +2,76 @@
 
 <!-- Changelog for bsorrentino maven-annotation-plugin. -->
 
+## Next release
+### Generic changes
+
+**prepare for next release**
+
+
+[42484713b583e67](https://github.com/bsorrentino/maven-annotation-plugin/commit/42484713b583e67) bsorrentino *2021-07-12 13:46:23*
+
+**update readme**
+
+
+[1a036a1a3ba5cdc](https://github.com/bsorrentino/maven-annotation-plugin/commit/1a036a1a3ba5cdc) bsorrentino *2021-07-12 13:42:41*
+
+**update readme**
+
+
+[a99c2dc88089197](https://github.com/bsorrentino/maven-annotation-plugin/commit/a99c2dc88089197) bsorrentino *2021-06-28 17:12:33*
+
+**move to next development version**
+
+
+[ec6942a8f5f9adf](https://github.com/bsorrentino/maven-annotation-plugin/commit/ec6942a8f5f9adf) bsorrentino *2021-06-28 16:46:34*
+
+**update changelog**
+
+
+[d5eea88e2a0aef5](https://github.com/bsorrentino/maven-annotation-plugin/commit/d5eea88e2a0aef5) bsorrentino *2021-06-28 16:43:51*
+
+**fix jdk8 release**
+
+
+[7a82313fa73fc61](https://github.com/bsorrentino/maven-annotation-plugin/commit/7a82313fa73fc61) bsorrentino *2021-06-28 16:43:43*
+
+
+###  [#45](https://github.com/bsorrentino/maven-annotation-plugin/issues/45) Option to list the processors to ignore instead of the processors to run    *wontfix*  
+
+**PR #45 - replace DependencyCoordinate with org.apache.maven.model.Dependency**
+
+
+[83ebf7b167b2d56](https://github.com/bsorrentino/maven-annotation-plugin/commit/83ebf7b167b2d56) bsorrentino *2021-06-28 14:01:19*
+
+**PR #45 - update unit test**
+
+
+[ccf0f27faed7caa](https://github.com/bsorrentino/maven-annotation-plugin/commit/ccf0f27faed7caa) bsorrentino *2021-06-28 13:52:49*
+
+**PR #45 - update unit test**
+
+
+[2d2c093e165a039](https://github.com/bsorrentino/maven-annotation-plugin/commit/2d2c093e165a039) Build Pipeline *2021-06-27 20:17:05*
+
+**PR #45 - add unit test**
+
+
+[ce0b27953216d37](https://github.com/bsorrentino/maven-annotation-plugin/commit/ce0b27953216d37) Build Pipeline *2021-06-27 20:11:55*
+
+**PR #45 - add unit test**
+
+
+[e8ca18170721e75](https://github.com/bsorrentino/maven-annotation-plugin/commit/e8ca18170721e75) Build Pipeline *2021-06-27 20:11:44*
+
+
+###  [#96](https://github.com/bsorrentino/maven-annotation-plugin/pull/96) Fix -processorpath joining char.  
+
+**pr #96 apply fix**
+
+
+[490d1cd4a8582bd](https://github.com/bsorrentino/maven-annotation-plugin/commit/490d1cd4a8582bd) bsorrentino *2021-07-11 18:18:26*
+
+
 ## v5.0-rc2
 ### Generic changes
 
