@@ -3,11 +3,12 @@ package org.bsc.processor;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.Source;
+import org.graalvm.polyglot.Value;
 
 import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -59,8 +60,7 @@ public class GraaljsProcessor extends BaseAbstractProcessor {
                 .build();
 
         final Map<String,String> options = getOptions();
-
-        context.getBindings("js").putMember("$options", options );
+        // context.getBindings("js").putMember("$options", options );
 
         final String scriptSource = options.get( "script" );
         if( scriptSource == null ) {
@@ -70,12 +70,38 @@ public class GraaljsProcessor extends BaseAbstractProcessor {
 
         try( java.io.Reader app = new java.io.FileReader(scriptSource)) {
             final Source source = Source.newBuilder("js", app,  scriptSource).build();
-            context.eval( source );
+
+            final Value evalResult = context.eval( source );
+
+            if( evalResult.canInvokeMember("process") ) {
+                error( "it is not possible invoke 'process' member!");
+                return false;
+            }
+
+            final Value invokeResult =
+                    evalResult.invokeMember( "process", annotations, roundEnv);
+
+            if( invokeResult.isBoolean() ) {
+                return invokeResult.asBoolean();
+            }
+
+            return false;
+
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            error( "file not found ! source: '%s' - %s", scriptSource, e.getMessage());
+        } catch (Exception e) {
+            error( "error executing script", e );
         }
         return false;
+    }
+
+    @Override
+    public Set<String> getSupportedAnnotationTypes() {
+        return super.getSupportedAnnotationTypes();
+    }
+
+    @Override
+    public SourceVersion getSupportedSourceVersion() {
+        return super.getSupportedSourceVersion();
     }
 }
