@@ -1,32 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-
-  <groupId>org.bsc.util</groupId>
-  <artifactId>processor-utils</artifactId>
-  <packaging>jar</packaging>
-  <name>JAVA PROCESSOR UTILS (JDK8)</name>
-  <description>Utilities for java annotation processor implementation JSR-269</description>
-  <url>https://github.com/bsorrentino/maven-annotation-plugin/tree/master/utils</url>
-
-  <inceptionYear>2013</inceptionYear>
-
-  <licenses>
-      <license>
-        <name>The MIT License (MIT)</name>
-        <url>http://opensource.org/licenses/MIT</url>
-      </license>
-    </licenses>
-
-  <developers>
-  	<developer>
-  		<email>bartolomeo.sorrentino@gmail.com</email>
-  		<name>Bartolomeo Sorrentino</name>
-  		<timezone>GMT+1</timezone>
-  		<roles>
-  			<role>Owner</role>
-  		</roles>
-  	</developer>
-  </developers>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.bsc.maven</groupId>
@@ -35,32 +9,59 @@
         <relativePath>../pom-jdk8.xml</relativePath>
     </parent>
 
+    <groupId>org.bsc.util</groupId>
+    <artifactId>processor-utils</artifactId>
+    <packaging>jar</packaging>
+    <name>JAVA PROCESSOR UTILS (JDK8)</name>
+    <description>Utilities for java annotation processor implementation JSR-269</description>
+    <url>https://github.com/bsorrentino/maven-annotation-plugin/tree/master/utils</url>
+
+    <inceptionYear>2013</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>The MIT License (MIT)</name>
+            <url>http://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <email>bartolomeo.sorrentino@gmail.com</email>
+            <name>Bartolomeo Sorrentino</name>
+            <timezone>GMT+1</timezone>
+            <roles>
+                <role>Owner</role>
+            </roles>
+        </developer>
+    </developers>
+
     <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-  <dependencies>
+    <dependencies>
 
-  </dependencies>
+    </dependencies>
 
-<build>
+    <build>
 
-<plugins>
+        <plugins>
 
-    <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-    </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
 
-    <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-        </configuration>
-    </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                </configuration>
+            </plugin>
 
-</plugins>
+        </plugins>
 
-</build>
+    </build>
 
 </project>

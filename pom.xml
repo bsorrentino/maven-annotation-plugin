@@ -3,7 +3,7 @@
   <groupId>org.bsc.maven</groupId>
   <artifactId>maven-processor-plugin-parent</artifactId>
   <packaging>pom</packaging>
-  <version>5.0-rc3</version>
+  <version>5.0-SNAPSHOT</version>
   <name>MAVEN PROCESSOR PLUGIN PARENT</name>
   <description>A maven plugin to process annotation for jdk6 at compile time
 
@@ -89,6 +89,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
         <module>test/processors</module>
         <module>test/app</module>
         <module>compiler</module>
+        <module>graaljs</module>
     </modules>
     <dependencyManagement>
         <dependencies>

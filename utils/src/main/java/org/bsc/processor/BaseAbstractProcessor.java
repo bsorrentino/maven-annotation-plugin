@@ -6,7 +6,6 @@
 package org.bsc.processor;
 
 import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.Filer;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.*;
 import javax.tools.Diagnostic.Kind;
@@ -19,8 +18,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
-
-import static java.util.Optional.empty;
 
 /**
  *
@@ -62,7 +59,7 @@ public abstract class BaseAbstractProcessor extends AbstractProcessor {
      */
     protected java.util.Map<String,String> getOptions() {
         return Optional.ofNullable(processingEnv.getOptions())
-                    .orElseGet(  () -> Collections.emptyMap() );
+                    .orElseGet(  Collections::emptyMap );
     }
 
     /**
