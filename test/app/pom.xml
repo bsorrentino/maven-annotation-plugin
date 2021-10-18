@@ -23,6 +23,12 @@
           <version>${project.version}</version>
       </dependency>
 
+      <dependency>
+          <groupId>org.bsc.util</groupId>
+          <artifactId>processor-graaljs</artifactId>
+          <version>${project.version}</version>
+      </dependency>
+
   </dependencies>
 
 <build>
@@ -56,85 +62,19 @@ PROCESSOR PLUGIN
                 <goals>
                     <goal>process</goal>
                 </goals>
-                <!--phase>process-sources</phase-->
                 <configuration>
-                    <!--
-                    <additionalSourceDirectories>
-                        <item>${basedir}/src/main/java</item>
-                    </additionalSourceDirectories>
-                    -->
                     <addOutputDirectoryToCompilationSources>true</addOutputDirectoryToCompilationSources>
                     <failOnError>false</failOnError>
                     <skipSourcesUnchanged>false</skipSourcesUnchanged>
                     <processors>
                         <processor>org.bsc.maven.plugin.processor.test.TestGenerateSourceProcessor</processor>
                     </processors>
-                    <!--
-                    <options>
-                        <test>false</test>
-                    </options>
-                    -->
                 </configuration>
 
-                <!--
-                <execution>
-                    <id>process-test</id>
-                    <goals>
-                        <goal>process-test</goal>
-                    </goals>
-                    <phase>process-test-classes</phase>
-                    <configuration>
-                        <additionalSourceDirectories>
-                            <item>${user.home}/src</item>
-                            <item>src/main/java</item>
-                        </additionalSourceDirectories>
-                        <failOnError>false</failOnError>
-                        <processors>
-                            <processor>org.bsc.maven.plugin.processor.test.TestGenerateSourceProcessor</processor>
-                        </processors>
-                        <options>
-                            <test>true</test>
-                        </options>
-                    </configuration>
-                </execution>
-                -->
 
             </execution>
         </executions>
     </plugin>
-<!--
-    <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <executions>
-            <execution>
-                <id>add-source</id>
-                <phase>generate-sources</phase>
-                <goals>
-                    <goal>add-source</goal>
-                </goals>
-                <configuration>
-                    <sources>
-                        <source>${basedir}/src-generated/src</source>
-                    </sources>
-                </configuration>
-            </execution>
-            <execution>
-                <id>add-test-source</id>
-                <phase>generate-test-sources</phase>
-                <goals>
-                    <goal>add-test-source</goal>
-                </goals>
-                <configuration>
-                    <sources>
-                        <source>${basedir}/src-generated/test</source>
-                    </sources>
-                </configuration>
-            </execution>
-
-        </executions>
-    </plugin>
--->
 </plugins>
 
 </build>
