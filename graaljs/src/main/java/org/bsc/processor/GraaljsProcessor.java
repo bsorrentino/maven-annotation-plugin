@@ -5,20 +5,25 @@ import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
+import javax.tools.FileObject;
 import java.io.FileNotFoundException;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 
-public class GraaljsProcessor extends BaseAbstractProcessor {
+import static java.util.Optional.empty;
+import static java.util.Optional.ofNullable;
 
-    private static final Logger log = Logger.getLogger(GraaljsProcessor.class.getName());
 
-    @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+interface GraaljsEvaluator {
+
+    default Value eval(java.io.Reader sourceScript, String sourceName) throws Exception {
 
         /**
          * @ref https://www.graalvm.org/reference-manual/js/Options/#to-the-launcher
@@ -52,56 +57,109 @@ public class GraaljsProcessor extends BaseAbstractProcessor {
                 //.allowAllAccess(true)
                 .allowHostAccess(HostAccess.ALL)
                 //.allowCreateThread(true)
-                .allowHostClassLookup( s -> true )
+                .allowHostClassLookup(s -> true)
                 .allowIO(true)
                 //.allowExperimentalOptions(true)
                 .option("js.foreign-object-prototype", "true")
-
                 .build();
+        final Source source = Source.newBuilder("js", sourceScript, sourceName).build();
 
-        final Map<String,String> options = getOptions();
-        // context.getBindings("js").putMember("$options", options );
+        return context.eval(source);
 
-        final String scriptSource = options.get( "script" );
-        if( scriptSource == null ) {
-            error( "option 'script' not set!");
-            return false;
+    }
+
+}
+
+public class GraaljsProcessor extends BaseAbstractProcessor implements GraaljsEvaluator {
+
+    static final Logger log = Logger.getLogger(GraaljsProcessor.class.getName());
+
+    private Optional<Value> evalValue = empty();
+
+
+    @Override
+    public synchronized void init(ProcessingEnvironment processingEnv) {
+        super.init(processingEnv);
+
+        final Map<String, String> options = super.getOptions();
+
+        final String scriptSourceName = options.get("script");
+        if (scriptSourceName == null) {
+            error("option 'script' not set!");
+            return;
         }
 
-        try( java.io.Reader app = new java.io.FileReader(scriptSource)) {
-            final Source source = Source.newBuilder("js", app,  scriptSource).build();
 
-            final Value evalResult = context.eval( source );
+        try {
+            final FileObject fileObject = super.getResourceFormClassPath("", scriptSourceName);
 
-            if( evalResult.canInvokeMember("process") ) {
-                error( "it is not possible invoke 'process' member!");
-                return false;
+            try (java.io.Reader scriptSourceReader = fileObject.openReader(true)) {
+                evalValue = ofNullable(eval(scriptSourceReader, scriptSourceName));
+            } catch (Exception e) {
+                error("error loading/evaluating script", e);
             }
-
-            final Value invokeResult =
-                    evalResult.invokeMember( "process", annotations, roundEnv);
-
-            if( invokeResult.isBoolean() ) {
-                return invokeResult.asBoolean();
-            }
-
-            return false;
-
-        } catch (FileNotFoundException e) {
-            error( "file not found ! source: '%s' - %s", scriptSource, e.getMessage());
         } catch (Exception e) {
-            error( "error executing script", e );
+            error("error reading script", e);
         }
+    }
+
+    private boolean executeProcess( Value evalResult,
+                                    Set<? extends TypeElement> annotations,
+                                    RoundEnvironment roundEnv )
+    {
+
+        if (evalResult.canInvokeMember("e -> process")) {
+            error("it is not possible invoke 'process' member!");
+            return false;
+        }
+
+        final Value invokeResult =
+                evalResult.invokeMember("process", annotations, roundEnv);
+
+        if (invokeResult.isBoolean()) {
+            return invokeResult.asBoolean();
+        }
+
         return false;
     }
 
     @Override
+    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+
+        return evalValue
+                .map( v -> executeProcess( v, annotations, roundEnv ) )
+                .orElseGet( () -> {
+                    warn( "no script evaluation detected!");
+                    return true;
+                });
+    }
+
+    @Override
     public Set<String> getSupportedAnnotationTypes() {
-        return super.getSupportedAnnotationTypes();
+        return  evalValue
+                .map( value -> {
+                    warn( "no 'SupportedAnnotationTypes' specified!");
+                    Set<String> result = Collections.emptySet();
+                    return result;
+                })
+                .orElseGet( () -> {
+                    warn( "no script evaluation detected!");
+                    return super.getSupportedAnnotationTypes();
+                });
+
     }
 
     @Override
     public SourceVersion getSupportedSourceVersion() {
-        return super.getSupportedSourceVersion();
+        return  evalValue
+                .map( value -> {
+                    warn( "no 'SupportedSourceVersion' specified!");
+                    return SourceVersion.latestSupported();
+                })
+                .orElseGet( () -> {
+                    warn( "no script evaluation detected!");
+                    return super.getSupportedSourceVersion();
+                });
+
     }
 }
