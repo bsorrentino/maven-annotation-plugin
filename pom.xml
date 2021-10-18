@@ -90,6 +90,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
         <module>test/app</module>
         <module>compiler</module>
         <module>graaljs</module>
+        <module>test/graaljs</module>
     </modules>
     <dependencyManagement>
         <dependencies>
