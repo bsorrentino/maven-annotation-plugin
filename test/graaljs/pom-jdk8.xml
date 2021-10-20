@@ -5,7 +5,7 @@
     <groupId>org.bsc.maven</groupId>
     <artifactId>maven-processor-plugin-graaljs-test</artifactId>
     <packaging>jar</packaging>
-    <name>PROCESSOR::GRAALJS::TEST</name>
+    <name>PROCESSOR::GRAALJS::TEST (JDK8)</name>
     <description>
         Test graaljs based annotation processor plugin
     </description>
@@ -13,8 +13,8 @@
     <parent>
         <groupId>org.bsc.maven</groupId>
         <artifactId>maven-processor-plugin-parent</artifactId>
-        <version>5.0-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+        <version>5.0-jdk8-SNAPSHOT</version>
+        <relativePath>../../pom-jdk8.xml</relativePath>
     </parent>
 
     <properties>
@@ -29,24 +29,30 @@
           <version>${project.version}</version>
           <optional>true</optional>
       </dependency>
-<!--
-      <dependency>
-          <groupId>org.graalvm.compiler</groupId>
-          <artifactId>compiler</artifactId>
-          <version>${graalvm.version}</version>
-          <scope>runtime</scope>
-      </dependency>
-      <dependency>
-          <groupId>org.graalvm.compiler</groupId>
-          <artifactId>compiler-management</artifactId>
-          <version>${graalvm.version}</version>
-      </dependency>
+
+      <!--
       <dependency>
           <groupId>org.graalvm.sdk</groupId>
           <artifactId>graal-sdk</artifactId>
           <version>${graalvm.version}</version>
+          <scope>compile</scope>
       </dependency>
--->
+
+      <dependency>
+          <groupId>org.graalvm.tools</groupId>
+          <artifactId>profiler</artifactId>
+          <version>${graalvm.version}</version>
+          <scope>runtime</scope>
+      </dependency>
+
+      <dependency>
+          <groupId>org.graalvm.tools</groupId>
+          <artifactId>chromeinspector</artifactId>
+          <version>${graalvm.version}</version>
+          <scope>runtime</scope>
+      </dependency>
+      -->
+
       <dependency>
           <groupId>org.graalvm.js</groupId>
           <artifactId>js</artifactId>
@@ -55,11 +61,6 @@
       <dependency>
           <groupId>org.graalvm.js</groupId>
           <artifactId>js-scriptengine</artifactId>
-          <version>${graalvm.version}</version>
-      </dependency>
-      <dependency>
-          <groupId>org.graalvm.truffle</groupId>
-          <artifactId>truffle-api</artifactId>
           <version>${graalvm.version}</version>
       </dependency>
 
@@ -84,13 +85,20 @@ PROCESSOR PLUGIN
         <groupId>org.bsc.maven</groupId>
         <artifactId>maven-processor-plugin</artifactId>
         <version>${project.version}</version>
+
         <dependencies>
+            <dependency>
+                <groupId>org.graalvm.truffle</groupId>
+                <artifactId>truffle-api</artifactId>
+                <version>${graalvm.version}</version>
+            </dependency>
         </dependencies>
         <executions>
 
             <execution>
 
                 <id>test</id>
+                <phase>package</phase>
                 <goals>
                     <goal>process</goal>
                 </goals>

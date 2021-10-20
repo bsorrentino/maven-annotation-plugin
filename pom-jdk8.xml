@@ -3,7 +3,7 @@
   <groupId>org.bsc.maven</groupId>
   <artifactId>maven-processor-plugin-parent</artifactId>
   <packaging>pom</packaging>
-  <version>5.0-jdk8-rc3</version>
+  <version>5.0-jdk-SNAPSHOT</version>
   <name>MAVEN PROCESSOR PLUGIN PARENT (JDK8)</name>
   <description>A maven plugin to process annotation for jdk6 at compile time
 
@@ -87,6 +87,9 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
         <module>processor/pom-jdk8.xml</module>
         <module>utils/pom-jdk8.xml</module>
         <module>compiler-jdk8</module>
+        <module>graaljs/pom-jdk8.xml</module>
+        <module>test/graaljs/pom-jdk8.xml</module>
+
     </modules>
     <dependencyManagement>
         <dependencies>
