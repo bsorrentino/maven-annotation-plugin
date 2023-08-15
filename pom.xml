@@ -36,7 +36,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
       <release.repo.id>sonatype-repo</release.repo.id>
       <release.repo.url>https://oss.sonatype.org/service/local/staging/deploy/maven2</release.repo.url>
 
-      <maven.version>3.5.4</maven.version>
+      <maven.version>3.8.1</maven.version>
       <maven.plugin.version>3.6.0</maven.plugin.version>
       <plexus.compiler.version>2.8.3</plexus.compiler.version>
 
