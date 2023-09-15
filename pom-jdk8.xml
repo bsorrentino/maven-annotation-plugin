@@ -3,7 +3,7 @@
   <groupId>org.bsc.maven</groupId>
   <artifactId>maven-processor-plugin-parent</artifactId>
   <packaging>pom</packaging>
-  <version>5.0-jdk8-rc3</version>
+  <version>5.0-jdk8-SNAPSHOT</version>
   <name>MAVEN PROCESSOR PLUGIN PARENT (JDK8)</name>
   <description>A maven plugin to process annotation for jdk6 at compile time
 
@@ -13,7 +13,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
   <url>https://github.com/bsorrentino/maven-annotation-plugin</url>
 
   <prerequisites>
-      <maven>3.5</maven>
+      <maven>3.6</maven>
   </prerequisites>
 
   <distributionManagement>
@@ -36,9 +36,9 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
       <release.repo.id>sonatype-repo</release.repo.id>
       <release.repo.url>https://oss.sonatype.org/service/local/staging/deploy/maven2</release.repo.url>
 
-      <maven.version>3.5.4</maven.version>
+      <maven.version>3.6.0</maven.version>
       <maven.plugin.version>3.6.0</maven.plugin.version>
-      <plexus.compiler.version>2.8.3</plexus.compiler.version>
+      <plexus.compiler.version>2.13.0</plexus.compiler.version>
 
       <maven.compiler.source>1.8</maven.compiler.source>
       <maven.compiler.target>1.8</maven.compiler.target>
@@ -156,13 +156,25 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.11.0</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <propertiesEncoding>UTF-8</propertiesEncoding>
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>jar</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>zip</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.8.2</version>
+                <version>3.12.1</version>
             </plugin>
 
             <plugin>
