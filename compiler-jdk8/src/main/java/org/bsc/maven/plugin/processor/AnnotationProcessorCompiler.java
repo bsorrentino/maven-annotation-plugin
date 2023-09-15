@@ -423,9 +423,9 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
 
-            // public void addModules(Iterable<String> moduleNames) {
-            //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            // }
+            public void addModules(Iterable<String> moduleNames) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
 
             @Override
             public Boolean call() {
