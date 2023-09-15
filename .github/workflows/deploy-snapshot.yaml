@@ -39,4 +39,4 @@ jobs:
       - name: Build with Maven
         env:
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-        run: mvn -B deploy --file pom-jdk8.xml -s settings-template.xml
+        run: mvn -B deploy --file pom-jdk8.xml -s settings-template.xml -X
