@@ -108,6 +108,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
                 <groupId>org.apache.maven.plugin-tools</groupId>
                 <artifactId>maven-plugin-annotations</artifactId>
                 <version>${maven.plugin.version}</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.plexus</groupId>
