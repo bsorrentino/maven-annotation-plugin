@@ -54,4 +54,4 @@ If you want stay tuned on each update, use the SNAPSHOT version as shown below
 
 ----
 
-[Releases History](HISTORY.MD)
+[Releases History](HISTORY.md)
