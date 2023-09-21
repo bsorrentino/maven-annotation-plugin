@@ -13,7 +13,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
   <parent>
       <groupId>org.bsc.maven</groupId>
       <artifactId>maven-processor-plugin-parent</artifactId>
-      <version>5.0-SNAPSHOT</version>
+      <version>5.0</version>
   </parent>
 
   <properties>
