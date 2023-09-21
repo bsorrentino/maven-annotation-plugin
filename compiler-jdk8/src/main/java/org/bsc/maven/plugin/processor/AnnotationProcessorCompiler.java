@@ -418,9 +418,12 @@ public class AnnotationProcessorCompiler implements JavaCompiler {
             public void setProcessors(Iterable<? extends Processor> processors) {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
-
             @Override
             public void setLocale(Locale locale) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            public void addModules(Iterable<String> moduleNames) {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
 
