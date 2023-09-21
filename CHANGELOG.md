@@ -2,8 +2,23 @@
 
 <!-- Changelog for bsorrentino maven-annotation-plugin. -->
 
-## Next release
+## v5.0
 ### Generic changes
+
+**Merge branch 'release/5.0'**
+
+
+[4413330b03f71d7](https://github.com/bsorrentino/maven-annotation-plugin/commit/4413330b03f71d7) bsorrentino *2023-09-21 20:30:53*
+
+**docs: update changelog**
+
+
+[79b9e3a274ae005](https://github.com/bsorrentino/maven-annotation-plugin/commit/79b9e3a274ae005) bsorrentino *2023-09-21 20:29:48*
+
+**build: move to next release**
+
+
+[6ff06d037c2bc44](https://github.com/bsorrentino/maven-annotation-plugin/commit/6ff06d037c2bc44) bsorrentino *2023-09-21 20:29:34*
 
 **build: change 'maven-plugin-annotations' dependency scope to provided**
 
@@ -36,6 +51,12 @@
 
 
 [07dd7fee8f6f086](https://github.com/bsorrentino/maven-annotation-plugin/commit/07dd7fee8f6f086) bsorrentino *2023-09-15 09:22:35*
+
+**Update deploy-snapshot.yaml**
+
+ * build: add manual trigger
+
+[33f3687dc7790d7](https://github.com/bsorrentino/maven-annotation-plugin/commit/33f3687dc7790d7) bsorrentino *2023-09-15 09:20:57*
 
 **Merge branch 'feature/mvn_3_9#102' into develop**
 
