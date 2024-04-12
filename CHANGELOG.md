@@ -2,6 +2,107 @@
 
 <!-- Changelog for bsorrentino maven-annotation-plugin. -->
 
+## v5.1
+### Generic changes
+
+**Merge branch 'release/5.1'**
+
+
+[ec799329daddd97](https://github.com/bsorrentino/maven-annotation-plugin/commit/ec799329daddd97) bsorrentino *2024-04-12 15:48:43*
+
+**build: move to next release**
+
+
+[861c5a31d9ece5b](https://github.com/bsorrentino/maven-annotation-plugin/commit/861c5a31d9ece5b) bsorrentino *2024-04-12 15:47:14*
+
+**docs: update readme**
+
+
+[5003422e7a1a45d](https://github.com/bsorrentino/maven-annotation-plugin/commit/5003422e7a1a45d) bsorrentino *2024-04-12 15:46:06*
+
+**build: update git ignore**
+
+
+[859ae83b97aca4d](https://github.com/bsorrentino/maven-annotation-plugin/commit/859ae83b97aca4d) bsorrentino *2024-04-12 15:45:54*
+
+**Merge branch 'AndreaBaroncelli-unchanged_sources_check_fix' into develop**
+
+
+[0b470ed27e50177](https://github.com/bsorrentino/maven-annotation-plugin/commit/0b470ed27e50177) bsorrentino *2024-04-12 15:39:12*
+
+**build: move to next developer version**
+
+
+[51d6eba6a7edb21](https://github.com/bsorrentino/maven-annotation-plugin/commit/51d6eba6a7edb21) bsorrentino *2024-04-12 15:24:24*
+
+**Fixed unchanged sources check**
+
+ * File .maven-processor-source-files.txt must be skipped in lastModified check (being just an extra file added for control purposes), especially because it is rewritten in method areSourceFilesSameAsPreviousRun, so its lastModified date is necessarily the most recent one, which causes method to always return true.
+
+[cda172bc544d4a7](https://github.com/bsorrentino/maven-annotation-plugin/commit/cda172bc544d4a7) Andrea Baroncelli *2024-04-11 14:31:25*
+
+**Merge tag 'v5.0-jdk8' into develop**
+
+ * fix release
+
+[b33eda77e45abc8](https://github.com/bsorrentino/maven-annotation-plugin/commit/b33eda77e45abc8) bsorrentino *2023-09-21 21:04:43*
+
+
+## v5.0-jdk8
+### Generic changes
+
+**Merge branch 'hotfix/5.0-jdk8'**
+
+
+[4b4f747eb99039d](https://github.com/bsorrentino/maven-annotation-plugin/commit/4b4f747eb99039d) bsorrentino *2023-09-21 21:04:32*
+
+**fix: update release of jdk8 version**
+
+
+[06d26ff7d09017e](https://github.com/bsorrentino/maven-annotation-plugin/commit/06d26ff7d09017e) bsorrentino *2023-09-21 21:02:46*
+
+**docs: update readme**
+
+
+[bda0bd6aa097056](https://github.com/bsorrentino/maven-annotation-plugin/commit/bda0bd6aa097056) bsorrentino *2023-09-21 20:50:41*
+
+**Merge branch 'master' into develop**
+
+
+[6bd561a05e559d3](https://github.com/bsorrentino/maven-annotation-plugin/commit/6bd561a05e559d3) bsorrentino *2023-09-21 20:48:12*
+
+**Merge branch 'hotfix/docs'**
+
+
+[2ec060a9c2ece63](https://github.com/bsorrentino/maven-annotation-plugin/commit/2ec060a9c2ece63) bsorrentino *2023-09-21 20:48:08*
+
+**docs: update readme and add release history**
+
+
+[b64a5427de1e488](https://github.com/bsorrentino/maven-annotation-plugin/commit/b64a5427de1e488) bsorrentino *2023-09-21 20:47:57*
+
+**Merge branch 'master' into develop**
+
+
+[fb82e84455a3854](https://github.com/bsorrentino/maven-annotation-plugin/commit/fb82e84455a3854) bsorrentino *2023-09-21 20:35:00*
+
+**Merge branch 'hotfix/docs'**
+
+
+[e61a479c2b2ed9d](https://github.com/bsorrentino/maven-annotation-plugin/commit/e61a479c2b2ed9d) bsorrentino *2023-09-21 20:34:58*
+
+**docs: update changelog and readme**
+
+
+[4d48c9174a543d3](https://github.com/bsorrentino/maven-annotation-plugin/commit/4d48c9174a543d3) bsorrentino *2023-09-21 20:34:41*
+
+**Merge tag 'v5.0' into develop**
+
+ * new release
+
+[a355c3e7a19190c](https://github.com/bsorrentino/maven-annotation-plugin/commit/a355c3e7a19190c) bsorrentino *2023-09-21 20:31:21*
+
+
 ## v5.0
 ### Generic changes
 
