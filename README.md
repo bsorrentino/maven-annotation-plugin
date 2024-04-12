@@ -28,14 +28,15 @@ This plugin was born as the 'alter ego' of maven apt plugin [apt-maven-plugin](h
 
 ## Releases
 
- Date  | Version  | Info
---- | --- | ---
-**Sep 21, 2023** | [Release 5.0](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v5.0) | fix [#102](https://github.com/bsorrentino/maven-annotation-plugin/issues/102) - Plugin validation issues on Maven 3.9
-**Jul 12, 2021** | [Release 5.0-rc3](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v5.0-rc3) | merge PR [#96](https://github.com/bsorrentino/maven-annotation-plugin/pull/96) - Thanks to [Ulysses Rangel RIbeiro](https://github.com/ulyssesrr)
+ Date  | Version                                                                                                   | Info
+--- |-----------------------------------------------------------------------------------------------------------| ---
+**Apr 12, 2024** | [Release 5.1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v5.1)                   | merge PR [#104](https://github.com/bsorrentino/maven-annotation-plugin/pull/104) - Fixed unchanged sources check.Thanks to [AndreaBaroncelli](https://github.com/AndreaBaroncelli)
+**Sep 21, 2023** | [Release 5.0](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v5.0)                   | fix [#102](https://github.com/bsorrentino/maven-annotation-plugin/issues/102) - Plugin validation issues on Maven 3.9
+**Jul 12, 2021** | [Release 5.0-rc3](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v5.0-rc3)           | merge PR [#96](https://github.com/bsorrentino/maven-annotation-plugin/pull/96) - Thanks to [Ulysses Rangel RIbeiro](https://github.com/ulyssesrr)
 **Jul 12, 2021** | [Release 5.0-jdk8-rc3](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v5.0-jdk8-rc3) | Maintenance release compatible with JDK8
-**Jun 28, 2021** | [Release 5.0-rc2](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v5.0-rc2) | merge PR [#95](https://github.com/bsorrentino/maven-annotation-plugin/pull/95) - Thanks to [Ulysses Rangel RIbeiro](https://github.com/ulyssesrr)
+**Jun 28, 2021** | [Release 5.0-rc2](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v5.0-rc2)           | merge PR [#95](https://github.com/bsorrentino/maven-annotation-plugin/pull/95) - Thanks to [Ulysses Rangel RIbeiro](https://github.com/ulyssesrr)
 **Jun 28, 2021** | [Release 5.0-jdk8-rc2](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v5.0-jdk8-rc2) | Maintenance release compatible with JDK8
-**Feb 04, 2021** | [Release 5.0-rc1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v5.0-rc1) | fix issue [#91](https://github.com/bsorrentino/maven-annotation-plugin/issues/91) [#92](https://github.com/bsorrentino/maven-annotation-plugin/issues/92) [#93](https://github.com/bsorrentino/maven-annotation-plugin/issues/93)
+**Feb 04, 2021** | [Release 5.0-rc1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v5.0-rc1)           | fix issue [#91](https://github.com/bsorrentino/maven-annotation-plugin/issues/91) [#92](https://github.com/bsorrentino/maven-annotation-plugin/issues/92) [#93](https://github.com/bsorrentino/maven-annotation-plugin/issues/93)
 **Feb 04, 2021** | [Release 5.0-jdk8-rc1](https://github.com/bsorrentino/maven-annotation-plugin/releases/tag/v5.0-jdk8-rc1) | Maintenance release compatible with JDK8
 
 ## import maven dependency ##
