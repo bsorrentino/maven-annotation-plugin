@@ -597,7 +597,8 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo {
   }
 
   private boolean isSourcesUnchanged(List<JavaFileObject> allSources) throws IOException {
-    if (!areSourceFilesSameAsPreviousRun(allSources))
+    Path sourceFileList = outputDirectory.toPath().resolve(".maven-processor-source-files.txt");
+    if (!areSourceFilesSameAsPreviousRun(allSources, sourceFileList))
       return false;
 
     long maxSourceDate = allSources.stream()
@@ -612,7 +613,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo {
       @Override
       public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
           throws IOException {
-        if (Files.isRegularFile(file)) {
+        if (Files.isRegularFile(file) && !file.equals(sourceFileList)) {
           maxOutputDate.updateAndGet(t -> Math.max(t, file.toFile().lastModified()));
         }
         return FileVisitResult.CONTINUE;
@@ -631,11 +632,11 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo {
    * Checks the list of {@code allSources} against the stored list of source files in a previous run.
    *
    * @param allSources
+   * @param sourceFileList
    * @return {@code true} when the filenames of the previous run matches exactly with the current run.
    * @throws IOException
    */
-  private boolean areSourceFilesSameAsPreviousRun(List<JavaFileObject> allSources) throws IOException {
-    Path sourceFileList = outputDirectory.toPath().resolve(".maven-processor-source-files.txt");
+  private boolean areSourceFilesSameAsPreviousRun(List<JavaFileObject> allSources, Path sourceFileList) throws IOException {
     try {
       if (!Files.exists(sourceFileList)) {
         getLog().debug("File with previous sources " + sourceFileList + " not found, treating as first run");
