@@ -178,7 +178,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.12.1</version>
+                <version>4.0.0-M13</version>
             </plugin>
 
             <plugin>
