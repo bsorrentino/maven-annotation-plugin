@@ -25,7 +25,7 @@ jobs:
           java-version: 8
       - name: Deploy site to Github pages
         run: |
-          mvn -B --projects processor site --file pom-jdk8.xml -s settings-template.xml
+          mvn -B --projects processor install site --file pom-jdk8.xml -s settings-template.xml
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
