@@ -71,7 +71,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.4</version>
+                <version>3.5.0</version>
                 <configuration>
                     <!-- @see https://www.mkyong.com/maven/maven-site-build-is-very-slow-dependency-report/ -->
                     <dependencyLocationsEnabled>false</dependencyLocationsEnabled>

@@ -202,7 +202,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.4</version>
+                <version>3.5.0</version>
             </plugin>
         </plugins>
 
