@@ -26,7 +26,7 @@ jobs:
       - name: Deploy site to Github pages
         run: |
           mvn -B install
-          mvn -B --projects processor site
+          mvn -B -pl processor site -f pom.xml
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
