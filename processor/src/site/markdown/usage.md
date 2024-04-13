@@ -1,11 +1,10 @@
 
 
-Repository
+## Repository
 
   To use this plugin you have to include the following repository declaration in your POM
 
-+-------------------------------------------+
-
+```xml
 <pluginRepositories>
 
     <!-- IF YOU WANT STAY TUNED ON UPDATE REMOVE COMMENT -->
@@ -22,20 +21,17 @@ Repository
     </pluginRepository>
 
 </pluginRepositories>
+```
 
+## Usage
 
-+-------------------------------------------+
+### Example 1
 
-Usage
+Sources will be generated into `target/generated-sources/apt/main/java`
+Test sources into `target/generated-sources/apt/test/java`
+Both directories will be added to the compilation path
 
-  <<Example1>>
-
-  Sources will be generated into target/generated-sources/apt/main/java
-  Test sources into target/generated-sources/apt/test/java
-  Both directories will be added to the compilation path
-
-+-------------------------------------------+
-
+```xml
 <build>
   <plugins>
     <!-- Run annotation processors on src/main/java sources -->
@@ -78,15 +74,14 @@ Usage
   </plugins>
 </build>
 
-+-------------------------------------------+
+```
 
-  <<Example2>>
+###  Example 2
 
-  Generating sources into src/main/generated directory. This strategy is good if you wish to check in your generated sources into your SCM.
-  Run mvn generate-sources to generate the sources.
+Generating sources into `src/main/generated` directory. This strategy is good if you wish to check in your generated sources into your SCM.
+Run `mvn generate-sources` to generate the sources.
 
-+-------------------------------------------+
-
+```xml
 <build>
   <plugins>
     <plugin>
@@ -108,15 +103,13 @@ Usage
     </plugin>
   </plugin>
 </build>
+```
 
-+-------------------------------------------+
+###  Example 3
 
-  <<Example3>>
+Running specific annotation processors only.
 
-  Running specific annotation processors only.
-
-+-------------------------------------------+
-
+```xml
 <build>
   <plugins>
     <plugin>
@@ -142,15 +135,13 @@ Usage
     </plugin>
   </plugin>
 </build>
+```
 
-+-------------------------------------------+
+###  Example 4
 
-  <<Example4>>
+Passing options to processors
 
-  Passing options to processors
-
-+-------------------------------------------+
-
+```xml
 <build>
   <plugins>
     <plugin>
@@ -178,15 +169,13 @@ Usage
     </plugin>
   </plugin>
 </build>
+```
 
-+-------------------------------------------+
+### Example 5
 
-  <<Example5>>
+Set System Properties
 
-  Set System Properties
-
-+-------------------------------------------+
-
+```xml
 <build>
   <plugins>
     <plugin>
@@ -211,15 +200,13 @@ Usage
     </plugin>
   </plugin>
 </build>
+```
 
-+-------------------------------------------+
+### Example 6
 
-  <<Example6>>
+use toolchain
 
-  use toolchain
-
-+-------------------------------------------+
-
+```xml
 <build>
   <plugins>
 
@@ -263,5 +250,6 @@ Usage
     </plugin>
   </plugin>
 </build>
+```
 
-+-------------------------------------------+
+
