@@ -25,7 +25,8 @@ jobs:
           java-version: 17
       - name: Deploy site to Github pages
         run: |
-          mvn -B --projects processor site --file pom.xml
+          mvn -B install
+          mvn -B --projects processor site
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
