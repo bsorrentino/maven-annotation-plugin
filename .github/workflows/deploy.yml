@@ -25,11 +25,16 @@ jobs:
         GPG_KEY_BASE64: ${{ secrets.GPG_KEY_BASE64 }}
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
       run: ./gpg-setup.sh
-    - name: Deploy to OSS Sonatype
+    - name: Deploy to OSS Sonatype (!utils)
       env:
         SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
       # mvn -Prelease source:jar javadoc:jar deploy -Dgpg.passphrase=thephrase
-      run: mvn -B -Prelease source:jar javadoc:jar deploy --file pom.xml -s settings-template.xml -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
+      run: mvn -B -Prelease source:jar javadoc:jar central-publishing:publish --file pom.xml -s settings-template.xml -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} -pl '!utils'
+    - name: Deploy to OSS Sonatype (utils)
+      env:
+        SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+      # mvn -Prelease source:jar javadoc:jar deploy -Dgpg.passphrase=thephrase
+      run: mvn -B -Prelease source:jar javadoc:jar central-publishing:publish --file pom.xml -s settings-template.xml -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} -pl 'utils'
 
   deploy-jdk8:
 
@@ -46,8 +51,13 @@ jobs:
         GPG_KEY_BASE64: ${{ secrets.GPG_KEY_BASE64 }}
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
       run: ./gpg-setup.sh
-    - name: Deploy to OSS Sonatype
+    - name: Deploy to OSS Sonatype (!utils)
       env:
         SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
       # mvn -Prelease source:jar javadoc:jar deploy -Dgpg.passphrase=thephrase
-      run: mvn -B -Prelease source:jar javadoc:jar deploy --file pom-jdk8.xml -s settings-template.xml -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
+      run: mvn -B -Prelease source:jar javadoc:jar central-publishing:publish --file pom-jdk8.xml -s settings-template.xml -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} -pl '!utils'
+    - name: Deploy to OSS Sonatype (utils)
+      env:
+        SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+      # mvn -Prelease source:jar javadoc:jar deploy -Dgpg.passphrase=thephrase
+      run: mvn -B -Prelease source:jar javadoc:jar central-publishing:publish --file pom-jdk8.xml -s settings-template.xml -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} -pl 'utils'
