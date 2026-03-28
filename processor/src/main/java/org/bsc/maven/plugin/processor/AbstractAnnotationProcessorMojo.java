@@ -290,7 +290,7 @@ public abstract class AbstractAnnotationProcessorMojo extends AbstractMojo {
    *
    * @since 4.3
    */
-  @Parameter(defaultValue = "false", property = "skipSourcesUnchangedAnnotationProcessing")
+  @Parameter(defaultValue = "true", property = "skipSourcesUnchangedAnnotationProcessing")
   protected boolean skipSourcesUnchanged;
 
   /**
