@@ -57,7 +57,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
       <dependency>
           <groupId>org.codehaus.plexus</groupId>
           <artifactId>plexus-utils</artifactId>
-          <version>3.1.1</version>
+          <version>4.0.3</version>
       </dependency>
 
         <dependency>
