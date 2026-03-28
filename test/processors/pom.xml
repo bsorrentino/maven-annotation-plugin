@@ -6,7 +6,7 @@
     <artifactId>maven-processor-plugin-test-processors</artifactId>
     <packaging>jar</packaging>
     <name>MAVEN PROCESSOR PLUGIN TEST::Processor</name>
-    <description></description>
+    <description>Test processors for the MAVEN PROCESSOR PLUGIN</description>
 
     <parent>
         <groupId>org.bsc.maven</groupId>

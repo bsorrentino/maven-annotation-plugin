@@ -6,7 +6,7 @@
     <artifactId>maven-processor-plugin-test-app</artifactId>
     <packaging>jar</packaging>
     <name>MAVEN PROCESSOR PLUGIN TEST</name>
-    <description></description>
+    <description>Test application for the MAVEN PROCESSOR PLUGIN</description>
 
     <parent>
         <groupId>org.bsc.maven</groupId>
