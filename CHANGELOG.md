@@ -2,8 +2,215 @@
 
 <!-- Changelog for bsorrentino maven-annotation-plugin. -->
 
+## v5.2
+### No issue
+
+**Merge branch 'release/5.2'**
+
+
+[a17323855e262aa](https://github.com/bsorrentino/maven-annotation-plugin/commit/a17323855e262aa) bsorrentino *2026-03-28 10:37:31*
+
+**build: bump to next version 5.2**
+
+
+[bc515a36d193c4d](https://github.com/bsorrentino/maven-annotation-plugin/commit/bc515a36d193c4d) bsorrentino *2026-03-28 10:37:02*
+
+**build: bump to next version 5.2**
+
+
+[4c81140b010331d](https://github.com/bsorrentino/maven-annotation-plugin/commit/4c81140b010331d) bsorrentino *2026-03-28 10:34:16*
+
+**build(processor): Add plexus-xml dependency**
+
+
+[5c016ce6fdd1a70](https://github.com/bsorrentino/maven-annotation-plugin/commit/5c016ce6fdd1a70) bsorrentino *2026-03-28 10:31:51*
+
+**build: bump to next dev version 5.2-SNAPSHOT**
+
+
+[c29b7d2eebb060c](https://github.com/bsorrentino/maven-annotation-plugin/commit/c29b7d2eebb060c) bsorrentino *2026-03-28 10:19:52*
+
+**refactor(AbstractAnnotationProcessorMojo): update default value of skipSourcesUnchanged parameter to true**
+
+ * resolve  #108
+
+[9f70fd9c61c07f4](https://github.com/bsorrentino/maven-annotation-plugin/commit/9f70fd9c61c07f4) bsorrentino *2026-03-28 10:17:02*
+
+**Merge pull request #109 from bsorrentino/dependabot/maven/processor/org.codehaus.plexus-plexus-utils-4.0.3**
+
+ * build(deps): bump org.codehaus.plexus:plexus-utils from 3.1.1 to 4.0.3 in /processor
+
+[2c4703c44d924d6](https://github.com/bsorrentino/maven-annotation-plugin/commit/2c4703c44d924d6) bsorrentino *2026-03-28 10:10:45*
+
+**Merge pull request #107 from bsorrentino/dependabot/maven/test/app/org.apache.commons-commons-lang3-3.18.0**
+
+ * build(deps): bump org.apache.commons:commons-lang3 from 3.12.0 to 3.18.0 in /test/app
+
+[d73880af929d529](https://github.com/bsorrentino/maven-annotation-plugin/commit/d73880af929d529) bsorrentino *2026-03-28 10:10:31*
+
+**build(deps): bump org.codehaus.plexus:plexus-utils in /processor**
+
+ * Bumps [org.codehaus.plexus:plexus-utils](https://github.com/codehaus-plexus/plexus-utils) from 3.1.1 to 4.0.3.
+ * - [Release notes](https://github.com/codehaus-plexus/plexus-utils/releases)
+ * - [Commits](https://github.com/codehaus-plexus/plexus-utils/compare/plexus-utils-3.1.1...plexus-utils-4.0.3)
+ * ---
+ * updated-dependencies:
+ * - dependency-name: org.codehaus.plexus:plexus-utils
+ * dependency-version: 4.0.3
+ * dependency-type: direct:production
+ * ...
+ * Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+
+[c489b10d1538e49](https://github.com/bsorrentino/maven-annotation-plugin/commit/c489b10d1538e49) dependabot[bot] *2026-03-27 22:49:28*
+
+**build(deps): bump org.apache.commons:commons-lang3 in /test/app**
+
+ * Bumps org.apache.commons:commons-lang3 from 3.12.0 to 3.18.0.
+ * ---
+ * updated-dependencies:
+ * - dependency-name: org.apache.commons:commons-lang3
+ * dependency-version: 3.18.0
+ * dependency-type: direct:production
+ * ...
+ * Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+
+[728c08f4d76a995](https://github.com/bsorrentino/maven-annotation-plugin/commit/728c08f4d76a995) dependabot[bot] *2025-07-12 01:09:57*
+
+**Merge pull request #106 from hyandell/master**
+
+ * Adjusting licensing to MIT per #105
+
+[15a24272547e75b](https://github.com/bsorrentino/maven-annotation-plugin/commit/15a24272547e75b) bsorrentino *2024-10-18 13:31:07*
+
+**Adjusting licensing to MIT per #105**
+
+
+[cb202d89c864406](https://github.com/bsorrentino/maven-annotation-plugin/commit/cb202d89c864406) Henri Yandell *2024-10-18 00:00:22*
+
+**fix: report problems**
+
+
+[9a39e035c3bc35f](https://github.com/bsorrentino/maven-annotation-plugin/commit/9a39e035c3bc35f) bsorrentino *2024-04-13 22:31:40*
+
+**build: upgrade maven-gpg-plugin**
+
+
+[bdabf8b47b6abc1](https://github.com/bsorrentino/maven-annotation-plugin/commit/bdabf8b47b6abc1) bsorrentino *2024-04-13 21:25:01*
+
+**ci: remove deploy-pages action**
+
+
+[599080f3b962de0](https://github.com/bsorrentino/maven-annotation-plugin/commit/599080f3b962de0) bsorrentino *2024-04-13 21:20:11*
+
+**refactor: Rename deply-pages.yml to deploy-pages.yml**
+
+
+[3f61125f20a8ad4](https://github.com/bsorrentino/maven-annotation-plugin/commit/3f61125f20a8ad4) bsorrentino *2024-04-13 21:04:43*
+
+**build: upgrade doxia-site-renderer**
+
+
+[f78b7d8df0673ba](https://github.com/bsorrentino/maven-annotation-plugin/commit/f78b7d8df0673ba) bsorrentino *2024-04-13 21:03:34*
+
+**build: Update deply-pages.yml**
+
+
+[67b094f78b17c95](https://github.com/bsorrentino/maven-annotation-plugin/commit/67b094f78b17c95) bsorrentino *2024-04-13 21:00:04*
+
+**build: upgrade maven-plugin-plugin in reporting**
+
+
+[0c310375cba21e6](https://github.com/bsorrentino/maven-annotation-plugin/commit/0c310375cba21e6) bsorrentino *2024-04-13 20:57:03*
+
+**ci: Update deply-pages.yml**
+
+
+[e0269fb7ef37f0f](https://github.com/bsorrentino/maven-annotation-plugin/commit/e0269fb7ef37f0f) bsorrentino *2024-04-13 20:52:20*
+
+**build: upgrade maven-fluido-skin**
+
+
+[e93c6f7e1d071ba](https://github.com/bsorrentino/maven-annotation-plugin/commit/e93c6f7e1d071ba) bsorrentino *2024-04-13 20:50:05*
+
+**build: Update deply-pages.yml**
+
+
+[61b23e609f242a5](https://github.com/bsorrentino/maven-annotation-plugin/commit/61b23e609f242a5) bsorrentino *2024-04-13 20:44:10*
+
+**build: upgrade maven-project-info-reports-plugin**
+
+
+[2c99cc5885d4df8](https://github.com/bsorrentino/maven-annotation-plugin/commit/2c99cc5885d4df8) bsorrentino *2024-04-13 20:34:52*
+
+**ci: update action**
+
+
+[4d4072e5d5705a2](https://github.com/bsorrentino/maven-annotation-plugin/commit/4d4072e5d5705a2) bsorrentino *2024-04-13 20:28:55*
+
+**build: upgrade reporting plugin**
+
+
+[75c1c3fe845c69e](https://github.com/bsorrentino/maven-annotation-plugin/commit/75c1c3fe845c69e) bsorrentino *2024-04-13 20:25:29*
+
+**ci: update deploy pages action**
+
+
+[1569f4442bb9378](https://github.com/bsorrentino/maven-annotation-plugin/commit/1569f4442bb9378) bsorrentino *2024-04-13 20:17:09*
+
+**ci: update deploy pages action**
+
+
+[45b98cf7da4a682](https://github.com/bsorrentino/maven-annotation-plugin/commit/45b98cf7da4a682) bsorrentino *2024-04-13 20:13:38*
+
+**ci: deploy pages using jdk 8**
+
+
+[5931ef7e019779d](https://github.com/bsorrentino/maven-annotation-plugin/commit/5931ef7e019779d) bsorrentino *2024-04-13 20:07:39*
+
+**ci: deploy pages using jdk 9**
+
+
+[6d15051b1322fa9](https://github.com/bsorrentino/maven-annotation-plugin/commit/6d15051b1322fa9) bsorrentino *2024-04-13 20:02:58*
+
+**ci: deploy pages using jdk 1.8**
+
+
+[a5fdc8e6c92024b](https://github.com/bsorrentino/maven-annotation-plugin/commit/a5fdc8e6c92024b) bsorrentino *2024-04-13 19:59:37*
+
+**pages**
+
+
+[4959f8cabbc585e](https://github.com/bsorrentino/maven-annotation-plugin/commit/4959f8cabbc585e) bsorrentino *2024-04-13 19:56:40*
+
+**build(jdk8): move to next release**
+
+
+[f11930997bd75d5](https://github.com/bsorrentino/maven-annotation-plugin/commit/f11930997bd75d5) bsorrentino *2024-04-13 18:30:54*
+
+**Merge branch 'master' into develop**
+
+
+[b93cb86e3ccf41f](https://github.com/bsorrentino/maven-annotation-plugin/commit/b93cb86e3ccf41f) bsorrentino *2024-04-12 15:50:19*
+
+**Merge branch 'hotfix/changelog'**
+
+
+[796a2c3c5b45604](https://github.com/bsorrentino/maven-annotation-plugin/commit/796a2c3c5b45604) bsorrentino *2024-04-12 15:50:17*
+
+**docs: update changelog**
+
+
+[b963344e111850b](https://github.com/bsorrentino/maven-annotation-plugin/commit/b963344e111850b) bsorrentino *2024-04-12 15:50:06*
+
+**Merge tag 'v5.1' into develop**
+
+ * new release
+
+[29f8831d17c04da](https://github.com/bsorrentino/maven-annotation-plugin/commit/29f8831d17c04da) bsorrentino *2024-04-12 15:48:51*
+
+
 ## v5.1
-### Generic changes
+### No issue
 
 **Merge branch 'release/5.1'**
 
@@ -49,7 +256,7 @@
 
 
 ## v5.0-jdk8
-### Generic changes
+### No issue
 
 **Merge branch 'hotfix/5.0-jdk8'**
 
@@ -104,7 +311,7 @@
 
 
 ## v5.0
-### Generic changes
+### No issue
 
 **Merge branch 'release/5.0'**
 
@@ -193,7 +400,7 @@
 
 
 ## v5.0-rc3
-### Generic changes
+### No issue
 
 **Merge branch 'release/5.0-rc3'**
 
@@ -370,7 +577,7 @@
 
 
 ## v5.0-rc2
-### Generic changes
+### No issue
 
 **Merge branch 'release/5.0-rc2'**
 
@@ -424,7 +631,7 @@
 
 
 ## v5.0-rc1
-### Generic changes
+### No issue
 
 **Merge branch 'release/5.0-rc1'**
 
@@ -540,7 +747,7 @@
 
 
 ## v4.5
-### Generic changes
+### No issue
 
 **Merge branch 'release/4.5'**
 
@@ -711,7 +918,7 @@
 
 
 ## v4.4
-### Generic changes
+### No issue
 
 **Merge branch 'release/4.4'**
 
@@ -826,7 +1033,7 @@
 
 
 ## v4.3
-### Generic changes
+### No issue
 
 **Merge branch 'release/4.3'**
 
@@ -898,7 +1105,7 @@
 
 
 ## v4.2
-### Generic changes
+### No issue
 
 **Merge branch 'release/4.2'**
 
@@ -963,7 +1170,7 @@
 
 
 ## v4.1
-### Generic changes
+### No issue
 
 **Merge branch 'release/4.1'**
 
@@ -1043,7 +1250,7 @@
 
 
 ## v4.0
-### Generic changes
+### No issue
 
 **update version**
 
@@ -1085,7 +1292,7 @@
 
 
 ## v4.0-rc1
-### Generic changes
+### No issue
 
 **Merge branch 'release/4.0-rc1'**
 
@@ -1217,7 +1424,7 @@
 
 
 ## v4.0-beta1
-### Generic changes
+### No issue
 
 **Merge branch 'release/4.0-beta1'**
 
@@ -1365,7 +1572,7 @@
 
 
 ## v3.3.3
-### Generic changes
+### No issue
 
 **Merge branch 'release/3.3.3'**
 
@@ -1449,7 +1656,7 @@
 
 
 ## v3.3.2
-### Generic changes
+### No issue
 
 **fix #69 merge #70**
 
@@ -1545,7 +1752,7 @@
 
 
 ## v3.3.1
-### Generic changes
+### No issue
 
 **Merge branch 'release/3.3.1'**
 
@@ -1574,7 +1781,7 @@
 
 
 ## v3.3
-### Generic changes
+### No issue
 
 **Merge branch 'release/3.3'**
 
@@ -1683,7 +1890,7 @@
 
 
 ## v3.2.0
-### Generic changes
+### No issue
 
 **Merge branch 'release/3.2.0'**
 
@@ -1747,7 +1954,7 @@
 
 
 ## v3.1.0
-### Generic changes
+### No issue
 
 **Merge branch 'release/3.1.0'**
 
@@ -1814,7 +2021,7 @@
 
 
 ## maven-processor-plugin-3.1.0-beta1
-### Generic changes
+### No issue
 
 **[maven-release-plugin] prepare release maven-processor-plugin-3.1.0-beta1**
 
@@ -1868,7 +2075,7 @@
 
 
 ## maven-processor-plugin-2.2.4
-### Generic changes
+### No issue
 
 **[maven-release-plugin] prepare release maven-processor-plugin-2.2.4**
 
@@ -1887,7 +2094,7 @@
 
 
 ## maven-processor-plugin-2.2.3
-### Generic changes
+### No issue
 
 **[maven-release-plugin] prepare release maven-processor-plugin-2.2.3**
 
@@ -1906,7 +2113,7 @@
 
 
 ## maven-processor-plugin-2.2.2
-### Generic changes
+### No issue
 
 **[maven-release-plugin] prepare release maven-processor-plugin-2.2.2**
 
@@ -1925,7 +2132,7 @@
 
 
 ## maven-processor-plugin-2.2.1
-### Generic changes
+### No issue
 
 **[maven-release-plugin] prepare release maven-processor-plugin-2.2.1**
 
@@ -1944,7 +2151,7 @@
 
 
 ## maven-processor-plugin-2.2.0
-### Generic changes
+### No issue
 
 **[maven-release-plugin] prepare release maven-processor-plugin-2.2.0**
 
@@ -1963,7 +2170,7 @@
 
 
 ## maven-processor-plugin-2.1.1
-### Generic changes
+### No issue
 
 **[maven-release-plugin] prepare release maven-processor-plugin-2.1.1**
 
@@ -1987,7 +2194,7 @@
 
 
 ## maven-processor-plugin-2.1.0
-### Generic changes
+### No issue
 
 **[maven-release-plugin] prepare release maven-processor-plugin-2.1.0**
 
@@ -2011,7 +2218,7 @@
 
 
 ## maven-processor-plugin-2.1.0-beta1
-### Generic changes
+### No issue
 
 **[maven-release-plugin] prepare release maven-processor-plugin-2.1.0-beta1**
 
@@ -2055,7 +2262,7 @@
 
 
 ## maven-processor-plugin-2.0.8
-### Generic changes
+### No issue
 
 **[maven-release-plugin] prepare release maven-processor-plugin-2.0.8**
 
@@ -2091,7 +2298,7 @@
 
 
 ## maven-processor-plugin-2.0.7
-### Generic changes
+### No issue
 
 **revert to 7c9b55a41816**
 
@@ -2120,7 +2327,7 @@
 
 
 ## maven-processor-plugin-2.0.6
-### Generic changes
+### No issue
 
 **[maven-release-plugin] prepare release maven-processor-plugin-2.0.6**
 
