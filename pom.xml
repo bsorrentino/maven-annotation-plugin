@@ -16,26 +16,8 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
       <maven>3.6</maven>
   </prerequisites>
 
-  <distributionManagement>
-      <repository>
-          <id>${release.repo.id}</id>
-          <url>${release.repo.url}</url>
-      </repository>
-      <snapshotRepository>
-          <id>${snapshot.repo.id}</id>
-          <url>${snapshot.repo.url}</url>
-          <uniqueVersion>false</uniqueVersion>
-      </snapshotRepository>
-  </distributionManagement>
-
   <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <!-- SONATYPE REPO -->
-      <snapshot.repo.id>sonatype-repo</snapshot.repo.id>
-      <snapshot.repo.url>https://oss.sonatype.org/content/repositories/snapshots</snapshot.repo.url>
-      <release.repo.id>sonatype-repo</release.repo.id>
-      <release.repo.url>https://oss.sonatype.org/service/local/staging/deploy/maven2</release.repo.url>
-
       <maven.version>3.6.0</maven.version>
       <maven.plugin.version>3.6.0</maven.plugin.version>
       <plexus.compiler.version>2.13.0</plexus.compiler.version>
@@ -288,7 +270,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.2.3</version>
+                        <version>3.2.4</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -299,6 +281,7 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
                             </execution>
                         </executions>
                         <configuration>
+                            <keyname>bartolomeo.sorrentino@gmail.com</keyname>
                             <gpgArguments>
                                 <arg>--pinentry-mode</arg>
                                 <arg>loopback</arg>
@@ -306,14 +289,14 @@ This plugin could be considered the 'alter ego' of maven apt plugin http://mojo.
                         </configuration>
                     </plugin>
                     <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.5.1</version>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.8.0</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <serverId>sonatype-server</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <stagingProfileId />
+                            <publishingServerId>sonatype-central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>published</waitUntil>
                         </configuration>
                     </plugin>
                 </plugins>
